@@ -1,12 +1,12 @@
-// Sujal-Grid - Core Application and Simulation Logic
+// Pravaha (प्रवाह) - Core Application, Simulation & Auto-Demo Logic
 
 // Global State
 let activeTab = 'control-room';
 let activeSlideIndex = 1;
 const totalSlides = 10;
 let activeAlert = 'kolar';
+let currentMapLayer = 'water';
 let simulatedWorkflows = {};
-let currentWaterTableY = 180; // Represents 28m depth in SVG coords
 
 // Alerts Database
 const alertsData = {
@@ -14,25 +14,56 @@ const alertsData = {
         title: "Aquifer Depletion: Kolar Karnataka",
         impact: "8,500 Farmers",
         sla: "48 Hours",
-        rationale: "Groundwater levels in Kolar have depleted below critical clay threshold (28m). Model forecasts 85% probability of permanent aquifer compaction and soil collapse unless draw-off is immediately restricted by 20%. Pumping energy demands have spiked by 42%.",
+        rationale: "Groundwater levels in Kolar have depleted below critical clay threshold (28m). Model forecasts 85% probability of permanent aquifer compaction and soil collapse unless draw-off is restricted. Pumping energy has spiked by 42%.",
         actions: [
-            "Initiate artificial recharge wells using localized monsoon stormwater runoff.",
+            "Initiate artificial rainwater recharge wells to replenish groundwater.",
             "Enforce a 20% agricultural tube-well draw-off limit during daytime peak solar hours.",
-            "Broadcast localized voice recommendations to 1,200 local farmers on WhatsApp."
-        ],
-        coordinates: { x: 150, y: 240 }
+            "Broadcast localized Kannada voice recommendations to 1,200 farmers on WhatsApp."
+        ]
     },
-    fresno: {
-        title: "Groundwater Table Drop: Fresno California",
-        impact: "220 Industrial Farms",
-        sla: "72 Hours",
-        rationale: "Satellite data highlights Central Valley sub-basin drop of 5.8m below seasonal average. Water salinity indexes have spiked by 14%, threatening almond crops.",
+    traffic: {
+        title: "Traffic Jam: Bengaluru Outer Ring Road",
+        impact: "18,000 Commuters & Cargo",
+        sla: "2 Hours",
+        rationale: "Waterlogging at Silk Board junction has reduced road capacity by 70%. Traffic queue length extends to 4.2km. Delivery delays are impacting grocery logistics.",
         actions: [
-            "Implement cyclic groundwater pumping bans across Fresno West corridors.",
-            "Redirect 2,500 acre-feet of state canal surplus to gravity-fed percolation basins.",
-            "Alert district agricultural agents to enforce sub-basin draw limits."
-        ],
-        coordinates: { x: 380, y: 260 }
+            "Auto-optimize regional traffic signals by 40% adaptive timing shifts.",
+            "Trigger Gati detour routing recommendations to all logistics trucks in transit.",
+            "Broadcast alternate routes to commuters via local WhatsApp alerts."
+        ]
+    },
+    grocery: {
+        title: "Tomato Logistics Spoilage: APMC Corridor",
+        impact: "₹18L Perishable Inventory",
+        sla: "12 Hours",
+        rationale: "Onion/Tomato trucks delayed at state border checkpoints in 38°C heat. Spoilage risk index has spiked to 82% due to lack of cold-chain protection.",
+        actions: [
+            "Activate emergency transit clearances for agricultural cargo trucks.",
+            "Redirect highly vulnerable inventory to the nearest municipal cold storage hub.",
+            "Disburse automated micro-subsidies to farmers via Direct Benefit Transfer (DBT)."
+        ]
+    },
+    weather: {
+        title: "Flash Flood Warning: Mumbai Ward 3",
+        impact: "1.2 Lakh Citizens",
+        sla: "30 Mins",
+        rationale: "Doppler radar forecasts high-intensity storm cell (120mm/hr precipitation) hovering over Ward 3. Milan Subway water sensor has crossed warning threshold.",
+        actions: [
+            "Dispatch mobile storm drain pumping crews to Milan Subway immediately.",
+            "Activate local ward sirens and trigger emergency WhatsApp broadcasts in Marathi.",
+            "Divert incoming suburban trains and buses away from low-lying flooding spots."
+        ]
+    },
+    geopolitical: {
+        title: "Maritime Shipping Lane Blockade: Red Sea",
+        impact: "42 Indian Grain Cargo Ships",
+        sla: "96 Hours",
+        rationale: "Bab-el-Mandeb shipping corridor blockaded. Re-routing cargo around Cape of Good Hope adds 12 days to transit and spikes fuel costs by 28%, driving wheat inflation.",
+        actions: [
+            "Divert state-sponsored grain vessels to the Cape of Good Hope bypass route.",
+            "Initiate strategic grain buffer releases in APMC stores to stabilize retail prices.",
+            "Enable dynamic shipping fuel subsidies via sovereign logistics credit lines."
+        ]
     }
 };
 
@@ -102,6 +133,37 @@ function nextSlide() {
     if (activeSlideIndex < totalSlides) showSlide(activeSlideIndex + 1);
 }
 
+// Set Active Map Layer
+function setMapLayer(layerId) {
+    currentMapLayer = layerId;
+    
+    // Update Map Buttons
+    document.querySelectorAll('.layer-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    const activeBtn = document.getElementById(`btn-layer-${layerId}`);
+    if (activeBtn) activeBtn.classList.add('active');
+    
+    // Update Layer Title
+    const titles = {
+        water: "Hydrology (Water) Layer",
+        traffic: "Urban Traffic (Gati) Layer",
+        grocery: "APMC Perishable Food (Grocery) Layer",
+        weather: "Meteorology (Weather) Layer",
+        geopolitical: "Sovereign Logistics (Geopolitical) Layer"
+    };
+    document.getElementById('current-layer-title').textContent = titles[layerId];
+    
+    // Hide all layers inside SVG
+    const layers = ['water', 'traffic', 'grocery', 'weather', 'geopolitical'];
+    layers.forEach(l => {
+        const layerElement = document.getElementById(`layer-${l}`);
+        if (layerElement) {
+            layerElement.style.display = (l === layerId) ? 'block' : 'none';
+        }
+    });
+}
+
 // Select Alert
 function selectAlert(alertKey) {
     activeAlert = alertKey;
@@ -121,17 +183,11 @@ function selectAlert(alertKey) {
         
         const data = alertsData[alertKey];
         document.getElementById('panel-title').textContent = data.title;
-        document.getElementById('panel-impact').textContent = data.impact;
         document.getElementById('panel-sla').textContent = data.sla;
         
         const premiumSpan = document.getElementById('panel-premium');
-        if (alertKey === 'kolar') {
-            premiumSpan.textContent = "+42% Energy";
-            premiumSpan.className = "val text-red";
-        } else {
-            premiumSpan.textContent = "+14% Salinity";
-            premiumSpan.className = "val text-orange";
-        }
+        premiumSpan.textContent = data.impact;
+        premiumSpan.className = "val text-red";
         
         document.getElementById('panel-rationale').textContent = data.rationale;
         
@@ -146,7 +202,7 @@ function selectAlert(alertKey) {
         // Execute button states
         const execBtn = document.querySelector('.dispatch-btn');
         if (simulatedWorkflows[alertKey]) {
-            execBtn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Workflow Active & Recharging`;
+            execBtn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Workflow Dispatched & Active`;
             execBtn.style.backgroundColor = '#10B981';
             execBtn.style.color = '#FFF';
             execBtn.disabled = true;
@@ -165,11 +221,11 @@ function dispatchWorkflow() {
     simulatedWorkflows[alertKey] = true;
     
     const execBtn = document.querySelector('.dispatch-btn');
-    execBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Initializing Aquifer Recharge...`;
+    execBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Dispatching Grid Controls...`;
     execBtn.disabled = true;
     
     setTimeout(() => {
-        execBtn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Workflow Active & Recharging`;
+        execBtn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Workflow Dispatched & Active`;
         execBtn.style.backgroundColor = '#10B981';
         execBtn.style.color = '#FFF';
         
@@ -177,11 +233,31 @@ function dispatchWorkflow() {
         const item = document.getElementById(`alert-${alertKey}-item`);
         if (item) {
             item.style.borderLeft = "4px solid #10B981";
-            item.querySelector('h4').textContent += " (RECHARGING)";
+            const textHeader = item.querySelector('h4');
+            if (textHeader && !textHeader.textContent.includes('(DISPATCHED)')) {
+                textHeader.textContent += " (DISPATCHED)";
+            }
         }
         
-        // Animate water table level rising in SVG
-        animateWaterTable(150); // Move water table up to 22m (Y = 150)
+        // Dynamic map updates based on type
+        if (alertKey === 'kolar') {
+            animateWaterTable(150); // Move water table up
+        } 
+        else if (alertKey === 'traffic') {
+            const detour = document.getElementById('traffic-detour');
+            if (detour) detour.style.display = 'block';
+            const bottleneck = document.getElementById('traffic-bottleneck');
+            if (bottleneck) {
+                bottleneck.setAttribute('fill', 'rgba(16, 185, 129, 0.15)');
+                bottleneck.setAttribute('stroke', '#10B981');
+            }
+        } 
+        else if (alertKey === 'geopolitical') {
+            const detour = document.getElementById('geopol-detour');
+            if (detour) detour.style.display = 'block';
+            const redsea = document.getElementById('geopol-redsea');
+            if (redsea) redsea.setAttribute('stroke', '#10B981');
+        }
         
         updateAlertCount();
         pushWhatsAppNotification(alertKey);
@@ -193,10 +269,7 @@ function animateWaterTable(targetY) {
     const textLabel = document.getElementById('text-watertable');
     
     if (waterLine && textLabel) {
-        // Change the SVG path definition
         waterLine.setAttribute('d', `M0 ${targetY} Q250 ${targetY - 10} 500 ${targetY}`);
-        
-        // Calculate new depth representation (180 corresponds to 28m, 150 corresponds to 22m)
         const depth = Math.round(28 - ((180 - targetY) * 0.2));
         textLabel.textContent = `WATER TABLE LEVEL (${depth}m Depth)`;
         textLabel.setAttribute('y', targetY + 30);
@@ -204,24 +277,31 @@ function animateWaterTable(targetY) {
 }
 
 function updateAlertCount() {
-    const activeCount = Object.keys(alertsData).length - Object.keys(simulatedWorkflows).length;
+    const activeAlerts = Object.keys(alertsData).filter(k => {
+        const item = document.getElementById(`alert-${k}-item`);
+        return item && !simulatedWorkflows[k];
+    });
+    
+    const activeCount = activeAlerts.length;
     const badge = document.getElementById('active-alert-count');
     if (badge) {
         badge.textContent = `${activeCount} Active Alert${activeCount !== 1 ? 's' : ''}`;
         if (activeCount === 0) {
             badge.className = "active-badge text-green";
             badge.style.backgroundColor = "rgba(16, 185, 129, 0.12)";
-            badge.style.border = "1px solid rgba(16, 185, 129, 0.25)";
+        } else {
+            badge.className = "active-badge";
+            badge.style.backgroundColor = "rgba(239, 68, 68, 0.12)";
         }
     }
 }
 
-// WhatsApp Simulation
-const conversations = {
+// WhatsApp Simulation Database
+const profilesData = {
     harish: {
         inputs: [
-            { text: "🇮🇳 Harish (Karnataka - Tube-well Dry-out)", type: "user" },
-            { audio: true, duration: "0:11", transcript: "Namma kolave bhavi purtiiyagi ಒಣಗಿಹೋಗಿದೆ. Bele neli haakuvudakke neeru illa. Enu madli?", textTrans: "My tube-well has completely dried out. I have no water to irrigate crops. What should I do?", type: "audio" }
+            { text: "🌾 Harish (Water - Tube-well Dry-out)", type: "user" },
+            { audio: true, duration: "0:11", transcript: "Namma kolave bhavi purtiiyagi ಒಣಗಿಹೋಗಿದೆ. Bele neli haakuvudakke neeru illa.", textTrans: "My tube-well has completely dried out. I have no water to irrigate crops. What should I do?", type: "audio" }
         ],
         pipeline: {
             ingest: "Ingested: Well level log | 12k records",
@@ -231,44 +311,76 @@ const conversations = {
         },
         responses: [
             "Namaste Harish. Our GPU-accelerated spatial forecast highlights that the water table in your block has dropped to 28.4m, which is below your pump's suction limit.",
-            "Sujal-Grid recommends routing rainwater harvesting recharge to Well R-12 located 150m west of your field. Pumping draw has been limited in your block for 48 hours to allow groundwater recovery."
+            "Pravaha recommends routing rainwater harvesting recharge to Well R-12 located 150m west of your field. Pumping draw has been limited in your block for 48 hours to allow groundwater recovery."
         ]
     },
-    john: {
+    deepak: {
         inputs: [
-            { text: "🇺🇸 John (California - Aquifer Depletion)", type: "user" },
-            { text: "My smart meter logs show aquifer drawdown rates increased by 25% this week in Fresno. Is there a salinity risk?", type: "text" }
+            { text: "🚦 Deepak (Traffic - ORR Road Gridlock)", type: "user" },
+            { audio: true, duration: "0:14", transcript: "Bhau, Outer Ring Road var khup motha traffic jam ahe, gadi hulat nahi ahe. Tomato delivery late hoil.", textTrans: "Bro, there is a huge traffic jam on Outer Ring Road, the truck isn't moving. Tomato delivery will be delayed.", type: "audio" }
         ],
         pipeline: {
-            ingest: "Ingested: Smart well log | 82k records",
-            cudf: "cuDF cleaned: 85ms on GPU",
-            spark: "Spatial Interpolation: complete in 71ms",
-            gemini: "Reading Central Valley Salinity thresholds"
+            ingest: "Ingested: GPS logs | 18k records",
+            cudf: "cuDF cleaned: 42ms on GPU",
+            spark: "Dynamic Routing: complete in 65ms",
+            gemini: "Reading Bengaluru smart routing RAG"
         },
         responses: [
-            "John, the GPU-Spark models indicate a localized drawdown zone forming in Fresno West. Salinity index is currently at 1.8 dS/m (14% above almond thresholds).",
-            "Recommended: Restrict daily pumping to 4 hours between 10 PM and 2 AM. JanAI has requested state canal surplus diversion to your local aquifer recharge basin."
+            "Namaste Deepak. We have detected a 4.2km congestion zone on Outer Ring Road Silk Board corridor due to local waterlogging.",
+            "Pravaha has auto-tuned the signals by 40% adaptive shifts. We have pushed a green detour routing map to your terminal bypassing the corridor via Bypass 2."
         ]
     },
-    kavitha: {
+    srinivas: {
         inputs: [
-            { text: "💧 Kavitha (Chennai - Rainwater Harvesting)", type: "user" },
-            { audio: true, duration: "0:09", transcript: "Ennoda rainwater harvesting structure-la recharge flow path block aayiduchu.", textTrans: "The recharge flow path inside my rainwater harvesting structure is blocked.", type: "audio" }
+            { text: "🍅 Srinivas (Grocery - Rotting Tomato Supply)", type: "user" },
+            { text: "Hamara tomato truck state border crossing pe 8 ghante se khada hai extreme heat me. Sadne ka risk hai.", type: "text" }
         ],
         pipeline: {
-            ingest: "Ingested: Citizen image log",
-            cudf: "cuDF parsed metadata: 25ms",
-            spark: "Grid mapping: active",
-            gemini: "Matching Chennai rainwater codes"
+            ingest: "Ingested: IoT temp logs | 42k records",
+            cudf: "cuDF parsed temp: 28ms on GPU",
+            spark: "Rot decay forecast: 48ms",
+            gemini: "Matching crop decay RAG thresholds"
         },
         responses: [
-            "Kavitha, we have registered your report. The system has automatically logged Ticket #RWH-482 and assigned it to the Ward 4 sanitation engineer.",
-            "A cleaning crew has been scheduled to inspect and clear your rainwater recharge shaft within 24 hours to ensure monsoon catchment is preserved."
+            "Srinivas, temperature sensors inside your cargo show 38°C. Our model predicts tomato decay risk at 82% if delayed another 4 hours.",
+            "We have issued a Pravaha green transit pass to skip the border toll line. If delay exceeds 2 hours, redirect cargo to the nearest APMC cold hub in Hosur."
+        ]
+    },
+    sunita: {
+        inputs: [
+            { text: "⛈️ Sunita (Weather - Cloudburst Alert)", type: "user" },
+            { audio: true, duration: "0:09", transcript: "Mumbai Milan Subway ke paas pani bharna shuru ho gaya hai. Pumping stations active hai kya?", textTrans: "Water has started logging near Milan Subway, Mumbai. Are the pumping stations active?", type: "audio" }
+        ],
+        pipeline: {
+            ingest: "Ingested: Doppler weather grid | 185k cells",
+            cudf: "cuDF grid clean: 95ms",
+            spark: "Cloudburst modeling: complete in 80ms",
+            gemini: "Matching Mumbai Disaster Action Plan"
+        },
+        responses: [
+            "Sunita, Doppler radar shows 120mm/hr cloudburst cell heading toward Ward 3. Milan Subway water sensor has crossed critical levels.",
+            "Pravaha has dispatched mobile storm pump crews to the subway and triggered automated public warnings in Marathi to divert local traffic."
+        ]
+    },
+    rajesh: {
+        inputs: [
+            { text: "🚢 Rajesh (Geopolitical - Red Sea Choke Route)", type: "user" },
+            { text: "Our grain shipping vessels are approaching the Red Sea. Current security alerts show high risks. Reroute required?", type: "text" }
+        ],
+        pipeline: {
+            ingest: "Ingested: AIS shipping grids | 320k records",
+            cudf: "cuDF shipping clean: 88ms",
+            spark: "Logistics delay impact: 71ms",
+            gemini: "Matching Global Maritime Security RAG"
+        },
+        responses: [
+            "Rajesh, Red Sea shipping routes through Bab-el-Mandeb are under high blockade risk. Rerouting via Cape of Good Hope adds 12 days to transit.",
+            "Pravaha recommends immediate detour. Government logistics credit lines have been activated to subsidize 28% of the spiked shipping fuel costs."
         ]
     }
 };
 
-function simulateFarmer(profileKey) {
+function simulateProfile(profileKey) {
     const chatBody = document.getElementById('chat-body');
     chatBody.innerHTML = '';
     
@@ -279,7 +391,7 @@ function simulateFarmer(profileKey) {
     document.getElementById('gemini-val').textContent = 'Idle';
     document.querySelectorAll('.step-card').forEach(c => c.className = 'step-card');
     
-    const conversation = conversations[profileKey];
+    const conversation = profilesData[profileKey];
     let delay = 300;
     
     // Render inputs
@@ -338,7 +450,7 @@ function simulateFarmer(profileKey) {
                     document.getElementById('gemini-val').textContent = pipe.gemini;
                     
                     renderAIReplies(conversation.responses);
-                    triggerHydrologicalAlert(profileKey);
+                    triggerPravahaAlert(profileKey);
                 }, 800);
             }, 800);
         }, 800);
@@ -369,33 +481,91 @@ function renderAIReplies(responses) {
     }, replyDelay);
 }
 
-function triggerHydrologicalAlert(profileKey) {
+function triggerPravahaAlert(profileKey) {
     const alertsList = document.getElementById('alerts-list');
     
     if (profileKey === 'harish') {
-        switchTab('control-room');
+        setMapLayer('water');
         selectAlert('kolar');
     } 
-    else if (profileKey === 'john') {
-        if (!document.getElementById('alert-fresno-item')) {
-            const fresnoAlert = document.createElement('div');
-            fresnoAlert.id = "alert-fresno-item";
-            fresnoAlert.className = "alert-item warning";
-            fresnoAlert.setAttribute('onclick', "selectAlert('fresno')");
-            fresnoAlert.innerHTML = `
-                <div class="alert-icon"><i class="fa-solid fa-circle-exclamation text-orange"></i></div>
+    else if (profileKey === 'deepak') {
+        if (!document.getElementById('alert-traffic-item')) {
+            const trafficAlert = document.createElement('div');
+            trafficAlert.id = "alert-traffic-item";
+            trafficAlert.className = "alert-item warning";
+            trafficAlert.setAttribute('onclick', "selectAlert('traffic')");
+            trafficAlert.innerHTML = `
+                <div class="alert-icon"><i class="fa-solid fa-traffic-light text-orange"></i></div>
                 <div class="alert-details">
-                    <h4>Groundwater Table Drop: Fresno California</h4>
-                    <p>Drawdown rates increased by 25%. Salinity risk to crops.</p>
-                    <span class="alert-meta">Source: Smart Well meters | Confidence: 88%</span>
+                    <h4>Traffic Jam: Bengaluru Outer Ring Road</h4>
+                    <p>Congestion corridor Silk Board has extended by 4.2km.</p>
+                    <span class="alert-meta">Source: GPS telemetry | Confidence: 94%</span>
                 </div>
             `;
-            alertsList.appendChild(fresnoAlert);
-            document.getElementById('well-fresno').style.display = 'block';
+            alertsList.appendChild(trafficAlert);
         }
-        
-        switchTab('control-room');
-        selectAlert('fresno');
+        setMapLayer('traffic');
+        selectAlert('traffic');
+        updateAlertCount();
+    }
+    else if (profileKey === 'srinivas') {
+        if (!document.getElementById('alert-grocery-item')) {
+            const groceryAlert = document.createElement('div');
+            groceryAlert.id = "alert-grocery-item";
+            groceryAlert.className = "alert-item warning";
+            groceryAlert.setAttribute('onclick', "selectAlert('grocery')");
+            groceryAlert.innerHTML = `
+                <div class="alert-icon"><i class="fa-solid fa-basket-shopping text-orange"></i></div>
+                <div class="alert-details">
+                    <h4>Tomato Logistics Spoilage: APMC Corridor</h4>
+                    <p>Tomato shipment rot risk stands at 82% under extreme heat.</p>
+                    <span class="alert-meta">Source: IoT temp sensors | Confidence: 89%</span>
+                </div>
+            `;
+            alertsList.appendChild(groceryAlert);
+        }
+        setMapLayer('grocery');
+        selectAlert('grocery');
+        updateAlertCount();
+    }
+    else if (profileKey === 'sunita') {
+        if (!document.getElementById('alert-weather-item')) {
+            const weatherAlert = document.createElement('div');
+            weatherAlert.id = "alert-weather-item";
+            weatherAlert.className = "alert-item danger";
+            weatherAlert.setAttribute('onclick', "selectAlert('weather')");
+            weatherAlert.innerHTML = `
+                <div class="alert-icon"><i class="fa-solid fa-cloud-showers-heavy text-red"></i></div>
+                <div class="alert-details">
+                    <h4>Flash Flood Warning: Mumbai Ward 3</h4>
+                    <p>Doppler forecasts cloudburst cell (120mm/hr precipitation).</p>
+                    <span class="alert-meta">Source: Radar + Water sensors | Confidence: 95%</span>
+                </div>
+            `;
+            alertsList.appendChild(weatherAlert);
+        }
+        setMapLayer('weather');
+        selectAlert('weather');
+        updateAlertCount();
+    }
+    else if (profileKey === 'rajesh') {
+        if (!document.getElementById('alert-geopolitical-item')) {
+            const geopolAlert = document.createElement('div');
+            geopolAlert.id = "alert-geopolitical-item";
+            geopolAlert.className = "alert-item warning";
+            geopolAlert.setAttribute('onclick', "selectAlert('geopolitical')");
+            geopolAlert.innerHTML = `
+                <div class="alert-icon"><i class="fa-solid fa-ship text-orange"></i></div>
+                <div class="alert-details">
+                    <h4>Maritime Shipping Lane Blockade: Red Sea</h4>
+                    <p>Bab-el-Mandeb Strait blockaded. Bypass route detour active.</p>
+                    <span class="alert-meta">Source: AIS transponders | Confidence: 99%</span>
+                </div>
+            `;
+            alertsList.appendChild(geopolAlert);
+        }
+        setMapLayer('geopolitical');
+        selectAlert('geopolitical');
         updateAlertCount();
     }
 }
@@ -406,9 +576,15 @@ function pushWhatsAppNotification(alertKey) {
     msgDiv.className = "wa-message system";
     
     if (alertKey === 'kolar') {
-        msgDiv.innerHTML = `<p>📢 <strong>Sujal-Grid Broadcast:</strong> Storm runoff redirected to Kolar Recharge Well. Tube-well pumping limits enabled.</p>`;
-    } else if (alertKey === 'fresno') {
-        msgDiv.innerHTML = `<p>📢 <strong>Sujal-Grid Broadcast:</strong> State canal surplus diverted to Fresno recharge basins. Pumping restrictions applied.</p>`;
+        msgDiv.innerHTML = `<p>📢 <strong>Pravaha Broadcast:</strong> Water recharge gates activated. Pumping limitations applied.</p>`;
+    } else if (alertKey === 'traffic') {
+        msgDiv.innerHTML = `<p>📢 <strong>Pravaha Broadcast:</strong> Traffic signals auto-tuned. Detour route pushed to logistics trucks.</p>`;
+    } else if (alertKey === 'grocery') {
+        msgDiv.innerHTML = `<p>📢 <strong>Pravaha Broadcast:</strong> Tomato trucks redirected to local cold hubs. DBT subsidies disbursed.</p>`;
+    } else if (alertKey === 'weather') {
+        msgDiv.innerHTML = `<p>📢 <strong>Pravaha Broadcast:</strong> Storm drain pumps deployed. Commuter warnings active.</p>`;
+    } else if (alertKey === 'geopolitical') {
+        msgDiv.innerHTML = `<p>📢 <strong>Pravaha Broadcast:</strong> Ships rerouted via Cape of Good Hope. Fuel subsidies active.</p>`;
     }
     
     chatBody.appendChild(msgDiv);
@@ -438,11 +614,10 @@ function runBenchmark(device) {
     gpuBtn.disabled = true;
     
     if (device === 'cpu') {
-        progressLabel.textContent = "Running Spatial Kriging on 16 vCPUs (CPU Model)...";
+        progressLabel.textContent = "Executing multi-layer spatial Kriging and route optimization on 16 vCPUs...";
         cpuCard.style.borderColor = 'var(--color-primary)';
         gpuCard.style.borderColor = 'var(--border-color)';
         
-        // Animate progress bar over 10 seconds (simulating CPU delay)
         let percent = 0;
         const interval = setInterval(() => {
             percent += 2.5;
@@ -462,11 +637,10 @@ function runBenchmark(device) {
         }, 250);
     } 
     else if (device === 'gpu') {
-        progressLabel.textContent = "Offloading matrix math to NVIDIA H100 GPU (cuDF + Spark)...";
+        progressLabel.textContent = "Offloading multi-layer network matrices to NVIDIA H100 GPU (cuDF + Spark)...";
         gpuCard.style.borderColor = 'var(--color-success)';
         cpuCard.style.borderColor = 'var(--border-color)';
         
-        // Fast animation for GPU (0.3 seconds)
         let percent = 0;
         const interval = setInterval(() => {
             percent += 34;
@@ -497,47 +671,46 @@ function calculateSpeedup() {
     }
 }
 
-// "What-If" Water Allocator Simulation
+// "What-If" Water & Flow Allocator Simulation
 function runSimulation() {
     const pumpingVal = parseInt(document.getElementById('slide-pumping').value);
-    const rechargeVal = parseInt(document.getElementById('slide-recharge').value);
-    const recyclingVal = parseInt(document.getElementById('slide-recycling').value);
+    const trafficVal = parseInt(document.getElementById('slide-traffic').value);
+    const coldchainVal = parseInt(document.getElementById('slide-coldchain').value);
+    const geopolVal = parseInt(document.getElementById('slide-geopol').value);
     
     document.getElementById('val-pumping').textContent = `${pumpingVal}% Draw`;
-    document.getElementById('val-recharge').textContent = `${rechargeVal} L/s`;
-    document.getElementById('val-recycling').textContent = `${recyclingVal}%`;
+    document.getElementById('val-traffic').textContent = `${trafficVal}% Auto`;
+    document.getElementById('val-coldchain').textContent = `₹${coldchainVal.toLocaleString()}/T`;
+    document.getElementById('val-geopol').textContent = `${geopolVal}% Divert`;
     
-    // Dynamic aquifer cross-section height calculations (lower pumping + higher recharge = water table rises)
-    // Map pumping (10% to 90%) and recharge (10 to 150) to Y-coordinates (Y=180 is baseline, Y=140 is high water, Y=220 is depleted)
+    // Dynamic aquifer cross-section height calculations (Water)
     const extractionEffect = (pumpingVal - 40) * 0.8;
-    const rechargeEffect = (rechargeVal - 30) * -0.4;
-    const targetY = Math.round(180 + extractionEffect + rechargeEffect);
-    
-    // Restrict coordinates to boundaries (140 to 220)
+    const targetY = Math.round(180 + extractionEffect);
     const finalY = Math.max(140, Math.min(220, targetY));
     animateWaterTable(finalY);
     
-    // Sustainability Index calculations
-    let sustainability = 45 - (pumpingVal * 0.4) + (rechargeVal * 0.3) + (recyclingVal * 0.4);
+    // Flow Efficiency Index calculations
+    let sustainability = 45 - (pumpingVal * 0.2) + (trafficVal * 0.3) + (coldchainVal * 0.003) + (geopolVal * 0.25);
     sustainability = Math.min(Math.round(sustainability), 96);
     
-    // Water Deficit Forecast
-    let deficit = 25 + (pumpingVal * 0.3) - (rechargeVal * 0.15) - (recyclingVal * 0.2);
+    // Mitigated Risk Index
+    let deficit = 55 + (pumpingVal * 0.2) - (trafficVal * 0.35) - (coldchainVal * 0.005) - (geopolVal * 0.3);
     deficit = Math.max(Math.round(deficit), 0);
     
-    // Energy Cost (lower water tables require more pumping energy)
-    // baseline is Y=180 (approx ₹8.4L), Y=220 is deeper (₹14.2L), Y=140 is shallower (₹4.2L)
+    // Pumping & Transit Energy Cost (₹ Lakhs)
     const baseEnergy = 8.4;
-    const energyMultiplier = (finalY - 180) * 0.15;
-    const totalEnergyCost = (baseEnergy + energyMultiplier).toFixed(1);
+    const trafficSaves = (trafficVal - 40) * -0.05;
+    const totalEnergyCost = (baseEnergy + trafficSaves).toFixed(1);
     
-    // Compaction Risk
+    // Supply Chain Rot Index
+    let rotVal = 95 - (coldchainVal * 0.015);
+    rotVal = Math.max(Math.round(rotVal), 5);
     let riskStr = "Moderate";
     let riskClass = "gauge-value text-orange";
-    if (finalY > 200) {
+    if (rotVal > 60) {
         riskStr = "Critical";
         riskClass = "gauge-value text-red";
-    } else if (finalY < 165) {
+    } else if (rotVal < 25) {
         riskStr = "Low";
         riskClass = "gauge-value text-green";
     }
@@ -556,19 +729,19 @@ function runSimulation() {
     energyDiv.className = `gauge-value ${totalEnergyCost > 11 ? 'text-red' : totalEnergyCost > 7 ? 'text-orange' : 'text-green'}`;
     
     const compDiv = document.getElementById('gauge-compaction');
-    compDiv.textContent = riskStr;
+    compDiv.textContent = `${rotVal}% (${riskStr})`;
     compDiv.className = riskClass;
     
     // Advisory updates
     const advisoryBox = document.getElementById('sim-advisory');
     if (sustainability >= 80) {
-        advisoryBox.textContent = `✅ High-Efficiency Grid Configured. Pumping draw matches natural aquifer recharge. Recharge well operations are operating at optimal peak capacity, ensuring a sustainable crops cycle while dropping compaction risk to ${riskStr.toLowerCase()}.`;
+        advisoryBox.textContent = `✅ High-Efficiency Grid Configured. Pumping draw matches aquifer recovery. AI traffic signal auto-tuning (${trafficVal}%) keeps transport latency low. Cold-chain storage preserves tomato inventory, lowering rot risk to ${rotVal}%.`;
         advisoryBox.parentElement.style.borderColor = 'rgba(16, 185, 129, 0.4)';
     } else if (sustainability < 45) {
-        advisoryBox.textContent = `🚨 Aquifer Depletion Warning. High extraction limits (${pumpingVal}%) exceed recharge thresholds, causing rapid water table descent. Deep pumping requires ${totalEnergyCost}L in energy, threatening permanent compaction risk.`;
+        advisoryBox.textContent = `🚨 High Flow Risk Warning. Extreme pumping draw (${pumpingVal}%) combined with low cold-chain subsidies under-allocates resources. Traffic auto-tuning is insufficient, raising supply chain rot risk to ${rotVal}%.`;
         advisoryBox.parentElement.style.borderColor = 'rgba(239, 68, 68, 0.4)';
     } else {
-        advisoryBox.textContent = `💡 Balanced Scenario. Sustainability is currently stable. Adjusting rainwater catchment recharge to higher levels will offset the agricultural deficit and save ₹1.5L in tube-well pumping energy costs.`;
+        advisoryBox.textContent = `💡 Balanced Flow Scenario. System is stable. Increasing cold-chain subsidies to ₹4,500/Ton will lower vegetable rot index to under 20% and offset transit delays.`;
         advisoryBox.parentElement.style.borderColor = 'rgba(16, 185, 129, 0.15)';
     }
 }
@@ -584,13 +757,91 @@ function selectPersona(role) {
     }
     
     if (role === 'farmer') {
-        // Start Farmer Walkthrough
         setTimeout(() => {
-            simulateFarmer('harish');
+            simulateProfile('harish');
         }, 500);
     } else if (role === 'commissioner') {
-        // Start Commissioner View
         switchTab('control-room');
         selectAlert('kolar');
     }
+}
+
+// Automated Demo Walkthrough Script (प्रवाह Multi-Flow Auto-Demo)
+function startAutoDemo() {
+    const demoBtn = document.querySelector('.demo-play-btn');
+    if (!demoBtn) return;
+    
+    demoBtn.disabled = true;
+    demoBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Running Demo...`;
+    
+    // Reset simulated states
+    simulatedWorkflows = {};
+    updateAlertCount();
+    
+    // Step 1: Switch to Control Room & select Hydrology
+    switchTab('control-room');
+    setMapLayer('water');
+    
+    // Remove temporary alerts if present
+    ['alert-traffic-item', 'alert-grocery-item', 'alert-weather-item', 'alert-geopolitical-item'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.remove();
+    });
+    
+    // Reset detour lines inside SVG
+    const td = document.getElementById('traffic-detour'); if (td) td.style.display = 'none';
+    const gd = document.getElementById('geopol-detour'); if (gd) gd.style.display = 'none';
+    
+    // Step 2: Simulate Harish (Water Flow Ingress)
+    setTimeout(() => {
+        simulateProfile('harish');
+    }, 1000);
+    
+    // Step 3: Approve Kolar recharge actions
+    setTimeout(() => {
+        selectAlert('kolar');
+        dispatchWorkflow();
+    }, 5500);
+    
+    // Step 4: Simulate Deepak (Traffic Corridor Gridlock Ingress)
+    setTimeout(() => {
+        simulateProfile('deepak');
+    }, 8500);
+    
+    // Step 5: Approve traffic rerouting actions
+    setTimeout(() => {
+        selectAlert('traffic');
+        dispatchWorkflow();
+    }, 13000);
+    
+    // Step 6: Simulate Rajesh (Geopolitical Ship Lane Blockade)
+    setTimeout(() => {
+        simulateProfile('rajesh');
+    }, 16000);
+    
+    // Step 7: Approve geopolitical route detour actions
+    setTimeout(() => {
+        selectAlert('geopolitical');
+        dispatchWorkflow();
+    }, 20500);
+    
+    // Step 8: Switch to Simulator Tab and slide optimization sliders
+    setTimeout(() => {
+        switchTab('simulator');
+    }, 23500);
+    
+    setTimeout(() => {
+        document.getElementById('slide-traffic').value = 70;
+        document.getElementById('slide-coldchain').value = 4500;
+        document.getElementById('slide-geopol').value = 60;
+        runSimulation();
+    }, 24500);
+    
+    // Step 9: Demo Complete
+    setTimeout(() => {
+        alert("Pravaha (प्रवाह) Walkthrough Completed!\n\nYou've witnessed the multi-layered flow optimization:\n1. Decoded Kannada farmer's well dry-out.\n2. Diverted commuter routes around Outer Ring Road in Marathi.\n3. Rerouted grain shipments around Bab-el-Mandeb Strait in English.\n4. Simulated global flow and cold-chain subsidies.\n\nExplore other layers manually!");
+        
+        demoBtn.disabled = false;
+        demoBtn.innerHTML = `<i class="fa-solid fa-play"></i> Run Auto-Demo`;
+    }, 28000);
 }

@@ -1,11 +1,11 @@
-/* Sujal-Grid Stylesheet - Ocean Cybernetic Theme */
+/* Pravaha (प्रवाह) Stylesheet - Deep Flow Theme */
 
 :root {
     --bg-base: #060913;
     --bg-surface: #0B1120;
-    --bg-card: rgba(15, 23, 42, 0.7);
+    --bg-card: rgba(15, 23, 42, 0.75);
     --border-color: rgba(255, 255, 255, 0.08);
-    --border-glow: rgba(0, 191, 255, 0.15);
+    --border-glow: rgba(0, 210, 255, 0.15);
     
     --color-primary: #00D2FF;
     --color-secondary: #8B5CF6;
@@ -56,8 +56,8 @@ body {
 }
 
 .logo-orb {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     background: linear-gradient(135deg, #00D2FF, #8B5CF6);
     box-shadow: 0 0 10px rgba(0, 210, 255, 0.8);
@@ -77,6 +77,19 @@ body {
     background: linear-gradient(135deg, #FFFFFF, #9CA3AF);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sanskrit-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-primary);
+    background: rgba(0, 210, 255, 0.08);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 210, 255, 0.15);
 }
 
 .sub-badge {
@@ -134,8 +147,23 @@ body {
 
 .text-cyan { color: var(--color-primary); }
 
-.status-item i {
-    color: var(--color-primary);
+.demo-play-btn {
+    background: linear-gradient(135deg, #10B981, #059669);
+    color: #FFF;
+    border: none;
+    padding: 6px 12px;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 11px;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+    transition: all 0.2s;
+}
+
+.demo-play-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
 }
 
 /* Dashboard Layout */
@@ -486,7 +514,42 @@ body {
     flex-direction: column;
 }
 
-/* TAB 1: Aquifer Room */
+/* Map layer selector */
+.map-layer-selector {
+    display: flex;
+    gap: 4px;
+    background: rgba(255,255,255,0.03);
+    padding: 2px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.layer-btn {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.layer-btn:hover {
+    color: var(--color-text-main);
+    background-color: rgba(255,255,255,0.05);
+}
+
+.layer-btn.active {
+    background-color: var(--color-primary);
+    color: #000;
+}
+
+/* TAB 1: Operational Control Room */
 .control-grid {
     display: grid;
     grid-template-columns: 1.2fr 1fr;
@@ -572,6 +635,17 @@ body {
     0% { cy: 75; opacity: 1; }
     80% { opacity: 1; }
     100% { cy: 190; opacity: 0; }
+}
+
+/* Risk Pulsing zone */
+.risk-zone {
+    animation: pulse-ring 2.5s infinite;
+}
+
+@keyframes pulse-ring {
+    0% { transform: scale(1); opacity: 0.8; transform-origin: center; }
+    50% { transform: scale(1.08); opacity: 0.4; transform-origin: center; }
+    100% { transform: scale(1); opacity: 0.8; transform-origin: center; }
 }
 
 /* Alerts Queue */
@@ -1109,24 +1183,6 @@ body {
     margin-top: 3px;
 }
 
-/* Scrollbar tweaks */
-::-webkit-scrollbar {
-    width: 6px;
-}
-
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--border-color);
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: rgba(255,255,255,0.15);
-}
-
 /* Onboarding Modal Styling */
 .modal-overlay {
     position: fixed;
@@ -1230,4 +1286,22 @@ body {
 
 .modal-skip-btn:hover {
     color: var(--color-text-main);
+}
+
+/* Scrollbar tweaks */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.15);
 }
