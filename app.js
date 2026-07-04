@@ -574,3 +574,69 @@ function runSimulation() {
         advisoryBox.parentElement.style.borderColor = 'rgba(16, 185, 129, 0.15)';
     }
 }
+
+// Automated Demo Walkthrough Script
+function startAutoDemo() {
+    const demoBtn = document.querySelector('.demo-play-btn');
+    if (!demoBtn) return;
+    
+    // Disable button and show running state
+    demoBtn.disabled = true;
+    demoBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Running Demo...`;
+    
+    // Step 1: Switch to Control Room
+    switchTab('control-room');
+    
+    // Reset alert resolution states
+    simulatedWorkflows = {};
+    updateAlertCount();
+    
+    // Remove previous flood alert if present
+    const prevFlood = document.getElementById('alert-flood-item');
+    if (prevFlood) prevFlood.remove();
+    
+    // Reset map flood element
+    const mapZone = document.getElementById('zone-flood');
+    if (mapZone) {
+        mapZone.style.display = 'none';
+        mapZone.setAttribute('fill', 'rgba(229, 62, 62, 0.25)');
+        mapZone.setAttribute('stroke', '#E53E3E');
+        mapZone.classList.add('pulse-warning');
+    }
+    
+    // Step 2: Simulate Mumbai Commuter (Sunil) Voice Input
+    setTimeout(() => {
+        simulateCitizen('sunil');
+    }, 1000);
+    
+    // Step 3: Select Mumbai Flood Alert (after STT/Translation/Gemini completes)
+    setTimeout(() => {
+        selectAlert('flood');
+    }, 5500);
+    
+    // Step 4: Click Approve & Execute Actions
+    setTimeout(() => {
+        dispatchWorkflow();
+    }, 8500);
+    
+    // Step 5: Switch to Simulator Tab
+    setTimeout(() => {
+        switchTab('simulator');
+    }, 11500);
+    
+    // Step 6: Adjust Sliders to optimize transit and cooling capacity
+    setTimeout(() => {
+        document.getElementById('slide-transit').value = 60;
+        document.getElementById('slide-cooling').value = 600;
+        runSimulation();
+    }, 12500);
+    
+    // Step 7: Completed popup
+    setTimeout(() => {
+        alert("JanAI Deployed Demo Walkthrough Completed!\n\nYou've witnessed the Mumbai Cloudburst scenario:\n1. Citizen voice query decoded from Marathi.\n2. Inundation alarm triggered in Ward 3.\n3. Dynamic traffic diversions approved and dispatched.\n4. Policy impact metrics re-calculated in real-time.\n\nFeel free to explore the features manually!");
+        
+        // Restore button state
+        demoBtn.disabled = false;
+        demoBtn.innerHTML = `<i class="fa-solid fa-play"></i> Run Auto-Demo`;
+    }, 15000);
+}

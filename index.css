@@ -1069,3 +1069,25 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(255,255,255,0.15);
 }
+
+.demo-play-btn {
+    background: linear-gradient(135deg, var(--color-primary), #10B981);
+    color: #000;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 11px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 0 10px rgba(0, 191, 255, 0.4);
+    transition: all 0.3s;
+}
+
+.demo-play-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 15px rgba(0, 191, 255, 0.7);
+}
