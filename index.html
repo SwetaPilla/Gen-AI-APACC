@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JanAI - India's AI Decision Intelligence Platform</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <!-- Top Cybernetic Navigation Bar -->
+    <header class="cyber-header">
+        <div class="header-logo">
+            <div class="logo-orb"></div>
+            <h1>JanAI</h1>
+            <span class="sub-badge">National Decision Intelligence Core</span>
+        </div>
+        <div class="system-status">
+            <div class="status-indicator">
+                <span class="pulse-green"></span>
+                <span class="status-text">Core System: Operational</span>
+            </div>
+            <div class="status-divider"></div>
+            <div class="status-item">
+                <i class="fa-solid fa-language"></i>
+                <span>Chirp 2.0: Active (22 Languages)</span>
+            </div>
+            <div class="status-divider"></div>
+            <div class="status-item">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>DPDP Audit: Compliant</span>
+            </div>
+            <div class="status-divider"></div>
+            <div class="status-item timer">
+                <i class="fa-regular fa-clock"></i>
+                <span id="live-time">04 July 2026 | 11:43 AM IST</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace Layout -->
+    <main class="dashboard-container">
+        <!-- LEFT PANEL: Citizen Chat Simulator (Interactive Phone) -->
+        <section class="left-panel">
+            <div class="panel-header">
+                <h2><i class="fa-solid fa-mobile-screen-button"></i> Citizen Access Portal</h2>
+                <p>Simulating WhatsApp Business Integration on low-bandwidth networks</p>
+            </div>
+            
+            <!-- Mobile Phone Shell -->
+            <div class="phone-shell">
+                <div class="phone-screen">
+                    <!-- WhatsApp Header -->
+                    <div class="wa-header">
+                        <div class="wa-avatar">
+                            <i class="fa-solid fa-hands-praying"></i>
+                        </div>
+                        <div class="wa-chat-info">
+                            <h3>JanAI Assistant</h3>
+                            <span class="online-indicator">Govt of India Official Account</span>
+                        </div>
+                        <div class="wa-actions">
+                            <i class="fa-solid fa-phone"></i>
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- WhatsApp Chat Area -->
+                    <div class="wa-body" id="chat-body">
+                        <div class="wa-message system">
+                            <p>🙏 Welcome to JanAI. You can speak or write to us in any of the 22 regional languages. Select an automated profile below to simulate a citizen concern:</p>
+                        </div>
+                    </div>
+                    
+                    <!-- WhatsApp Inputs & Quick Options -->
+                    <div class="wa-footer">
+                        <div class="quick-selectors">
+                            <button onclick="simulateCitizen('ramesh')">🌾 Ramesh (Bihar - Crop Blight)</button>
+                            <button onclick="simulateCitizen('priya')">💧 Priya (Bengaluru - Muddy Water)</button>
+                            <button onclick="simulateCitizen('sunil')">🌧️ Sunil (Mumbai - Flood Route)</button>
+                            <button onclick="simulateCitizen('harpreet')">🚜 Harpreet (Punjab - Smog/Stubble)</button>
+                        </div>
+                        <div class="input-container">
+                            <input type="text" id="user-input" placeholder="Type message in your language..." disabled>
+                            <button class="send-btn" id="send-btn" disabled><i class="fa-solid fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pipeline Visualizer -->
+            <div class="pipeline-visualizer">
+                <h3><i class="fa-solid fa-gears"></i> Multimodal AI Pipeline</h3>
+                <div class="steps-grid">
+                    <div class="step-card" id="step-stt">
+                        <div class="step-num">1</div>
+                        <h4>Chirp STT</h4>
+                        <p id="stt-val">Idle</p>
+                    </div>
+                    <div class="step-card" id="step-trans">
+                        <div class="step-num">2</div>
+                        <h4>Translate AI</h4>
+                        <p id="trans-val">Idle</p>
+                    </div>
+                    <div class="step-card" id="step-rag">
+                        <div class="step-num">3</div>
+                        <h4>AlloyDB RAG</h4>
+                        <p id="rag-val">Idle</p>
+                    </div>
+                    <div class="step-card" id="step-gemini">
+                        <div class="step-num">4</div>
+                        <h4>Gemini Pro</h4>
+                        <p id="gemini-val">Idle</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RIGHT PANEL: Government Decision Intelligence Hub -->
+        <section class="right-panel">
+            <!-- Navigation Tabs -->
+            <div class="tab-bar">
+                <button class="tab-btn active" onclick="switchTab('control-room')"><i class="fa-solid fa-map-location-dot"></i> Operational Control Room</button>
+                <button class="tab-btn" onclick="switchTab('simulator')"><i class="fa-solid fa-chart-line"></i> "What-If" Policy Simulator</button>
+                <button class="tab-btn" onclick="switchTab('use-cases')"><i class="fa-solid fa-grip"></i> Use Cases Explorer</button>
+                <button class="tab-btn" onclick="switchTab('slide-deck')"><i class="fa-solid fa-presentation-screen"></i> Hackathon Pitch Deck</button>
+            </div>
+
+            <!-- TAB 1: Control Room -->
+            <div class="tab-content active" id="control-room">
+                <div class="control-grid">
+                    <!-- Left: Spatial Digital Twin Map -->
+                    <div class="card map-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-earth-asia"></i> Geospatial Digital Twin</h3>
+                            <span class="live-map-badge">Live Map Feeds</span>
+                        </div>
+                        <div class="map-container">
+                            <!-- Digital Twin SVG Simulation -->
+                            <svg viewBox="0 0 500 350" class="digital-twin-svg" id="digital-twin-map">
+                                <!-- Background grid -->
+                                <defs>
+                                    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+                                    </pattern>
+                                </defs>
+                                <rect width="500" height="350" fill="url(#grid)" />
+                                
+                                <!-- Simulated City Boundaries -->
+                                <path d="M50 50 L150 30 L300 40 L450 100 L420 280 L200 320 L60 250 Z" fill="rgba(26, 32, 44, 0.5)" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+                                
+                                <!-- Roads -->
+                                <path d="M50 180 Q250 150 450 180" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="4" stroke-dasharray="5,5"/>
+                                <path d="M250 30 Q230 180 220 320" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="4"/>
+                                
+                                <!-- Water Body / River -->
+                                <path d="M 60 50 Q 200 120 420 280" fill="none" stroke="rgba(0, 191, 255, 0.4)" stroke-width="15" id="river-path"/>
+                                
+                                <!-- Sensor Pins & Areas -->
+                                <g id="sensor-group">
+                                    <!-- Nelamangala Block (Water Scarcity) -->
+                                    <circle cx="120" cy="100" r="25" class="risk-zone" fill="rgba(237, 137, 54, 0.3)" stroke="#DD6B20" stroke-width="1" id="zone-water"/>
+                                    <circle cx="120" cy="100" r="4" fill="#DD6B20" />
+                                    <text x="120" y="80" text-anchor="middle" fill="#E2E8F0" font-size="9" font-family="Outfit">Nelamangala (Water)</text>
+                                    
+                                    <!-- Mumbai Flood Sensor Zone -->
+                                    <circle cx="280" cy="180" r="30" class="risk-zone pulse-warning" fill="rgba(229, 62, 62, 0.25)" stroke="#E53E3E" stroke-width="1.5" id="zone-flood" style="display:none;"/>
+                                    <circle cx="280" cy="180" r="4" fill="#E53E3E" id="sensor-flood" style="display:none;"/>
+                                    <text x="280" y="160" text-anchor="middle" fill="#E2E8F0" font-size="9" font-family="Outfit" id="text-flood" style="display:none;">Ward 3 (Flood Risk)</text>
+
+                                    <!-- Stubble Burning Smoke Zone -->
+                                    <path d="M 300 50 Q 380 40 420 80 Q 350 100 300 50 Z" fill="rgba(160, 174, 192, 0.3)" stroke="#718096" stroke-dasharray="2,2" id="zone-smoke" style="display:none;"/>
+                                    <circle cx="360" cy="65" r="4" fill="#FFD700" id="sensor-smoke" style="display:none;"/>
+                                    <text x="360" y="50" text-anchor="middle" fill="#E2E8F0" font-size="9" font-family="Outfit" id="text-smoke" style="display:none;">Smog Plume detected</text>
+                                </g>
+
+                                <!-- Legend -->
+                                <g transform="translate(15, 300)">
+                                    <rect width="180" height="40" rx="5" fill="rgba(11, 15, 25, 0.9)" stroke="rgba(255,255,255,0.1)"/>
+                                    <circle cx="15" cy="12" r="4" fill="#E53E3E"/>
+                                    <text x="25" y="15" fill="#A0AEC0" font-size="8" font-family="Outfit">High Danger Risk</text>
+                                    
+                                    <circle cx="15" cy="27" r="4" fill="#DD6B20"/>
+                                    <text x="25" y="30" fill="#A0AEC0" font-size="8" font-family="Outfit">Moderate Stress Warning</text>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Right: Live Intelligent Alerts Queue -->
+                    <div class="card alerts-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-bell"></i> Operational Alerts</h3>
+                            <span class="active-badge" id="active-alert-count">1 Active Alert</span>
+                        </div>
+                        <div class="alerts-list" id="alerts-list">
+                            <!-- Alert 1 (Always Active initially - Water Scarcity) -->
+                            <div class="alert-item warning" id="alert-water-item" onclick="selectAlert('water')">
+                                <div class="alert-icon"><i class="fa-solid fa-droplet"></i></div>
+                                <div class="alert-details">
+                                    <h4>Groundwater Stress: Nelamangala</h4>
+                                    <p>Demand exceeds capacity by 18%. Risk of dry-out in 72 hours.</p>
+                                    <span class="alert-meta">Source: Smart Water meters | Confidence: 88%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Selected Alert Actions / Rationale Panel -->
+                        <div class="alert-detail-panel" id="alert-detail-panel">
+                            <h3>Decision Support Panel</h3>
+                            <p class="panel-placeholder">Select an active operational alert above to inspect explainable AI reasoning and trigger closed-loop automation workflows.</p>
+                            
+                            <div class="panel-data" id="panel-data" style="display: none;">
+                                <h4 id="panel-title">Groundwater Stress: Nelamangala</h4>
+                                <div class="metric-row">
+                                    <div class="sub-metric">
+                                        <span class="label">SLA Time Remaining</span>
+                                        <span class="val text-orange">72 Hours</span>
+                                    </div>
+                                    <div class="sub-metric">
+                                        <span class="label">Impact Population</span>
+                                        <span class="val" id="panel-impact">12,000 Citizens</span>
+                                    </div>
+                                </div>
+                                <div class="reason-block">
+                                    <h5><i class="fa-solid fa-brain"></i> Explainable AI Rationale (SHAP Grounding)</h5>
+                                    <p id="panel-rationale">Water demand in Ward 12 is expected to exceed supply by 18% within 72 hours due to increased consumption and declining reservoir levels. Target aquifer depletion is 4.2m below seasonal baseline.</p>
+                                </div>
+                                <div class="action-block">
+                                    <h5>Recommended Actions</h5>
+                                    <ul id="panel-actions">
+                                        <li>Deploy 10 municipal water tankers immediately.</li>
+                                        <li>Reduce industrial supply allocation by 10%.</li>
+                                        <li>Alert local residential association managers via automated WhatsApp notifications.</li>
+                                    </ul>
+                                    <button class="dispatch-btn" onclick="dispatchWorkflow()"><i class="fa-solid fa-bolt"></i> Approve & Execute Actions</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: "What-If" Policy Simulator -->
+            <div class="tab-content" id="simulator">
+                <div class="simulator-header">
+                    <h2><i class="fa-solid fa-sliders"></i> "What-If" Policy Simulation Board</h2>
+                    <p>Forecast regional outcomes by dynamically tuning municipal resources and tracking system impacts.</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- Left: Control Sliders -->
+                    <div class="card sim-sliders-card">
+                        <h3>Resource Adjustments</h3>
+                        <div class="slider-group">
+                            <label for="slide-tankers">
+                                <span><i class="fa-solid fa-truck-water"></i> Water Tanker Pool Size</span>
+                                <span class="slide-val" id="val-tankers">15 Tanks</span>
+                            </label>
+                            <input type="range" id="slide-tankers" min="5" max="50" value="15" oninput="runSimulation()">
+                            <span class="slide-desc">Affects Nelamangala water distribution coverage. Billed directly to municipal budget.</span>
+                        </div>
+
+                        <div class="slider-group">
+                            <label for="slide-subsidy">
+                                <span><i class="fa-solid fa-hand-holding-dollar"></i> Stubble Burning Subsidy (per Acre)</span>
+                                <span class="slide-val" id="val-subsidy">₹2,500</span>
+                            </label>
+                            <input type="range" id="slide-subsidy" min="1000" max="6000" step="500" value="2500" oninput="runSimulation()">
+                            <span class="slide-desc">Incentivizes Punjab farmers. Direct impact on Delhi winter smog density.</span>
+                        </div>
+
+                        <div class="slider-group">
+                            <label for="slide-transit">
+                                <span><i class="fa-solid fa-traffic-light"></i> Traffic Diversion Rate (ORR Bengaluru)</span>
+                                <span class="slide-val" id="val-transit">20%</span>
+                            </label>
+                            <input type="range" id="slide-transit" min="0" max="80" step="10" value="20" oninput="runSimulation()">
+                            <span class="slide-desc">Rate of traffic redirected to outer corridors during gridlocks.</span>
+                        </div>
+
+                        <div class="slider-group">
+                            <label for="slide-cooling">
+                                <span><i class="fa-solid fa-snowflake"></i> Urban Cooling Shelter Capacity</span>
+                                <span class="slide-val" id="val-cooling">200 Beds</span>
+                            </label>
+                            <input type="range" id="slide-cooling" min="50" max="1000" step="50" value="200" oninput="runSimulation()">
+                            <span class="slide-desc">Adjusts cooling shelter availability during summer heatwaves.</span>
+                        </div>
+                    </div>
+
+                    <!-- Right: Visual Impact Gauges -->
+                    <div class="card sim-gauges-card">
+                        <h3>Simulated Output & AI Advisory</h3>
+                        <div class="gauges-grid">
+                            <div class="gauge-card">
+                                <span class="gauge-title">Sentiment & CSAT</span>
+                                <div class="gauge-value" id="gauge-sentiment">76%</div>
+                                <div class="gauge-trend"><i class="fa-solid fa-caret-up text-green"></i> Stable</div>
+                            </div>
+                            <div class="gauge-card">
+                                <span class="gauge-title">Mitigated Risk %</span>
+                                <div class="gauge-value text-orange" id="gauge-risk">55%</div>
+                                <div class="gauge-trend"><i class="fa-solid fa-caret-up text-orange"></i> Improving</div>
+                            </div>
+                            <div class="gauge-card">
+                                <span class="gauge-title">Response Latency</span>
+                                <div class="gauge-value" id="gauge-latency">42 Min</div>
+                                <div class="gauge-trend"><i class="fa-solid fa-caret-down text-green"></i> Faster</div>
+                            </div>
+                            <div class="gauge-card">
+                                <span class="gauge-title">Budget Impact (Est)</span>
+                                <div class="gauge-value text-red" id="gauge-budget">₹18.4L</div>
+                                <div class="gauge-trend"><i class="fa-solid fa-caret-up text-red"></i> High Cost</div>
+                            </div>
+                        </div>
+
+                        <!-- Causal Engine Box -->
+                        <div class="causal-engine-box">
+                            <h4><i class="fa-solid fa-circle-nodes"></i> Causal AI Analysis & Advisory</h4>
+                            <p id="sim-advisory">Current policies maintain a balanced status quo. Increasing stubble burning subsidies to ₹4,000 is projected to reduce Delhi smoke density by 22% but requires reallocation of ₹14 Lakhs from urban greening grants.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: Use Cases Explorer -->
+            <div class="tab-content" id="use-cases">
+                <div class="usecases-header">
+                    <h2><i class="fa-solid fa-cubes"></i> Top 10 Multimodal AI Use Cases</h2>
+                    <p>Designed specifically to address current and forecasted societal challenges in India.</p>
+                </div>
+                
+                <div class="usecases-grid">
+                    <!-- 1 -->
+                    <div class="usecase-card">
+                        <div class="uc-header">
+                            <div class="uc-icon"><i class="fa-solid fa-briefcase-medical"></i></div>
+                            <h3>1. Healthcare Outbreak Predictor</h3>
+                        </div>
+                        <div class="uc-body">
+                            <p><strong>Problem:</strong> Rapid spread of Dengue, Malaria, and Cholera due to delayed detection in urban slums and rural zones.</p>
+                            <p><strong>AI Solution:</strong> Gemini analyzes hospital admissions, local rainfall patterns, and satellite indices of stagnant water. Models forecast outbreaks 14 days in advance.</p>
+                        </div>
+                        <div class="uc-footer">
+                            <span>Google Cloud: Vertex AI, BigQuery, Earth Engine</span>
+                        </div>
+                    </div>
+
+                    <!-- 2 -->
+                    <div class="usecase-card">
+                        <div class="uc-header">
+                            <div class="uc-icon"><i class="fa-solid fa-cloud-showers-heavy"></i></div>
+                            <h3>2. Multimodal Flood Coordinator</h3>
+                        </div>
+                        <div class="uc-body">
+                            <p><strong>Problem:</strong> Heavy monsoon cloudbursts causing flash flooding, stalling transport and endangering citizens.</p>
+                            <p><strong>AI Solution:</strong> Ingests water level sensor telemetry and citizen photos via WhatsApp. Predicts runoffs and schedules automated emergency alerts.</p>
+                        </div>
+                        <div class="uc-footer">
+                            <span>Google Cloud: Pub/Sub, Cloud Run, Maps API</span>
+                        </div>
+                    </div>
+
+                    <!-- 3 -->
+                    <div class="usecase-card">
+                        <div class="uc-header">
+                            <div class="uc-icon"><i class="fa-solid fa-venus"></i></div>
+                            <h3>3. Suraksha: Safe Passage</h3>
+                        </div>
+                        <div class="uc-body">
+                            <p><strong>Problem:</strong> Dynamic safety challenges for women working late night shifts in under-lit urban transit corridors.</p>
+                            <p><strong>AI Solution:</strong> Integrates street-lighting data, retail commercial density, police patrol logs, and emergency feeds to map optimal walking pathways.</p>
+                        </div>
+                        <div class="uc-footer">
+                            <span>Google Cloud: Vision AI, Cloud Functions, Firestore</span>
+                        </div>
+                    </div>
+
+                    <!-- 4 -->
+                    <div class="usecase-card">
+                        <div class="uc-header">
+                            <div class="uc-icon"><i class="fa-solid fa-bus"></i></div>
+                            <h3>4. Dynamic Transit Optimizer</h3>
+                        </div>
+                        <div class="uc-body">
+                            <p><strong>Problem:</strong> Stalling economic productivity due to heavy transit gridlocks in metro hubs like Bengaluru.</p>
+                            <p><strong>AI Solution:</strong> Uses reinforcement learning on CCTV traffic feeds to dynamically adjust light signaling patterns and bus fleet dispatch intervals.</p>
+                        </div>
+                        <div class="uc-footer">
+                            <span>Google Cloud: Vertex AI Reinforcement Learning, Looker</span>
+                        </div>
+                    </div>
+
+                    <!-- 5 -->
+                    <div class="usecase-card">
+                        <div class="uc-header">
+                            <div class="uc-icon"><i class="fa-solid fa-trash-can"></i></div>
+                            <h3>5. Swachh-AI: Smart Waste Dispatch</h3>
+                        </div>
+                        <div class="uc-body">
+                            <p><strong>Problem:</strong> Blocked public sewage drains and overflowing dustbins, leading to municipal health hazards.</p>
+                            <p><strong>AI Solution:</strong> Ingests citizen photos, categorizes trash volume using Vision AI, and dynamically creates route schedules for sanitation trucks.</p>
+                        </div>
+                        <div class="uc-footer">
+                            <span>Google Cloud: Document AI, Cloud Run, Optimization AI</span>
+                        </div>
+                    </div>
+
+                    <!-- 6 -->
+                    <div class="usecase-card">
+                        <div class="uc-header">
+                            <div class="uc-icon"><i class="fa-solid fa-monument"></i></div>
+                            <h3>6. Multi-lingual Tourist Guide</h3>
+                        </div>
+                        <div class="uc-body">
+                            <p><strong>Problem:</strong> Lack of structured, accessible multi-lingual historical narratives at cultural monuments.</p>
+                            <p><strong>AI Solution:</strong> Real-time visual analysis of monuments via mobile camera; Gemini provides rich contextual storytelling in 22 regional languages.</p>
+                        </div>
+                        <div class="uc-footer">
+                            <span>Google Cloud: Gemini, Text-to-Speech, Vision API</span>
+                        </div>
+                    </div>
+
+                    <!-- 7 -->
+                    <div class="usecase-card">
+                        <div class="uc-header">
+                            <div class="uc-icon"><i class="fa-solid fa-seedling"></i></div>
+                            <h3>7. Krishi-Gyan: Agri-Risk Mitigator</h3>
+                        </div>
+                        <div class="uc-body">
+                            <p><strong>Problem:</strong> Severe crop failures from unpredictable pest invasions and sudden unseasonal rainfall.</p>
+                            <p><strong>AI Solution:</strong> Matches soil sensors, satellite imagery of leaf canopy, and local weather patterns. Provides direct crop remedy advisory on WhatsApp.</p>
+                        </div>
+                        <div class="uc-footer">
+                            <span>Google Cloud: Earth Engine, Spanner, Vertex Feature Store</span>
+                        </div>
+                    </div>
+
+                    <!-- 8 -->
+                    <div class="usecase-card">
+                        <div class="uc-header">
+                            <div class="uc-icon"><i class="fa-solid fa-comments"></i></div>
+                            <h3>8. Jan-Grievance Voice Redressal</h3>
+                        </div>
+                        <div class="uc-body">
+                            <p><strong>Problem:</strong> Administrative blockages; rural citizens cannot access complex, text-heavy grievance portals.</p>
+                            <p><strong>AI Solution:</strong> A voice-note portal on WhatsApp. Chirp transcribes local dialects, extracts grievances, and routes them to departments.</p>
+                        </div>
+                        <div class="uc-footer">
+                            <span>Google Cloud: Chirp STT, Translation API, Firestore</span>
+                        </div>
+                    </div>
+
+                    <!-- 9 -->
+                    <div class="usecase-card">
+                        <div class="uc-header">
+                            <div class="uc-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                            <h3>9. Shiksha-Link: Tutor Assistant</h3>
+                        </div>
+                        <div class="uc-body">
+                            <p><strong>Problem:</strong> High dropout rates in government schools due to lack of localized personal tutors.</p>
+                            <p><strong>AI Solution:</strong> An interactive multimodal agent grounded in state textbook syllabi, delivering visual stories and marking physical papers.</p>
+                        </div>
+                        <div class="uc-footer">
+                            <span>Google Cloud: Vertex Studio RAG, Document AI</span>
+                        </div>
+                    </div>
+
+                    <!-- 10 -->
+                    <div class="usecase-card">
+                        <div class="uc-header">
+                            <div class="uc-icon"><i class="fa-solid fa-wind"></i></div>
+                            <h3>10. Paryavaran: Clean Air Sentinel</h3>
+                        </div>
+                        <div class="uc-body">
+                            <p><strong>Problem:</strong> Seasonal stubble-smog crises in northern cities with AQI exceeding hazardous limits.</p>
+                            <p><strong>AI Solution:</strong> Correlates satellite smoke detection, traffic levels, and AQI monitors to trigger automated alerts and coordinate mist tankers.</p>
+                        </div>
+                        <div class="uc-footer">
+                            <span>Google Cloud: Vertex AI, BigQuery, Maps Platform</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: Slide Deck Browser -->
+            <div class="tab-content" id="slide-deck">
+                <div class="slide-controls">
+                    <button class="slide-nav-btn" onclick="prevSlide()"><i class="fa-solid fa-arrow-left"></i> Previous</button>
+                    <span class="slide-indicator" id="slide-number">Slide 1 of 10</span>
+                    <button class="slide-nav-btn" onclick="nextSlide()">Next <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+
+                <div class="slide-viewer">
+                    <!-- Slides Container -->
+                    <div class="slide-container" id="slide-container">
+                        <!-- Slide 1 -->
+                        <div class="slide-card active" id="slide-1">
+                            <span class="slide-tag">HACKATHON FINALE DECK</span>
+                            <h2>JanAI: Empowering 1.4B Indian Citizens & Governance</h2>
+                            <h3>Sovereign AI Decision Intelligence Platform</h3>
+                            <div class="slide-bullets">
+                                <div class="bullet-item"><i class="fa-solid fa-check"></i> <strong>Core Concept:</strong> Bridge fragmented public data silos into a closed-loop decision engine.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-check"></i> <strong>Technology:</strong> Built on Google Cloud Vertex AI, Gemini 2.5 Pro, and Chirp STT.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-check"></i> <strong>Focus:</strong> Resolve groundwater scarcity, monsoon cloudbursts, and winter AQI smog.</div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 2 -->
+                        <div class="slide-card" id="slide-2">
+                            <span class="slide-tag">THE PROBLEM STATEMENT</span>
+                            <h2>India's Data Paradox: Rich Datasets, Fragmented Insights</h2>
+                            <div class="slide-bullets">
+                                <div class="bullet-item"><i class="fa-solid fa-circle-exclamation"></i> <strong>The Vault Dilemma:</strong> Aadhaar, ABDM, Smart Cities IoT, and Grievance records operate in isolation.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-circle-exclamation"></i> <strong>Reactive Governance:</strong> City administrations react *after* flooding, epidemics, or pollution events occur.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-circle-exclamation"></i> <strong>Language Exclusion:</strong> Complex online text portals exclude non-literate and regional-speaking rural populations.</div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 3 -->
+                        <div class="slide-card" id="slide-3">
+                            <span class="slide-tag">THE SOLUTION ARCHITECTURE</span>
+                            <h2>Observe-Reason-Recommend-Act (ORRA)</h2>
+                            <div class="slide-bullets">
+                                <div class="bullet-item"><i class="fa-solid fa-eye"></i> <strong>Observe:</strong> Continuous streaming of regional voice files, sensor telemetry, and satellite rasters.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-gears"></i> <strong>Reason:</strong> Cross-departmental correlation using Gemini 2.5 Pro and BigQuery.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-lightbulb"></i> <strong>Recommend:</strong> Mathematical policy recommendations with strict SHAP explainability.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-bolt"></i> <strong>Act:</strong> Automated dispatch orders, SMS gateways, and cooling center allocations.</div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 4 -->
+                        <div class="slide-card" id="slide-4">
+                            <span class="slide-tag">GOVERNMENT DASHBOARD</span>
+                            <h2>Spatial Digital Twin & Active Alerts</h2>
+                            <div class="slide-bullets">
+                                <div class="bullet-item"><i class="fa-solid fa-cubes"></i> <strong>Interactive Mapping:</strong> A unified 3D-like view linking water main lines, air sensors, and emergency assets.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-signal"></i> <strong>Intelligent Prioritization:</strong> Automated risk scoring based on population vulnerability and secondary risk likelihood.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-shield-halved"></i> <strong>Privacy First:</strong> Sensitive Data Protection API masks citizen PII dynamically.</div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 5 -->
+                        <div class="slide-card" id="slide-5">
+                            <span class="slide-tag">CITIZEN INTERFACE</span>
+                            <h2>Democratizing Access via WhatsApp Voice</h2>
+                            <div class="slide-bullets">
+                                <div class="bullet-item"><i class="fa-solid fa-microphone"></i> <strong>Zero Learning Curve:</strong> Citizens send speech voice notes on WhatsApp in local dialects.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-language"></i> <strong>Chirp Speech Core:</strong> Transcribes code-mixed inputs (e.g., Hinglish, Kannada-English).</div>
+                                <div class="bullet-item"><i class="fa-solid fa-link"></i> <strong>Direct Integration:</strong> Auto-ticket generation and Department routing completed in seconds.</div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 6 -->
+                        <div class="slide-card" id="slide-6">
+                            <span class="slide-tag">GROUNDED AI</span>
+                            <h2>RAG Architecture: Trustworthy & Fact-Checked</h2>
+                            <div class="slide-bullets">
+                                <div class="bullet-item"><i class="fa-solid fa-database"></i> <strong>AlloyDB pgvector:</strong> Stores official government booklets and municipal codes.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-magnifying-glass"></i> <strong>Hallucination Prevention:</strong> Models check output similarity against source documents. If score < 0.85, the answer is rewritten.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-arrow-down-up-lock"></i> <strong>Security Guardrails:</strong> Compliant with DPDP Act 2023 guidelines on data sovereignty.</div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 7 -->
+                        <div class="slide-card" id="slide-7">
+                            <span class="slide-tag">SCALING UP</span>
+                            <h2>Sovereign & Cost-Effective Scalability</h2>
+                            <div class="slide-bullets">
+                                <div class="bullet-item"><i class="fa-solid fa-server"></i> <strong>Cloud Run & GKE:</strong> Scales dynamically to handle peaks during monsoon floods.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-wallet"></i> <strong>Multi-Model Optimizations:</strong> Routine tasks run on Gemini 2.5 Flash. Only critical risk evaluations route to Gemini 2.5 Pro (saving 60% token costs).</div>
+                                <div class="bullet-item"><i class="fa-solid fa-location-dot"></i> <strong>Data Sovereignty:</strong> Bounded strictly within Google Cloud's Mumbai and Delhi data regions.</div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 8 -->
+                        <div class="slide-card" id="slide-8">
+                            <span class="slide-tag">THE MVP ROADMAP</span>
+                            <h2>90-Day MVP & Execution Strategy</h2>
+                            <div class="slide-bullets">
+                                <div class="bullet-item"><i class="fa-solid fa-calendar-day"></i> <strong>Days 1-30:</strong> Setup of Google Cloud foundations, loading schemes into BigQuery & AlloyDB vector stores.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-calendar-day"></i> <strong>Days 31-60:</strong> Implementing RAG models, Chirp integration, and testing core agents.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-calendar-day"></i> <strong>Days 61-90:</strong> Dashboard UI completion, deployment of WhatsApp bot in Nelamangala ward.</div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 9 -->
+                        <div class="slide-card" id="slide-9">
+                            <span class="slide-tag">IMPACT & BUSINESS VALUE</span>
+                            <h2>Measurable Social & Economic Impact</h2>
+                            <div class="slide-bullets">
+                                <div class="bullet-item"><i class="fa-solid fa-money-bill-wave"></i> <strong>Efficiency:</strong> Reductions in municipal fleet fuel burn by 20% and water leakages by 15%.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-heart-pulse"></i> <strong>Health:</strong> 30% reduction in local dengue incidence via early breeding tracking.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-hands-holding"></i> <strong>Trust:</strong> Direct citizen-grievance resolution times cut by 45%.</div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 10 -->
+                        <div class="slide-card" id="slide-10">
+                            <span class="slide-tag">CONCLUSION</span>
+                            <h2>JanAI: The Cognitive Engine of Digital India</h2>
+                            <div class="slide-bullets">
+                                <div class="bullet-item"><i class="fa-solid fa-flag"></i> <strong>A Smart Nation:</strong> Proactive decision-making scaling from Panchayats to the PMO.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-network-wired"></i> <strong>Ready for Tomorrow:</strong> Enabling the next logical step of the India Stack.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-rocket"></i> <strong>Google Cloud Partnership:</strong> The ultimate showcase of enterprise-scale sovereign AI.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- JS Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
