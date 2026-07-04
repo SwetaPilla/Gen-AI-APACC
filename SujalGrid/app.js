@@ -572,3 +572,25 @@ function runSimulation() {
         advisoryBox.parentElement.style.borderColor = 'rgba(16, 185, 129, 0.15)';
     }
 }
+
+// Persona Selector (Onboarding)
+function selectPersona(role) {
+    const modal = document.getElementById('onboarding-modal');
+    if (modal) {
+        modal.style.opacity = 0;
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 400);
+    }
+    
+    if (role === 'farmer') {
+        // Start Farmer Walkthrough
+        setTimeout(() => {
+            simulateFarmer('harish');
+        }, 500);
+    } else if (role === 'commissioner') {
+        // Start Commissioner View
+        switchTab('control-room');
+        selectAlert('kolar');
+    }
+}

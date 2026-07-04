@@ -510,6 +510,28 @@
         </section>
     </main>
 
+    <!-- Interactive Onboarding Modal -->
+    <div class="modal-overlay" id="onboarding-modal">
+        <div class="modal-content">
+            <div class="modal-header-icon"><i class="fa-solid fa-hands-holding-child"></i></div>
+            <h2>Welcome to Sujal-Grid</h2>
+            <p>Select your operational persona to begin the interactive groundwater walkthrough:</p>
+            <div class="modal-roles">
+                <button class="role-btn" onclick="selectPersona('farmer')">
+                    <div class="role-icon"><i class="fa-solid fa-seedling"></i></div>
+                    <h3>I am a Farmer / Citizen</h3>
+                    <p>Request regional crop advice & check local tube-well water table levels.</p>
+                </button>
+                <button class="role-btn" onclick="selectPersona('commissioner')">
+                    <div class="role-icon"><i class="fa-solid fa-building-user"></i></div>
+                    <h3>I am a Water Commissioner</h3>
+                    <p>Monitor aquifer stress, run GPU benchmarks, and simulate policy allocations.</p>
+                </button>
+            </div>
+            <button class="modal-skip-btn" onclick="selectPersona('none')">Skip & Explore Manually</button>
+        </div>
+    </div>
+
     <!-- JS Scripts -->
     <script src="app.js"></script>
 </body>
