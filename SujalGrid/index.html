@@ -11,539 +11,532 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="index.css">
 </head>
-<body>
-    <!-- Top Cybernetic Header -->
-    <header class="cyber-header">
-        <div class="header-logo">
-            <div class="logo-orb"></div>
-            <h1>Pravaha <span class="sanskrit-title">प्रवाह</span></h1>
-            <span class="sub-badge">Global Grid Intelligence Core</span>
-        </div>
-        <div class="system-status">
-            <div class="status-indicator">
-                <span class="pulse-green"></span>
-                <span class="status-text">Core Status: Active</span>
-            </div>
-            <div class="status-divider"></div>
-            <div class="status-item">
-                <i class="fa-solid fa-microchip text-cyan"></i>
-                <span>NVIDIA H100: Acceleration Active</span>
-            </div>
-            <div class="status-divider"></div>
-            <button class="demo-play-btn" onclick="startAutoDemo()"><i class="fa-solid fa-play"></i> Run Auto-Demo</button>
-            <div class="status-divider"></div>
-            <div class="status-item timer">
-                <i class="fa-regular fa-clock"></i>
-                <span id="live-time">05 July 2026 | 01:45 AM IST</span>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Workspace Layout -->
-    <main class="dashboard-container">
-        <!-- LEFT PANEL: Citizen / Farmer Mobile Portal -->
-        <section class="left-panel">
-            <div class="panel-header">
-                <h2><i class="fa-solid fa-mobile-screen-button"></i> Ingress Chat Portal</h2>
-                <p>Simulating WhatsApp Dialect Processing on Low-Bandwidth Networks</p>
+<body class="cool-theme text-normal">
+    <!-- Classy App Shell -->
+    <div class="app-shell">
+        <!-- Vertical Sidebar Navigation -->
+        <aside class="sidebar-nav">
+            <div class="logo-area">
+                <div class="logo-orb"></div>
+                <h2 class="logo-text">Pravaha</h2>
+                <span class="logo-sanskrit">प्रवाह</span>
             </div>
             
-            <!-- Mobile Phone Shell -->
-            <div class="phone-shell">
-                <div class="phone-screen">
-                    <!-- WhatsApp Header -->
-                    <div class="wa-header">
-                        <div class="wa-avatar">
-                            <i class="fa-solid fa-hands-holding-child"></i>
-                        </div>
-                        <div class="wa-chat-info">
-                            <h3>Pravaha Assistant</h3>
-                            <span class="online-indicator">Govt of India Official Account</span>
-                        </div>
-                        <div class="wa-actions">
-                            <i class="fa-solid fa-phone"></i>
-                            <i class="fa-solid fa-ellipsis-vertical"></i>
-                        </div>
-                    </div>
-                    
-                    <!-- WhatsApp Chat Area -->
-                    <div class="wa-body" id="chat-body">
-                        <div class="wa-message system">
-                            <p>🙏 Welcome to Pravaha. We coordinate Water, Traffic, Grocery logistics, Weather warnings, and Geopolitical routes. Select a profile below to run a simulation:</p>
-                        </div>
-                    </div>
-                    
-                    <!-- WhatsApp Inputs & Quick Options -->
-                    <div class="wa-footer">
-                        <div class="quick-selectors">
-                            <button onclick="simulateProfile('harish')">🌾 Harish (Water - Tube-well Dry-out)</button>
-                            <button onclick="simulateProfile('deepak')">🚦 Deepak (Traffic - ORR Road Gridlock)</button>
-                            <button onclick="simulateProfile('srinivas')">🍅 Srinivas (Grocery - Rotting Tomato Supply)</button>
-                            <button onclick="simulateProfile('sunita')">⛈️ Sunita (Weather - Cloudburst Alert)</button>
-                            <button onclick="simulateProfile('rajesh')">🚢 Rajesh (Geopolitical - Red Sea Choke Route)</button>
-                        </div>
-                        <div class="input-container">
-                            <input type="text" id="user-input" placeholder="Type message in your language..." disabled>
-                            <button class="send-btn" id="send-btn" disabled><i class="fa-solid fa-paper-plane"></i></button>
-                        </div>
-                    </div>
+            <nav class="nav-menu">
+                <button class="nav-item active" id="btn-view-dashboard" onclick="switchMainView('dashboard')">
+                    <i class="fa-solid fa-earth-asia"></i>
+                    <span data-i18n="nav_dashboard">Control Board</span>
+                </button>
+                <button class="nav-item" id="btn-view-benchmark" onclick="switchMainView('benchmark')">
+                    <i class="fa-solid fa-gauge-high"></i>
+                    <span data-i18n="nav_benchmark">GPU Benchmark</span>
+                </button>
+                <button class="nav-item" id="btn-view-slides" onclick="switchMainView('slides')">
+                    <i class="fa-solid fa-presentation-screen"></i>
+                    <span data-i18n="nav_slides">Pitch Slides</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="accessibility-ctrl">
+                    <button class="access-btn" onclick="adjustTextSize('small')" title="Small Text">A-</button>
+                    <button class="access-btn" onclick="adjustTextSize('normal')" title="Normal Text">A</button>
+                    <button class="access-btn" onclick="adjustTextSize('large')" title="Large Text">A+</button>
                 </div>
             </div>
+        </aside>
 
-            <!-- Pipeline Visualizer -->
-            <div class="pipeline-visualizer">
-                <h3><i class="fa-solid fa-bolt-lightning text-cyan"></i> NVIDIA GPU Processing Pipeline</h3>
-                <div class="steps-grid">
-                    <div class="step-card" id="step-ingest">
-                        <div class="step-num">1</div>
-                        <h4>Ingest</h4>
-                        <p id="ingest-val">Idle</p>
+        <!-- Main Workspace Area -->
+        <div class="main-workspace">
+            <!-- Header Bar -->
+            <header class="cyber-header">
+                <div class="header-info">
+                    <span class="sub-badge" id="lbl-subbadge" data-i18n="lbl_subbadge">Global Grid Intelligence Core</span>
+                    <div class="status-indicator">
+                        <span class="pulse-green"></span>
+                        <span class="status-text" id="lbl-status" data-i18n="lbl_status">Core Status: Active</span>
                     </div>
-                    <div class="step-card" id="step-cudf">
-                        <div class="step-num">2</div>
-                        <h4>cuDF Clean</h4>
-                        <p id="cudf-val">Idle</p>
-                    </div>
-                    <div class="step-card" id="step-spark">
-                        <div class="step-num">3</div>
-                        <h4>GPU Spark</h4>
-                        <p id="spark-val">Idle</p>
-                    </div>
-                    <div class="step-card" id="step-gemini">
-                        <div class="step-num">4</div>
-                        <h4>Gemini RAG</h4>
-                        <p id="gemini-val">Idle</p>
+                    <div class="status-divider"></div>
+                    <div class="status-item">
+                        <i class="fa-solid fa-microchip text-cyan"></i>
+                        <span id="lbl-hardware" data-i18n="lbl_hardware">NVIDIA H100: Active</span>
                     </div>
                 </div>
-            </div>
-        </section>
+                
+                <div class="header-actions">
+                    <!-- Language Dropdown Selector -->
+                    <div class="language-selector-box">
+                        <i class="fa-solid fa-language text-cyan"></i>
+                        <select id="lang-selector" onchange="changeLanguage()" class="lang-dropdown">
+                            <option value="en">English</option>
+                            <option value="hi">हिन्दी (Hindi)</option>
+                            <option value="kn">ಕನ್ನಡ (Kannada)</option>
+                            <option value="mr">मराठी (Marathi)</option>
+                        </select>
+                    </div>
 
-        <!-- RIGHT PANEL: Decision Support Command Board -->
-        <section class="right-panel">
-            <!-- Navigation Tabs -->
-            <div class="tab-bar">
-                <button class="tab-btn active" onclick="switchTab('control-room')"><i class="fa-solid fa-circle-nodes"></i> Operational Control Room</button>
-                <button class="tab-btn" onclick="switchTab('accelerator')"><i class="fa-solid fa-gauge-high"></i> NVIDIA GPU Accelerator Benchmark</button>
-                <button class="tab-btn" onclick="switchTab('simulator')"><i class="fa-solid fa-sliders"></i> "What-If" Flow Allocator</button>
-                <button class="tab-btn" onclick="switchTab('slide-deck')"><i class="fa-solid fa-presentation-screen"></i> Pitch Slides</button>
-            </div>
+                    <div class="status-divider"></div>
 
-            <!-- TAB 1: Operational Control Room -->
-            <div class="tab-content active" id="control-room">
-                <div class="control-grid">
-                    <!-- Left: Spatial Digital Twin Map -->
-                    <div class="card map-card">
-                        <div class="card-header">
-                            <h3><i class="fa-solid fa-earth-asia"></i> Dynamic Twin: <span id="current-layer-title" class="text-cyan">Hydrology (Water) Layer</span></h3>
-                            <!-- Map Layer Toggles -->
-                            <div class="map-layer-selector">
-                                <button class="layer-btn active" id="btn-layer-water" onclick="setMapLayer('water')"><i class="fa-solid fa-droplet"></i></button>
-                                <button class="layer-btn" id="btn-layer-traffic" onclick="setMapLayer('traffic')"><i class="fa-solid fa-traffic-light"></i></button>
-                                <button class="layer-btn" id="btn-layer-grocery" onclick="setMapLayer('grocery')"><i class="fa-solid fa-basket-shopping"></i></button>
-                                <button class="layer-btn" id="btn-layer-weather" onclick="setMapLayer('weather')"><i class="fa-solid fa-cloud-showers-heavy"></i></button>
-                                <button class="layer-btn" id="btn-layer-geopolitical" onclick="setMapLayer('geopolitical')"><i class="fa-solid fa-ship"></i></button>
+                    <button class="demo-play-btn" id="btn-autodemo" onclick="startAutoDemo()">
+                        <i class="fa-solid fa-play"></i> <span data-i18n="btn_autodemo">Run Auto-Demo</span>
+                    </button>
+                    
+                    <div class="status-divider"></div>
+                    
+                    <div class="status-item timer">
+                        <i class="fa-regular fa-clock"></i>
+                        <span id="live-time">05 July 2026 | 01:45 AM IST</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Columns Layout Grid -->
+            <div class="workspace-grid">
+                <!-- Column 1: WhatsApp Ingress Chat Panel -->
+                <aside class="workspace-col chat-col">
+                    <div class="col-header">
+                        <h3 data-i18n="chat_header"><i class="fa-solid fa-mobile-screen-button"></i> Ingress Chat Portal</h3>
+                    </div>
+                    <div class="phone-screen-seamless">
+                        <!-- WhatsApp Header -->
+                        <div class="wa-header">
+                            <div class="wa-avatar"><i class="fa-solid fa-hands-holding-child"></i></div>
+                            <div class="wa-chat-info">
+                                <h3 id="lbl-assistant" data-i18n="lbl_assistant">Pravaha Assistant</h3>
+                                <span class="online-indicator" data-i18n="lbl_official">Govt of India Official</span>
                             </div>
                         </div>
-                        <div class="map-container">
-                            <svg viewBox="0 0 500 350" class="digital-twin-svg" id="pravaha-svg">
-                                <defs>
-                                    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-                                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-                                    </pattern>
-                                    <linearGradient id="unsaturated-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                        <stop offset="0%" stop-color="#4a3b32" stop-opacity="0.6"/>
-                                        <stop offset="100%" stop-color="#3d2c1e" stop-opacity="0.8"/>
-                                    </linearGradient>
-                                    <linearGradient id="saturated-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                        <stop offset="0%" stop-color="#1E3A8A" stop-opacity="0.7"/>
-                                        <stop offset="100%" stop-color="#0F172A" stop-opacity="0.95"/>
-                                    </linearGradient>
-                                </defs>
-                                <rect width="500" height="350" fill="url(#grid)" />
-                                
-                                <!-- ================= LAYER 1: WATER ================= -->
-                                <g id="layer-water">
-                                    <!-- Ground level -->
-                                    <path d="M0 80 Q250 60 500 80" fill="none" stroke="#8B5CF6" stroke-width="3" stroke-dasharray="2,2"/>
-                                    <!-- Unsaturated Zone -->
-                                    <path d="M0 80 Q250 60 500 80 L500 180 Q250 170 0 180 Z" fill="url(#unsaturated-grad)" stroke="rgba(255,255,255,0.05)"/>
-                                    <!-- Water Table Line -->
-                                    <path d="M0 180 Q250 170 500 180" fill="none" stroke="#00D2FF" stroke-width="4" id="water-table-line"/>
-                                    <text x="15" y="210" fill="#00D2FF" font-size="8" font-family="Outfit" font-weight="600" id="text-watertable">WATER TABLE LEVEL (28m Depth)</text>
-                                    <!-- Saturated Aquifer -->
-                                    <path d="M0 180 Q250 170 500 180 L500 350 L0 350 Z" fill="url(#saturated-grad)"/>
-                                    <!-- India Pumping well -->
-                                    <line x1="150" y1="70" x2="150" y2="240" stroke="#EF4444" stroke-width="3" stroke-dasharray="4,2"/>
-                                    <circle cx="150" cy="70" r="5" fill="#EF4444"/>
-                                    <text x="150" y="55" text-anchor="middle" fill="#EF4444" font-size="8" font-family="Outfit" font-weight="600">Pumping Well (India)</text>
-                                    <!-- Recharge Well -->
-                                    <line x1="280" y1="70" x2="280" y2="220" stroke="#10B981" stroke-width="4"/>
-                                    <circle cx="280" cy="70" r="6" fill="#10B981"/>
-                                    <text x="280" y="55" text-anchor="middle" fill="#10B981" font-size="8" font-family="Outfit" font-weight="600">Rainwater Recharge Well</text>
-                                    <circle cx="280" cy="90" r="2.5" fill="#00BFFF" class="water-drop" id="flow-drop-1"/>
-                                    <circle cx="280" cy="140" r="2.5" fill="#00BFFF" class="water-drop" id="flow-drop-2"/>
-                                </g>
-
-                                <!-- ================= LAYER 2: TRAFFIC ================= -->
-                                <g id="layer-traffic" style="display:none;">
-                                    <path d="M50 50 L150 30 L350 40 L450 100 L420 280 L200 320 L60 250 Z" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
-                                    <!-- Road Lines -->
-                                    <path d="M50 180 C200 130 350 220 450 180" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="6" id="road-main"/>
-                                    <path d="M250 30 Q220 180 200 320" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="4"/>
-                                    <!-- Bottleneck warning -->
-                                    <circle cx="210" cy="165" r="20" class="risk-zone pulse-warning" fill="rgba(239, 68, 68, 0.25)" stroke="#EF4444" stroke-width="1.5" id="traffic-bottleneck"/>
-                                    <circle cx="210" cy="165" r="4" fill="#EF4444" />
-                                    <text x="210" y="140" text-anchor="middle" fill="#EF4444" font-size="8" font-family="Outfit" font-weight="600">ORR Gridlock: 4km Jam</text>
-                                    <!-- Detour path -->
-                                    <path d="M50 180 C110 130 180 90 280 100 C340 110 400 140 450 180" fill="none" stroke="#10B981" stroke-width="4" stroke-dasharray="6,4" id="traffic-detour" style="display:none;"/>
-                                </g>
-
-                                <!-- ================= LAYER 3: GROCERY ================= -->
-                                <g id="layer-grocery" style="display:none;">
-                                    <!-- Kolar Farm -->
-                                    <rect x="60" y="80" width="60" height="50" rx="5" fill="rgba(16, 185, 129, 0.15)" stroke="#10B981" stroke-width="1.5"/>
-                                    <text x="90" y="110" text-anchor="middle" fill="#10B981" font-size="8" font-family="Outfit" font-weight="600">Kolar Farms</text>
-                                    
-                                    <!-- Bengaluru APMC Market -->
-                                    <rect x="350" y="220" width="80" height="50" rx="5" fill="rgba(0, 210, 255, 0.15)" stroke="#00D2FF" stroke-width="1.5"/>
-                                    <text x="390" y="250" text-anchor="middle" fill="#00D2FF" font-size="8" font-family="Outfit" font-weight="600">APMC Market</text>
-
-                                    <!-- Logistics Transit Path -->
-                                    <path d="M120 105 C200 100 280 180 350 245" fill="none" stroke="#F59E0B" stroke-width="3" stroke-dasharray="5,3" id="transit-line"/>
-                                    <text x="250" y="150" text-anchor="middle" fill="#F59E0B" font-size="7" font-family="Outfit">Rotting Risk: High</text>
-                                    <circle cx="210" cy="130" r="4" fill="#F59E0B"/>
-                                </g>
-
-                                <!-- ================= LAYER 4: WEATHER ================= -->
-                                <g id="layer-weather" style="display:none;">
-                                    <!-- Doppler Cloud Vectors -->
-                                    <circle cx="180" cy="110" r="40" fill="rgba(139, 92, 246, 0.2)" stroke="#8B5CF6" stroke-width="1" stroke-dasharray="3,3" class="risk-zone"/>
-                                    <circle cx="240" cy="130" r="30" fill="rgba(239, 68, 68, 0.15)" stroke="#EF4444" stroke-width="1" stroke-dasharray="3,3" class="risk-zone pulse-warning"/>
-                                    <text x="210" y="60" text-anchor="middle" fill="#EF4444" font-size="8" font-family="Outfit" font-weight="600">Doppler: Cloudburst Vector (120mm/hr)</text>
-                                    <!-- Wind Vector Arrows -->
-                                    <line x1="80" y1="120" x2="130" y2="120" stroke="#00D2FF" stroke-width="2" marker-end="url(#arrow)"/>
-                                    <line x1="320" y1="160" x2="370" y2="160" stroke="#00D2FF" stroke-width="2"/>
-                                </g>
-
-                                <!-- ================= LAYER 5: GEOPOLITICAL ================= -->
-                                <g id="layer-geopolitical" style="display:none;">
-                                    <!-- Shipping Lanes -->
-                                    <path d="M30 250 C120 220 220 180 320 230 C380 260 420 220 480 200" fill="none" stroke="#EF4444" stroke-width="4" id="geopol-redsea"/>
-                                    <text x="210" y="195" text-anchor="middle" fill="#EF4444" font-size="8" font-family="Outfit" font-weight="600">Bab-el-Mandeb Choke Point (BLOCKED)</text>
-                                    <circle cx="210" cy="210" r="8" fill="#EF4444"/>
-                                    
-                                    <!-- Cape of Good Hope Detour Route -->
-                                    <path d="M30 250 C80 310 180 340 320 310 C390 290 420 220 480 200" fill="none" stroke="#10B981" stroke-width="4" stroke-dasharray="6,3" id="geopol-detour" style="display:none;"/>
-                                </g>
-                            </svg>
+                        
+                        <!-- Chat Messages -->
+                        <div class="wa-body" id="chat-body">
+                            <div class="wa-message system">
+                                <p id="lbl-chat-welcome" data-i18n="lbl_chat_welcome">🙏 Welcome to Pravaha. We coordinate Water, Traffic, Grocery, Weather, and Geopolitical routes. Select a profile below to run a simulation:</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Profile Selectors -->
+                        <div class="wa-footer">
+                            <div class="quick-selectors">
+                                <button onclick="simulateProfile('harish')">🌾 <span data-i18n="prof_harish">Harish (Water - Tube-well Dry-out)</span></button>
+                                <button onclick="simulateProfile('deepak')">🚦 <span data-i18n="prof_deepak">Deepak (Traffic - ORR Road Gridlock)</span></button>
+                                <button onclick="simulateProfile('srinivas')">🍅 <span data-i18n="prof_srinivas">Srinivas (Grocery - Rotting Tomato Supply)</span></button>
+                                <button onclick="simulateProfile('sunita')">⛈️ <span data-i18n="prof_sunita">Sunita (Weather - Cloudburst Alert)</span></button>
+                                <button onclick="simulateProfile('rajesh')">🚢 <span data-i18n="prof_rajesh">Rajesh (Geopolitical - Red Sea Choke Route)</span></button>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Right: Live Intelligent Alerts Queue -->
-                    <div class="card alerts-card">
-                        <div class="card-header">
-                            <h3><i class="fa-solid fa-bell"></i> Operational Alerts</h3>
-                            <span class="active-badge" id="active-alert-count">1 Active Alert</span>
+                    <!-- Pipeline Process Steps -->
+                    <div class="pipeline-visualizer-seamless">
+                        <h3 data-i18n="pipeline_title"><i class="fa-solid fa-bolt-lightning text-cyan"></i> NVIDIA GPU Processing Pipeline</h3>
+                        <div class="steps-grid">
+                            <div class="step-card" id="step-ingest">
+                                <div class="step-num">1</div>
+                                <h4 data-i18n="pipe_ingest">Ingest</h4>
+                                <p id="ingest-val">Idle</p>
+                            </div>
+                            <div class="step-card" id="step-cudf">
+                                <div class="step-num">2</div>
+                                <h4 data-i18n="pipe_cudf">cuDF Clean</h4>
+                                <p id="cudf-val">Idle</p>
+                            </div>
+                            <div class="step-card" id="step-spark">
+                                <div class="step-num">3</div>
+                                <h4 data-i18n="pipe_spark">GPU Spark</h4>
+                                <p id="spark-val">Idle</p>
+                            </div>
+                            <div class="step-card" id="step-gemini">
+                                <div class="step-num">4</div>
+                                <h4 data-i18n="pipe_gemini">Gemini RAG</h4>
+                                <p id="gemini-val">Idle</p>
+                            </div>
                         </div>
-                        <div class="alerts-list" id="alerts-list">
-                            <!-- Alert 1 (Water) -->
-                            <div class="alert-item warning active-select" id="alert-kolar-item" onclick="selectAlert('kolar')">
-                                <div class="alert-icon"><i class="fa-solid fa-droplet text-orange"></i></div>
-                                <div class="alert-details">
-                                    <h4>Aquifer Depletion: Kolar Karnataka</h4>
-                                    <p>Water table fell by 4.2m. Critical dry-out warning inside crops zone.</p>
-                                    <span class="alert-meta">Source: Sat-GRACE | Confidence: 91%</span>
+                    </div>
+                </aside>
+
+                <!-- Column 2: Center View (Map OR Benchmark OR Slides) -->
+                <section class="workspace-col center-col">
+                    <!-- VIEW A: Dashboard (Map & Alerts) -->
+                    <div class="view-panel active" id="view-dashboard">
+                        <div class="card map-card-seamless">
+                            <div class="card-header-seamless">
+                                <h3 id="current-layer-title"><i class="fa-solid fa-earth-asia"></i> Hydrology (Water) Layer</h3>
+                                <div class="map-layer-selector">
+                                    <button class="layer-btn active" id="btn-layer-water" onclick="setMapLayer('water')" title="Water Layer"><i class="fa-solid fa-droplet"></i></button>
+                                    <button class="layer-btn" id="btn-layer-traffic" onclick="setMapLayer('traffic')" title="Traffic Layer"><i class="fa-solid fa-traffic-light"></i></button>
+                                    <button class="layer-btn" id="btn-layer-grocery" onclick="setMapLayer('grocery')" title="Grocery Layer"><i class="fa-solid fa-basket-shopping"></i></button>
+                                    <button class="layer-btn" id="btn-layer-weather" onclick="setMapLayer('weather')" title="Weather Layer"><i class="fa-solid fa-cloud-showers-heavy"></i></button>
+                                    <button class="layer-btn" id="btn-layer-geopolitical" onclick="setMapLayer('geopolitical')" title="Geopolitical Layer"><i class="fa-solid fa-ship"></i></button>
+                                </div>
+                            </div>
+                            <div class="map-container-seamless">
+                                <svg viewBox="0 0 500 240" class="digital-twin-svg" id="pravaha-svg">
+                                    <defs>
+                                        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+                                        </pattern>
+                                        <linearGradient id="unsaturated-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" stop-color="#4a3b32" stop-opacity="0.6"/>
+                                            <stop offset="100%" stop-color="#3d2c1e" stop-opacity="0.8"/>
+                                        </linearGradient>
+                                        <linearGradient id="saturated-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" stop-color="#1E3A8A" stop-opacity="0.7"/>
+                                            <stop offset="100%" stop-color="#0F172A" stop-opacity="0.95"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <rect width="500" height="240" fill="url(#grid)" />
+                                    
+                                    <!-- LAYER 1: WATER -->
+                                    <g id="layer-water">
+                                        <path d="M0 60 Q250 45 500 60" fill="none" stroke="#14B8A6" stroke-width="2.5" stroke-dasharray="2,2"/>
+                                        <path d="M0 60 Q250 45 500 60 L500 130 Q250 120 0 130 Z" fill="url(#unsaturated-grad)" stroke="rgba(255,255,255,0.04)"/>
+                                        <path d="M0 130 Q250 120 500 130" fill="none" stroke="#0EA5E9" stroke-width="3.5" id="water-table-line" class="water-flow-line"/>
+                                        <text x="15" y="155" fill="#0EA5E9" font-size="8" font-family="Outfit" font-weight="600" id="text-watertable">WATER TABLE LEVEL (28m Depth)</text>
+                                        <path d="M0 130 Q250 120 500 130 L500 240 L0 240 Z" fill="url(#saturated-grad)"/>
+                                        <line x1="150" y1="50" x2="150" y2="170" stroke="#F43F5E" stroke-width="2.5" stroke-dasharray="4,2"/>
+                                        <circle cx="150" cy="50" r="4" fill="#F43F5E"/>
+                                        <text x="150" y="40" text-anchor="middle" fill="#F43F5E" font-size="8" font-family="Outfit" font-weight="600">Pumping Well (India)</text>
+                                        <line x1="280" y1="50" x2="280" y2="160" stroke="#10B981" stroke-width="3"/>
+                                        <circle cx="280" cy="50" r="5" fill="#10B981"/>
+                                        <text x="280" y="40" text-anchor="middle" fill="#10B981" font-size="8" font-family="Outfit" font-weight="600">Recharge Well</text>
+                                        <circle cx="280" cy="70" r="2" fill="#00D2FF" class="water-drop" id="flow-drop-1"/>
+                                        <circle cx="280" cy="110" r="2" fill="#00D2FF" class="water-drop" id="flow-drop-2"/>
+                                    </g>
+
+                                    <!-- LAYER 2: TRAFFIC -->
+                                    <g id="layer-traffic" style="display:none;">
+                                        <path d="M50 120 C200 80 350 160 450 120" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="6"/>
+                                        <path d="M220 20 Q200 120 180 220" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="4"/>
+                                        <circle cx="195" cy="115" r="15" fill="rgba(244, 63, 94, 0.25)" stroke="#F43F5E" stroke-width="1.5" class="risk-zone"/>
+                                        <circle cx="195" cy="115" r="3" fill="#F43F5E" />
+                                        <text x="195" y="90" text-anchor="middle" fill="#F43F5E" font-size="8" font-family="Outfit" font-weight="600">ORR Gridlock: 4km Jam</text>
+                                        <path d="M50 120 C110 80 180 50 280 60 C340 70 400 90 450 120" fill="none" stroke="#10B981" stroke-width="3" stroke-dasharray="5,3" id="traffic-detour" style="display:none;"/>
+                                    </g>
+
+                                    <!-- LAYER 3: GROCERY -->
+                                    <g id="layer-grocery" style="display:none;">
+                                        <rect x="50" y="50" width="70" height="40" rx="4" fill="rgba(16, 185, 129, 0.12)" stroke="#10B981" stroke-width="1.2"/>
+                                        <text x="85" y="74" text-anchor="middle" fill="#10B981" font-size="8" font-family="Outfit" font-weight="600">Kolar Farms</text>
+                                        <rect x="350" y="140" width="80" height="40" rx="4" fill="rgba(20, 184, 166, 0.12)" stroke="#14B8A6" stroke-width="1.2"/>
+                                        <text x="390" y="164" text-anchor="middle" fill="#14B8A6" font-size="8" font-family="Outfit" font-weight="600">APMC Market</text>
+                                        <path d="M120 70 C190 70 270 110 350 150" fill="none" stroke="#F59E0B" stroke-width="2.5" stroke-dasharray="4,2"/>
+                                        <text x="230" y="100" text-anchor="middle" fill="#F59E0B" font-size="7" font-family="Outfit">Rotting Risk: 82%</text>
+                                    </g>
+
+                                    <!-- LAYER 4: WEATHER -->
+                                    <g id="layer-weather" style="display:none;">
+                                        <circle cx="180" cy="90" r="30" fill="rgba(139, 92, 246, 0.15)" stroke="#8B5CF6" stroke-width="1" stroke-dasharray="2,2"/>
+                                        <circle cx="230" cy="110" r="22" fill="rgba(244, 63, 94, 0.15)" stroke="#F43F5E" stroke-width="1" stroke-dasharray="2,2" class="risk-zone"/>
+                                        <text x="210" y="50" text-anchor="middle" fill="#F43F5E" font-size="8" font-family="Outfit" font-weight="600">Doppler Storm Cloud (120mm/hr)</text>
+                                    </g>
+
+                                    <!-- LAYER 5: GEOPOLITICAL -->
+                                    <g id="layer-geopolitical" style="display:none;">
+                                        <path d="M30 180 C120 155 220 120 320 160 C380 180 420 150 480 140" fill="none" stroke="#F43F5E" stroke-width="3" id="geopol-redsea"/>
+                                        <text x="210" y="130" text-anchor="middle" fill="#F43F5E" font-size="8" font-family="Outfit" font-weight="600">Red Sea Choke Point (BLOCKED)</text>
+                                        <circle cx="210" cy="142" r="6" fill="#F43F5E"/>
+                                        <path d="M30 180 C80 215 180 230 320 210 C390 195 420 150 480 140" fill="none" stroke="#10B981" stroke-width="3.5" stroke-dasharray="5,3" id="geopol-detour" style="display:none;"/>
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Alerts Queue inside the same workspace panel -->
+                        <div class="card alerts-card-seamless">
+                            <div class="card-header-seamless">
+                                <h3><i class="fa-solid fa-bell"></i> <span data-i18n="alerts_header">Operational Alerts</span></h3>
+                                <span class="active-badge" id="active-alert-count">1 Active Alert</span>
+                            </div>
+                            <div class="alerts-list-seamless" id="alerts-list">
+                                <div class="alert-item warning active-select" id="alert-kolar-item" onclick="selectAlert('kolar')">
+                                    <div class="alert-icon"><i class="fa-solid fa-droplet text-orange"></i></div>
+                                    <div class="alert-details">
+                                        <h4 data-i18n="alert_kolar_title">Aquifer Depletion: Kolar Karnataka</h4>
+                                        <p data-i18n="alert_kolar_desc">Water table fell by 4.2m. Critical dry-out warning inside crops zone.</p>
+                                        <span class="alert-meta">Source: Sat-GRACE | Confidence: 91%</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Selected Alert Actions / Rationale Panel -->
-                        <div class="alert-detail-panel" id="alert-detail-panel">
-                            <h3>Decision Support Panel</h3>
-                            <p class="panel-placeholder">Select an active operational alert above to inspect explainable AI reasoning and trigger closed-loop automation workflows.</p>
+                    <!-- VIEW B: GPU Accelerator Benchmark -->
+                    <div class="view-panel" id="view-benchmark">
+                        <div class="card full-height-card">
+                            <h2 data-i18n="bench_header" style="font-family:var(--font-heading); font-size:16px; margin-bottom:4px;"><i class="fa-solid fa-gauge-high"></i> NVIDIA GPU Accelerator Benchmark Panel</h2>
+                            <p style="font-size:11px; color:var(--color-text-muted); margin-bottom:12px;">Offload geostatistical Kriging interpolation of 12,000 aquifer sensor wells on Google Cloud: CPU vs. GPU.</p>
+                            
+                            <div class="benchmark-grid">
+                                <div class="card benchmark-card-element" id="cpu-bench-card">
+                                    <h3 data-i18n="cpu_title">Traditional CPU Processing</h3>
+                                    <p class="bench-sub text-muted">Standard Spark Cluster (16 vCPUs)</p>
+                                    <div class="bench-speed-value" id="cpu-time-val">--</div>
+                                    <div class="bench-metrics">
+                                        <div class="m-row"><span>Throughput:</span><strong>930 rows/s</strong></div>
+                                        <div class="m-row"><span>Hardware Limit:</span><strong>Memory Bottleneck</strong></div>
+                                    </div>
+                                    <button class="bench-start-btn" onclick="runBenchmark('cpu')" id="btn-run-cpu"><i class="fa-solid fa-microchip"></i> Run CPU Model</button>
+                                </div>
+
+                                <div class="bench-vs">VS</div>
+
+                                <div class="card benchmark-card-element nvidia-highlight" id="gpu-bench-card">
+                                    <span class="nvidia-badge"><i class="fa-solid fa-bolt"></i> ACCELERATED</span>
+                                    <h3 data-i18n="gpu_title">NVIDIA GPU Spark RAPIDS</h3>
+                                    <p class="bench-sub text-cyan">GCP A3 Instance (NVIDIA H100 GPU)</p>
+                                    <div class="bench-speed-value text-cyan" id="gpu-time-val">--</div>
+                                    <div class="bench-metrics">
+                                        <div class="m-row"><span>Throughput:</span><strong>168,000 rows/s</strong></div>
+                                        <div class="m-row"><span>Speedup:</span><strong class="text-green" id="gpu-speedup-multiplier">--</strong></div>
+                                    </div>
+                                    <button class="bench-start-btn gpu-btn" onclick="runBenchmark('gpu')" id="btn-run-gpu"><i class="fa-solid fa-bolt-lightning"></i> Run NVIDIA GPU Model</button>
+                                </div>
+                            </div>
+
+                            <div class="bench-progress-container" id="bench-progress-box" style="display: none; margin-top:12px;">
+                                <span id="bench-progress-label">Executing Spatial-Temporal Kriging...</span>
+                                <div class="progress-bar-bg">
+                                    <div class="progress-bar-fill" id="progress-bar"></div>
+                                </div>
+                            </div>
+
+                            <div class="causal-engine-box" style="margin-top: 12px; font-size:10px;">
+                                <h4 data-i18n="bench_why_title"><i class="fa-solid fa-circle-info"></i> Why is this acceleration crucial for real-world deployment?</h4>
+                                <p data-i18n="bench_why_desc">Mapping groundwater tables, traffic jams, and perishable transport logistics requires calculations on massive spatial matrices. CPUs take hours to run, leading to delayed, reactive decisions. Running cuDF and Spark RAPIDS on NVIDIA H100 GPUs reduces processing times to milliseconds, enabling proactive, automated responses.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- VIEW C: Pitch Slides -->
+                    <div class="view-panel" id="view-slides">
+                        <div class="card full-height-card">
+                            <div class="slide-controls">
+                                <button class="slide-nav-btn" onclick="prevSlide()"><i class="fa-solid fa-arrow-left"></i> Previous</button>
+                                <span class="slide-indicator" id="slide-number">Slide 1 of 10</span>
+                                <button class="slide-nav-btn" onclick="nextSlide()">Next <i class="fa-solid fa-arrow-right"></i></button>
+                            </div>
+
+                            <div class="slide-viewer">
+                                <div class="slide-container" id="slide-container">
+                                    <!-- Slide 1 -->
+                                    <div class="slide-card active" id="slide-1">
+                                        <span class="slide-tag">HACKATHON FINALE DECK</span>
+                                        <h2>Pravaha: Global Flow & Grid Intelligence</h2>
+                                        <h3>Sovereign AI Decision Core (प्रवाह) built on Google Cloud & NVIDIA</h3>
+                                        <div class="slide-bullets">
+                                            <div class="bullet-item"><i class="fa-solid fa-check"></i> <strong>Core Concept:</strong> Bridge fragmented water, traffic, weather, and geopolitical data.</div>
+                                            <div class="bullet-item"><i class="fa-solid fa-check"></i> <strong>NVIDIA Hardware Layer:</strong> cuDF and Spark RAPIDS offload matrix math to H100 GPUs.</div>
+                                            <div class="bullet-item"><i class="fa-solid fa-check"></i> <strong>Sanskrit Identity:</strong> 'Pravaha' signifies the dynamic stream of resource flows.</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Slide 2 -->
+                                    <div class="slide-card" id="slide-2">
+                                        <span class="slide-tag">THE PROBLEM STATEMENT</span>
+                                        <h2>India's and the World's Siloed Data Streams</h2>
+                                        <div class="slide-bullets">
+                                            <div class="bullet-item"><i class="fa-solid fa-circle-exclamation"></i> <strong>Hydrology:</strong> Groundwater table collapse in Bangalore and California Central Valley.</div>
+                                            <div class="bullet-item"><i class="fa-solid fa-circle-exclamation"></i> <strong>Logistics & Traffic:</strong> Perishable vegetables (tomatoes) rotting in transit.</div>
+                                            <div class="bullet-item"><i class="fa-solid fa-circle-exclamation"></i> <strong>Geopolitics:</strong> Shipping lane blockades driving inflation.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Slide 3 -->
+                                    <div class="slide-card" id="slide-3">
+                                        <span class="slide-tag">Observe-Reason-Recommend-Act</span>
+                                        <h2>Pravaha Closed-Loop Optimization</h2>
+                                        <div class="slide-bullets">
+                                            <div class="bullet-item"><i class="fa-solid fa-eye"></i> <strong>Observe:</strong> Streams radar imagery, well levels, Doppler clouds, and ship logs.</div>
+                                            <div class="bullet-item"><i class="fa-solid fa-gears"></i> <strong>Reason:</strong> Analyzes spatial-temporal flow matrices on NVIDIA H100 GPUs.</div>
+                                            <div class="bullet-item"><i class="fa-solid fa-bolt"></i> <strong>Act:</strong> Triggers auto-rerouting, DBT payments, and aquifer valves.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Slide 4 -->
+                                    <div class="slide-card" id="slide-4">
+                                        <span class="slide-tag">NVIDIA ACCELERATION</span>
+                                        <h2>cuDF & Spark RAPIDS: 180x Speedup</h2>
+                                        <div class="slide-bullets">
+                                            <div class="bullet-item"><i class="fa-solid fa-bolt"></i> <strong>NVIDIA GPUs:</strong> Managed Service for Apache Spark on NVIDIA H100.</div>
+                                            <div class="bullet-item"><i class="fa-solid fa-chart-line"></i> <strong>Accelerated Kriging:</strong> Drops spatial modeling runtimes from 12.8s to 71ms.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Slide 5 -->
+                                    <div class="slide-card" id="slide-5">
+                                        <span class="slide-tag">FARMER INTEGRATION</span>
+                                        <h2>Democratizing Hydrological Insights on WhatsApp</h2>
+                                        <div class="slide-bullets">
+                                            <div class="bullet-item"><i class="fa-solid fa-microphone"></i> <strong>Multi-lingual Voice Notes:</strong> Farmers record questions (e.g. Kannada, English) on WhatsApp.</div>
+                                            <div class="bullet-item"><i class="fa-solid fa-gears"></i> <strong>Grounded Advisory:</strong> Gemini extracts coords, fetches localized water table data, and provides direct pumping recommendations.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Slide 6 -->
+                                    <div class="slide-card" id="slide-6">
+                                        <span class="slide-tag">WHAT-IF SIMULATION</span>
+                                        <h2>Interactive Resource Allocator</h2>
+                                        <div class="slide-bullets">
+                                            <div class="bullet-item"><i class="fa-solid fa-sliders"></i> <strong>Resource Tuning:</strong> Allows administrators to adjust pumping limits and stormwater recharge flows.</div>
+                                            <div class="bullet-item"><i class="fa-solid fa-chart-pie"></i> <strong>Instant Feedback:</strong> Displays dynamic indicators for aquifer sustainability, pumping cost, and compaction risks.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Slide 7 -->
+                                    <div class="slide-card" id="slide-7">
+                                        <span class="slide-tag">TECHNOLOGY STACK</span>
+                                        <h2>Google Cloud & NVIDIA Hardware Core</h2>
+                                        <div class="slide-bullets">
+                                            <div class="bullet-item"><i class="fa-solid fa-cloud"></i> <strong>Google Cloud Layer:</strong> Managed Service for Apache Spark, BigQuery, AlloyDB pgvector, GKE.</div>
+                                            <div class="bullet-item"><i class="fa-solid fa-microchip"></i> <strong>NVIDIA Layer:</strong> GPUs on Google Cloud, RAPIDS, cuDF, Spark RAPIDS Accelerator.</div>
+                                            <div class="bullet-item"><i class="fa-solid fa-brain"></i> <strong>Cognitive Layer:</strong> Gemini Enterprise Agent Platform.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Slide 8 -->
+                                    <div class="slide-card" id="slide-8">
+                                        <span class="slide-tag">MEASURABLE IMPACT</span>
+                                        <h2>Saving Aquifers & Energy</h2>
+                                        <div class="slide-bullets">
+                                            <div class="bullet-item"><i class="fa-solid fa-wallet"></i> <strong>Energy Savings:</strong> Proper water table management reduces pumping energy costs by 22%.</div>
+                                            <div class="bullet-item"><i class="fa-solid fa-droplet"></i> <strong>Water Security:</strong> Replaces uncoordinated pumping with data-driven allocation.</div>
+                                            <div class="bullet-item"><i class="fa-solid fa-shield-halved"></i> <strong>Agricultural Stability:</strong> Lowers the risk of complete crop failures during monsoonal dry spells.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Slide 9 -->
+                                    <div class="slide-card" id="slide-9">
+                                        <span class="slide-tag">THE 90-DAY MVP</span>
+                                        <h2>Deployment & Pilot Scale</h2>
+                                        <div class="slide-bullets">
+                                            <div class="bullet-item"><i class="fa-solid fa-calendar-day"></i> <strong>Day 1-30:</strong> Connect sensor feeds and set up GPU-Spark clusters on GCP.</div>
+                                            <div class="bullet-item"><i class="fa-solid fa-calendar-day"></i> <strong>Day 31-60:</strong> Build the spatial interpolation model and test RAG advisory templates.</div>
+                                            <div class="bullet-item"><i class="fa-solid fa-calendar-day"></i> <strong>Day 61-90:</strong> Launch the pilot in Kolar (India) and Fresno (USA) for 200+ test farmers.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Slide 10 -->
+                                    <div class="slide-card" id="slide-10">
+                                        <span class="slide-tag">CONCLUSION</span>
+                                        <h2>Pravaha: Securing the World's Water Future</h2>
+                                        <div class="slide-bullets">
+                                            <div class="bullet-item"><i class="fa-solid fa-globe"></i> <strong>Indian Solution to the World:</strong> Architecture scales from rural panchayats to global agricultural valleys.</div>
+                                            <div class="bullet-item"><i class="fa-solid fa-check-double"></i> <strong>Ready for Scale:</strong> Powered by the ultimate combination of Google Cloud and NVIDIA.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Column 3: Right Panel (Decision support details & What-If Allocator) -->
+                <section class="workspace-col right-col">
+                    <!-- Decision Support Panel -->
+                    <div class="card detail-card-seamless">
+                        <div class="card-header-seamless">
+                            <h3><i class="fa-solid fa-brain"></i> <span data-i18n="detail_header">Decision Support Panel</span></h3>
+                        </div>
+                        <div class="alert-detail-panel-seamless" id="alert-detail-panel">
+                            <p class="panel-placeholder" data-i18n="panel_placeholder">Select an active operational alert to inspect explainable AI reasoning and trigger closed-loop automation workflows.</p>
                             
                             <div class="panel-data" id="panel-data" style="display: none;">
-                                <h4 id="panel-title">Aquifer Depletion: Kolar</h4>
+                                <h4 id="panel-title" style="font-family:var(--font-heading); font-size:12px; font-weight:700;">Aquifer Depletion: Kolar</h4>
                                 <div class="metric-row">
                                     <div class="sub-metric">
-                                        <span class="label">SLA Time Remaining</span>
+                                        <span class="label" data-i18n="panel_lbl_sla">SLA Time</span>
                                         <span class="val text-orange" id="panel-sla">48 Hours</span>
                                     </div>
                                     <div class="sub-metric">
-                                        <span class="label">Risk Index / Impact</span>
+                                        <span class="label" data-i18n="panel_lbl_risk">Impact Severity</span>
                                         <span class="val text-red" id="panel-premium">+42% Energy</span>
                                     </div>
                                 </div>
                                 <div class="reason-block">
-                                    <h5><i class="fa-solid fa-brain"></i> Explainable AI Rationale (SHAP Grounding)</h5>
-                                    <p id="panel-rationale">Water table has depleted below Kolar clay threshold.Permanent compaction risk stands at 85%.</p>
+                                    <h5 data-i18n="panel_reason_title"><i class="fa-solid fa-circle-nodes"></i> Explainable AI Rationale (RAG Grounded)</h5>
+                                    <p id="panel-rationale" style="font-size:10px; line-height:1.3;"></p>
+                                    
+                                    <!-- Accessibility Voice Read Aloud Button -->
+                                    <button class="voice-btn" onclick="speakAdvisory()"><i class="fa-solid fa-volume-high"></i> <span data-i18n="btn_speak">Listen to Advisory</span></button>
                                 </div>
                                 <div class="action-block">
-                                    <h5>Recommended Actions</h5>
-                                    <ul id="panel-actions">
-                                        <li>Deploy rainwater harvesting recharge flows to Well R-12.</li>
-                                    </ul>
-                                    <button class="dispatch-btn" onclick="dispatchWorkflow()"><i class="fa-solid fa-bolt"></i> Approve & Execute Actions</button>
+                                    <h5 data-i18n="panel_actions_title">Recommended Actions</h5>
+                                    <ul id="panel-actions" style="font-size:10px; padding-left:14px; margin-bottom:8px;"></ul>
+                                    <button class="dispatch-btn" onclick="dispatchWorkflow()"><i class="fa-solid fa-bolt"></i> <span data-i18n="btn_dispatch">Approve & Execute Actions</span></button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+
+                    <!-- What-If Water & Flow Allocator -->
+                    <div class="card simulator-card-seamless">
+                        <div class="card-header-seamless">
+                            <h3><i class="fa-solid fa-sliders"></i> <span data-i18n="sim_header">"What-If" Flow Allocator</span></h3>
+                        </div>
+                        
+                        <div class="sim-content-seamless">
+                            <div class="slider-group-seamless">
+                                <label for="slide-pumping">
+                                    <span data-i18n="slide_pumping">🌾 Tube-well Draw limit</span>
+                                    <span class="slide-val" id="val-pumping">40% Draw</span>
+                                </label>
+                                <input type="range" id="slide-pumping" min="10" max="90" value="40" oninput="runSimulation()">
+                            </div>
+
+                            <div class="slider-group-seamless">
+                                <label for="slide-traffic">
+                                    <span data-i18n="slide_traffic">🚦 Traffic Auto-Tune</span>
+                                    <span class="slide-val" id="val-traffic">40% Auto</span>
+                                </label>
+                                <input type="range" id="slide-traffic" min="10" max="90" value="40" oninput="runSimulation()">
+                            </div>
+
+                            <div class="slider-group-seamless">
+                                <label for="slide-coldchain">
+                                    <span data-i18n="slide_coldchain">🍅 Cold-Chain Subsidy</span>
+                                    <span class="slide-val" id="val-coldchain">₹3,000 /Ton</span>
+                                </label>
+                                <input type="range" id="slide-coldchain" min="1000" max="6000" step="500" value="3000" oninput="runSimulation()">
+                            </div>
+
+                            <div class="slider-group-seamless">
+                                <label for="slide-geopol">
+                                    <span data-i18n="slide_geopol">🚢 Geopolitical Bypass</span>
+                                    <span class="slide-val" id="val-geopol">20% Divert</span>
+                                </label>
+                                <input type="range" id="slide-geopol" min="0" max="80" step="10" value="20" oninput="runSimulation()">
+                            </div>
+
+                            <div class="gauges-grid-seamless">
+                                <div class="gauge-card-seamless">
+                                    <span class="gauge-title" data-i18n="gauge_eff">Flow Efficiency</span>
+                                    <div class="gauge-value text-orange" id="gauge-sustainability">62%</div>
+                                </div>
+                                <div class="gauge-card-seamless">
+                                    <span class="gauge-title" data-i18n="gauge_risk">Mitigated Risk</span>
+                                    <div class="gauge-value text-red" id="gauge-deficit">12%</div>
+                                </div>
+                                <div class="gauge-card-seamless">
+                                    <span class="gauge-title" data-i18n="gauge_cost">Transit Energy</span>
+                                    <div class="gauge-value" id="gauge-energy">₹8.4L</div>
+                                </div>
+                                <div class="gauge-card-seamless">
+                                    <span class="gauge-title" data-i18n="gauge_rot">Supply Chain Rot</span>
+                                    <div class="gauge-value text-orange" id="gauge-compaction">32%</div>
+                                </div>
+                            </div>
+
+                            <div class="causal-engine-box-seamless">
+                                <p id="sim-advisory">Current policies maintain a balanced status quo. Increasing subsidies offsets crops rot risks.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
+        </div>
+    </div>
 
-            <!-- TAB 2: NVIDIA GPU Accelerator Benchmark -->
-            <div class="tab-content" id="accelerator">
-                <div class="simulator-header">
-                    <h2><i class="fa-solid fa-gauge-high"></i> NVIDIA GPU Accelerator Benchmark Panel</h2>
-                    <p>Compare spatial-temporal calculations of 12,000 aquifer sensor wells and routing grids: CPU vs. GPU.</p>
-                </div>
-                
-                <div class="benchmark-container">
-                    <div class="benchmark-grid">
-                        <div class="card benchmark-card-element" id="cpu-bench-card">
-                            <h3>Traditional CPU Processing</h3>
-                            <p class="bench-sub text-muted">Standard Spark Cluster (16 vCPUs)</p>
-                            <div class="bench-speed-value" id="cpu-time-val">--</div>
-                            <div class="bench-metrics">
-                                <div class="m-row"><span>Throughput:</span><strong>930 rows/s</strong></div>
-                                <div class="m-row"><span>Hardware Limit:</span><strong>Memory Bottleneck</strong></div>
-                            </div>
-                            <button class="bench-start-btn" onclick="runBenchmark('cpu')" id="btn-run-cpu"><i class="fa-solid fa-microchip"></i> Run CPU Model (Simulated)</button>
-                        </div>
-
-                        <div class="bench-vs">VS</div>
-
-                        <div class="card benchmark-card-element nvidia-highlight" id="gpu-bench-card">
-                            <span class="nvidia-badge"><i class="fa-solid fa-bolt"></i> ACCELERATED</span>
-                            <h3>NVIDIA GPU Spark RAPIDS</h3>
-                            <p class="bench-sub text-cyan">GCP A3 Instance (NVIDIA H100 GPU)</p>
-                            <div class="bench-speed-value text-cyan" id="gpu-time-val">--</div>
-                            <div class="bench-metrics">
-                                <div class="m-row"><span>Throughput:</span><strong>168,000 rows/s</strong></div>
-                                <div class="m-row"><span>Speedup:</span><strong class="text-green" id="gpu-speedup-multiplier">--</strong></div>
-                            </div>
-                            <button class="bench-start-btn gpu-btn" onclick="runBenchmark('gpu')" id="btn-run-gpu"><i class="fa-solid fa-bolt-lightning"></i> Run NVIDIA GPU Model</button>
-                        </div>
-                    </div>
-
-                    <div class="bench-progress-container" id="bench-progress-box" style="display: none;">
-                        <span id="bench-progress-label">Executing Spatial-Temporal Kriging Interpolation...</span>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" id="progress-bar"></div>
-                        </div>
-                    </div>
-
-                    <div class="causal-engine-box" style="margin-top: 16px;">
-                        <h4><i class="fa-solid fa-circle-info"></i> Why is this acceleration crucial for real-world deployment?</h4>
-                        <p>Mapping groundwater levels, traffic bottlenecks, and perishable logistics routes requires stitching massive raster grids and multi-year telemetries. CPUs take hours to complete these multi-dimensional interpolations, leading to **reactive water and transport management**. Running cuDF and Spark RAPIDS on NVIDIA H100 GPUs reduces processing times to milliseconds, enabling **proactive, real-time closed-loop grids** that save aquifers and supply routes before depletion.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TAB 3: "What-If" Flow Allocator -->
-            <div class="tab-content" id="simulator">
-                <div class="simulator-header">
-                    <h2><i class="fa-solid fa-sliders"></i> "What-If" Global Flow Allocator</h2>
-                    <p>Adjust aquifer extraction limits, coordinate rain recharge wells, and simulate sustainability scores.</p>
-                </div>
-                
-                <div class="sim-grid">
-                    <div class="card sim-sliders-card">
-                        <h3>Resource Adjustments</h3>
-                        <div class="slider-group">
-                            <label for="slide-pumping">
-                                <span><i class="fa-solid fa-faucet-drip"></i> Agricultural Pumping Draw limit</span>
-                                <span class="slide-val" id="val-pumping">40% Draw</span>
-                            </label>
-                            <input type="range" id="slide-pumping" min="10" max="90" value="40" oninput="runSimulation()">
-                            <span class="slide-desc">Restricts how much groundwater farmers can pump. Direct impact on aquifer levels.</span>
-                        </div>
-
-                        <div class="slider-group">
-                            <label for="slide-traffic">
-                                <span><i class="fa-solid fa-traffic-light"></i> Traffic Signal Auto-Tune Rate</span>
-                                <span class="slide-val" id="val-traffic">40% Auto</span>
-                            </label>
-                            <input type="range" id="slide-traffic" min="10" max="90" value="40" oninput="runSimulation()">
-                            <span class="slide-desc">Enables AI-driven real-time traffic signal optimization.</span>
-                        </div>
-
-                        <div class="slider-group">
-                            <label for="slide-coldchain">
-                                <span><i class="fa-solid fa-snowflake"></i> Cold-Chain Logistics Subsidy</span>
-                                <span class="slide-val" id="val-coldchain">₹3,000 /Ton</span>
-                            </label>
-                            <input type="range" id="slide-coldchain" min="1000" max="6000" step="500" value="3000" oninput="runSimulation()">
-                            <span class="slide-desc">Incentivizes cold storage setup to reduce vegetable spoilage rates.</span>
-                        </div>
-
-                        <div class="slider-group">
-                            <label for="slide-geopol">
-                                <span><i class="fa-solid fa-ship"></i> Geopolitical Bypass Divert %</span>
-                                <span class="slide-val" id="val-geopol">20% Divert</span>
-                            </label>
-                            <input type="range" id="slide-geopol" min="0" max="80" step="10" value="20" oninput="runSimulation()">
-                            <span class="slide-desc">Bypass shipping routes (e.g. Bab-el-Mandeb to Cape of Good Hope) diverted programmatically.</span>
-                        </div>
-                    </div>
-
-                    <div class="card sim-gauges-card">
-                        <h3>Simulated Flow Outputs</h3>
-                        <div class="gauges-grid">
-                            <div class="gauge-card">
-                                <span class="gauge-title">Flow Efficiency Index</span>
-                                <div class="gauge-value text-orange" id="gauge-sustainability">62%</div>
-                                <div class="gauge-trend"><i class="fa-solid fa-caret-up text-orange"></i> Stable</div>
-                            </div>
-                            <div class="gauge-card">
-                                <span class="gauge-title">Mitigated Risk Index</span>
-                                <div class="gauge-value text-red" id="gauge-deficit">12%</div>
-                                <div class="gauge-trend"><i class="fa-solid fa-caret-down text-green"></i> Decreasing</div>
-                            </div>
-                            <div class="gauge-card">
-                                <span class="gauge-title">Pumping & Transit Energy</span>
-                                <div class="gauge-value" id="gauge-energy">₹8.4L</div>
-                                <div class="gauge-trend"><i class="fa-solid fa-caret-down text-green"></i> Low-Load</div>
-                            </div>
-                            <div class="gauge-card">
-                                <span class="gauge-title">Supply Chain Rot Index</span>
-                                <div class="gauge-value text-orange" id="gauge-compaction">Moderate</div>
-                                <div class="gauge-trend"><i class="fa-solid fa-caret-down text-green"></i> Dropping</div>
-                            </div>
-                        </div>
-
-                        <div class="causal-engine-box">
-                            <h4><i class="fa-solid fa-circle-nodes"></i> Causal AI Analysis & Water Advisory</h4>
-                            <p id="sim-advisory">Current policies maintain a balanced status quo. Adjusting water and logistics subsidies resolves 22% crop spoilage risk.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TAB 4: Slide Deck Browser -->
-            <div class="tab-content" id="slide-deck">
-                <div class="slide-controls">
-                    <button class="slide-nav-btn" onclick="prevSlide()"><i class="fa-solid fa-arrow-left"></i> Previous</button>
-                    <span class="slide-indicator" id="slide-number">Slide 1 of 10</span>
-                    <button class="slide-nav-btn" onclick="nextSlide()">Next <i class="fa-solid fa-arrow-right"></i></button>
-                </div>
-
-                <div class="slide-viewer">
-                    <div class="slide-container" id="slide-container">
-                        <!-- Slide 1 -->
-                        <div class="slide-card active" id="slide-1">
-                            <span class="slide-tag">HACKATHON FINALE DECK</span>
-                            <h2>Pravaha: Global Flow & Grid Intelligence</h2>
-                            <h3>Sovereign AI Decision Core (प्रवाह) built on Google Cloud & NVIDIA</h3>
-                            <div class="slide-bullets">
-                                <div class="bullet-item"><i class="fa-solid fa-check"></i> <strong>Core Concept:</strong> Bridge fragmented water, traffic, weather, and geopolitical data.</div>
-                                <div class="bullet-item"><i class="fa-solid fa-check"></i> <strong>NVIDIA Hardware Layer:</strong> cuDF and Spark RAPIDS offload matrix math to H100 GPUs.</div>
-                                <div class="bullet-item"><i class="fa-solid fa-check"></i> <strong>Sanskrit Identity:</strong> 'Pravaha' signifies the dynamic stream of resource flows.</div>
-                            </div>
-                        </div>
-
-                        <!-- Slide 2 -->
-                        <div class="slide-card" id="slide-2">
-                            <span class="slide-tag">THE PROBLEM STATEMENT</span>
-                            <h2>India's and the World's Siloed Data Streams</h2>
-                            <div class="slide-bullets">
-                                <div class="bullet-item"><i class="fa-solid fa-circle-exclamation"></i> <strong>Hydrology:</strong> Groundwater table collapse in Bangalore and California Central Valley.</div>
-                                <div class="bullet-item"><i class="fa-solid fa-circle-exclamation"></i> <strong>Logistics & Traffic:</strong> Perishable vegetables (tomatoes) rotting in interstate jams.</div>
-                                <div class="bullet-item"><i class="fa-solid fa-circle-exclamation"></i> <strong>Geopolitics:</strong> Bab-el-Mandeb shipping choke points driving inflation.</div>
-                            </div>
-                        </div>
-
-                        <!-- Slide 3 -->
-                        <div class="slide-card" id="slide-3">
-                            <span class="slide-tag">Observe-Reason-Recommend-Act</span>
-                            <h2>Pravaha Closed-Loop Optimization</h2>
-                            <div class="slide-bullets">
-                                <div class="bullet-item"><i class="fa-solid fa-eye"></i> <strong>Observe:</strong> Streams radar imagery, well levels, Doppler clouds, and ship logs.</div>
-                                <div class="bullet-item"><i class="fa-solid fa-gears"></i> <strong>Reason:</strong> Analyzes spatial-temporal flow matrices on NVIDIA H100 GPUs.</div>
-                                <div class="bullet-item"><i class="fa-solid fa-bolt"></i> <strong>Act:</strong> Triggers auto-rerouting, DBT payments, and aquifer valves.</div>
-                            </div>
-                        </div>
-
-                        <!-- Slide 4 -->
-                        <div class="slide-card" id="slide-4">
-                            <span class="slide-tag">NVIDIA ACCELERATION LAYER</span>
-                            <h2>cuDF & Spark RAPIDS: The 180x Speedup</h2>
-                            <div class="slide-bullets">
-                                <div class="bullet-item"><i class="fa-solid fa-microchip"></i> <strong>The Challenge:</strong> Spatial interpolation of 12,000+ well sensors requires heavy matrix math.</div>
-                                <div class="bullet-item"><i class="fa-solid fa-bolt"></i> <strong>The GPU Speedup:</strong> Pushing computations to NVIDIA H100 GPUs via Spark RAPIDS drops runtimes from 12.8s to 71ms.</div>
-                                <div class="bullet-item"><i class="fa-solid fa-chart-line"></i> <strong>Real-World Value:</strong> Real-time mapping makes water grid responses proactive rather than delayed.</div>
-                            </div>
-                        </div>
-
-                        <!-- Slide 5 -->
-                        <div class="slide-card" id="slide-5">
-                            <span class="slide-tag">FARMER INTEGRATION</span>
-                            <h2>Democratizing Hydrological Insights on WhatsApp</h2>
-                            <div class="slide-bullets">
-                                <div class="bullet-item"><i class="fa-solid fa-microphone"></i> <strong>Multi-lingual Voice Notes:</strong> Farmers record questions (e.g. Kannada, English) on WhatsApp.</div>
-                                <div class="bullet-item"><i class="fa-solid fa-gears"></i> <strong>Grounded Advisory:</strong> Gemini extracts coords, fetches localized water table data, and provides direct pumping recommendations.</div>
-                            </div>
-                        </div>
-
-                        <!-- Slide 6 -->
-                        <div class="slide-card" id="slide-6">
-                            <span class="slide-tag">WHAT-IF SIMULATION</span>
-                            <h2>Interactive Resource Allocator</h2>
-                            <div class="slide-bullets">
-                                <div class="bullet-item"><i class="fa-solid fa-sliders"></i> <strong>Resource Tuning:</strong> Allows administrators to adjust pumping limits and stormwater recharge flows.</div>
-                                <div class="bullet-item"><i class="fa-solid fa-chart-pie"></i> <strong>Instant Feedback:</strong> Displays dynamic indicators for aquifer sustainability, pumping cost, and compaction risks.</div>
-                            </div>
-                        </div>
-
-                        <!-- Slide 7 -->
-                        <div class="slide-card" id="slide-7">
-                            <span class="slide-tag">TECHNOLOGY STACK</span>
-                            <h2>Google Cloud & NVIDIA Hardware Core</h2>
-                            <div class="slide-bullets">
-                                <div class="bullet-item"><i class="fa-solid fa-cloud"></i> <strong>Google Cloud Layer:</strong> Managed Service for Apache Spark, BigQuery, AlloyDB pgvector, GKE.</div>
-                                <div class="bullet-item"><i class="fa-solid fa-microchip"></i> <strong>NVIDIA Layer:</strong> GPUs on Google Cloud, RAPIDS, cuDF, Spark RAPIDS Accelerator.</div>
-                                <div class="bullet-item"><i class="fa-solid fa-brain"></i> <strong>Cognitive Layer:</strong> Gemini Enterprise Agent Platform.</div>
-                            </div>
-                        </div>
-
-                        <!-- Slide 8 -->
-                        <div class="slide-card" id="slide-8">
-                            <span class="slide-tag">MEASURABLE IMPACT</span>
-                            <h2>Saving Aquifers & Energy</h2>
-                            <div class="slide-bullets">
-                                <div class="bullet-item"><i class="fa-solid fa-wallet"></i> <strong>Energy Savings:</strong> Proper water table management reduces pumping energy costs by 22%.</div>
-                                <div class="bullet-item"><i class="fa-solid fa-droplet"></i> <strong>Water Security:</strong> Replaces uncoordinated pumping with data-driven allocation.</div>
-                                <div class="bullet-item"><i class="fa-solid fa-shield-halved"></i> <strong>Agricultural Stability:</strong> Lowers the risk of complete crop failures during monsoonal dry spells.</div>
-                            </div>
-                        </div>
-
-                        <!-- Slide 9 -->
-                        <div class="slide-card" id="slide-9">
-                            <span class="slide-tag">THE 90-DAY MVP</span>
-                            <h2>Deployment & Pilot Scale</h2>
-                            <div class="slide-bullets">
-                                <div class="bullet-item"><i class="fa-solid fa-calendar-day"></i> <strong>Day 1-30:</strong> Connect sensor feeds and set up GPU-Spark clusters on GCP.</div>
-                                <div class="bullet-item"><i class="fa-solid fa-calendar-day"></i> <strong>Day 31-60:</strong> Build the spatial interpolation model and test RAG advisory templates.</div>
-                                <div class="bullet-item"><i class="fa-solid fa-calendar-day"></i> <strong>Day 61-90:</strong> Launch the pilot in Kolar (India) and Fresno (USA) for 200+ test farmers.</div>
-                            </div>
-                        </div>
-
-                        <!-- Slide 10 -->
-                        <div class="slide-card" id="slide-10">
-                            <span class="slide-tag">CONCLUSION</span>
-                            <h2>Pravaha: Securing the World's Water Future</h2>
-                            <div class="slide-bullets">
-                                <div class="bullet-item"><i class="fa-solid fa-globe"></i> <strong>Indian Solution to the World:</strong> Architecture scales from rural panchayats to global agricultural valleys.</div>
-                                <div class="bullet-item"><i class="fa-solid fa-check-double"></i> <strong>Ready for Scale:</strong> Powered by the ultimate combination of Google Cloud and NVIDIA.</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Interactive Onboarding Modal -->
+    <!-- Onboarding Modal Overlay -->
     <div class="modal-overlay" id="onboarding-modal">
         <div class="modal-content">
             <div class="modal-header-icon"><i class="fa-solid fa-hands-holding-child"></i></div>
