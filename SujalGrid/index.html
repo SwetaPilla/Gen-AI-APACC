@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sujal-Grid - Aquifer Recharge & Water-Grid Intelligence Platform</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <!-- Top Cybernetic Header -->
+    <header class="cyber-header">
+        <div class="header-logo">
+            <div class="logo-orb"></div>
+            <h1>Sujal-Grid</h1>
+            <span class="sub-badge">Global Aquifer & Water Grid Core</span>
+        </div>
+        <div class="system-status">
+            <div class="status-indicator">
+                <span class="pulse-green"></span>
+                <span class="status-text">Core Status: Active</span>
+            </div>
+            <div class="status-divider"></div>
+            <div class="status-item">
+                <i class="fa-solid fa-microchip text-cyan"></i>
+                <span>NVIDIA H100: Acceleration Active</span>
+            </div>
+            <div class="status-divider"></div>
+            <div class="status-item">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Sovereign Storage: Delhi/Mumbai Regions</span>
+            </div>
+            <div class="status-divider"></div>
+            <div class="status-item timer">
+                <i class="fa-regular fa-clock"></i>
+                <span id="live-time">05 July 2026 | 01:45 AM IST</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace Layout -->
+    <main class="dashboard-container">
+        <!-- LEFT PANEL: Citizen / Farmer Mobile Portal -->
+        <section class="left-panel">
+            <div class="panel-header">
+                <h2><i class="fa-solid fa-mobile-screen-button"></i> Farmer & Citizen Portal</h2>
+                <p>Simulating WhatsApp Advisory on Low-Bandwidth Networks</p>
+            </div>
+            
+            <!-- Mobile Phone Shell -->
+            <div class="phone-shell">
+                <div class="phone-screen">
+                    <!-- WhatsApp Header -->
+                    <div class="wa-header">
+                        <div class="wa-avatar">
+                            <i class="fa-solid fa-hand-holding-droplet"></i>
+                        </div>
+                        <div class="wa-chat-info">
+                            <h3>Sujal-Grid Advisory</h3>
+                            <span class="online-indicator">Govt/Municipal Official Account</span>
+                        </div>
+                        <div class="wa-actions">
+                            <i class="fa-solid fa-phone"></i>
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- WhatsApp Chat Area -->
+                    <div class="wa-body" id="chat-body">
+                        <div class="wa-message system">
+                            <p>🙏 Welcome to Sujal-Grid Advisory. We resolve crop-pumping and local aquifer recharge concerns. Select a profile below to simulate a query:</p>
+                        </div>
+                    </div>
+                    
+                    <!-- WhatsApp Inputs & Quick Options -->
+                    <div class="wa-footer">
+                        <div class="quick-selectors">
+                            <button onclick="simulateFarmer('harish')">🇮🇳 Harish (Karnataka - Tube-well Dry-out)</button>
+                            <button onclick="simulateFarmer('john')">🇺🇸 John (California - Aquifer Depletion)</button>
+                            <button onclick="simulateFarmer('kavitha')">💧 Kavitha (Chennai - Rainwater Harvesting)</button>
+                        </div>
+                        <div class="input-container">
+                            <input type="text" id="user-input" placeholder="Type message in your language..." disabled>
+                            <button class="send-btn" id="send-btn" disabled><i class="fa-solid fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pipeline Visualizer -->
+            <div class="pipeline-visualizer">
+                <h3><i class="fa-solid fa-bolt-lightning text-cyan"></i> NVIDIA GPU Processing Pipeline</h3>
+                <div class="steps-grid">
+                    <div class="step-card" id="step-ingest">
+                        <div class="step-num">1</div>
+                        <h4>Ingest</h4>
+                        <p id="ingest-val">Idle</p>
+                    </div>
+                    <div class="step-card" id="step-cudf">
+                        <div class="step-num">2</div>
+                        <h4>cuDF Clean</h4>
+                        <p id="cudf-val">Idle</p>
+                    </div>
+                    <div class="step-card" id="step-spark">
+                        <div class="step-num">3</div>
+                        <h4>GPU Spark</h4>
+                        <p id="spark-val">Idle</p>
+                    </div>
+                    <div class="step-card" id="step-gemini">
+                        <div class="step-num">4</div>
+                        <h4>Gemini RAG</h4>
+                        <p id="gemini-val">Idle</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RIGHT PANEL: Decision Support Command Board -->
+        <section class="right-panel">
+            <!-- Navigation Tabs -->
+            <div class="tab-bar">
+                <button class="tab-btn active" onclick="switchTab('control-room')"><i class="fa-solid fa-water"></i> Aquifer Control Room</button>
+                <button class="tab-btn" onclick="switchTab('accelerator')"><i class="fa-solid fa-gauge-high"></i> NVIDIA GPU Accelerator Benchmark</button>
+                <button class="tab-btn" onclick="switchTab('simulator')"><i class="fa-solid fa-sliders"></i> "What-If" Water Allocator</button>
+                <button class="tab-btn" onclick="switchTab('slide-deck')"><i class="fa-solid fa-presentation-screen"></i> Pitch Slides</button>
+            </div>
+
+            <!-- TAB 1: Aquifer Control Room -->
+            <div class="tab-content active" id="control-room">
+                <div class="control-grid">
+                    <!-- Left: Geospatial Aquifer Cross-Section -->
+                    <div class="card map-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-circle-nodes"></i> Aquifer Cross-Section & Sensor Grid</h3>
+                            <span class="live-map-badge">Live IoT Sensors</span>
+                        </div>
+                        <div class="map-container">
+                            <svg viewBox="0 0 500 350" class="digital-twin-svg" id="aquifer-svg">
+                                <defs>
+                                    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+                                    </pattern>
+                                    <linearGradient id="unsaturated-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" stop-color="#4a3b32" stop-opacity="0.6"/>
+                                        <stop offset="100%" stop-color="#3d2c1e" stop-opacity="0.8"/>
+                                    </linearGradient>
+                                    <linearGradient id="saturated-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" stop-color="#1E3A8A" stop-opacity="0.7"/>
+                                        <stop offset="100%" stop-color="#0F172A" stop-opacity="0.95"/>
+                                    </linearGradient>
+                                </defs>
+                                <rect width="500" height="350" fill="url(#grid)" />
+                                
+                                <!-- Ground level line -->
+                                <path d="M0 80 Q250 60 500 80" fill="none" stroke="#8B5CF6" stroke-width="3" stroke-dasharray="2,2"/>
+                                <text x="15" y="70" fill="#8B5CF6" font-size="9" font-family="Outfit" font-weight="600">GROUND LEVEL</text>
+                                
+                                <!-- Unsaturated Soil Zone (Clay/Sand layers) -->
+                                <path d="M0 80 Q250 60 500 80 L500 180 Q250 170 0 180 Z" fill="url(#unsaturated-grad)" stroke="rgba(255,255,255,0.05)"/>
+                                <text x="15" y="130" fill="#A0AEC0" font-size="8" font-family="Outfit">UNSATURATED ZONE</text>
+                                
+                                <!-- Water Table Line (Dynamic height controlled by simulator) -->
+                                <path d="M0 180 Q250 170 500 180" fill="none" stroke="#00BFFF" stroke-width="4" id="water-table-line" class="water-flow-line"/>
+                                <text x="15" y="210" fill="#00BFFF" font-size="9" font-family="Outfit" font-weight="600" id="text-watertable">WATER TABLE LEVEL (28m Depth)</text>
+
+                                <!-- Saturated Aquifer Zone (Water bearing rock) -->
+                                <path d="M0 180 Q250 170 500 180 L500 350 L0 350 Z" fill="url(#saturated-grad)"/>
+                                <text x="15" y="280" fill="#93C5FD" font-size="8" font-family="Outfit">SATURATED AQUIFER ZONE</text>
+
+                                <!-- Simulated Wells -->
+                                <!-- 1. Agricultural Pumping Tube-well (Kolar Karnataka) -->
+                                <g id="well-kolar">
+                                    <line x1="150" y1="70" x2="150" y2="240" stroke="#EF4444" stroke-width="3" stroke-dasharray="4,2"/>
+                                    <circle cx="150" cy="70" r="5" fill="#EF4444"/>
+                                    <circle cx="150" cy="240" r="3" fill="#EF4444"/>
+                                    <text x="150" y="55" text-anchor="middle" fill="#EF4444" font-size="8" font-family="Outfit" font-weight="600">Pumping Well (India)</text>
+                                </g>
+
+                                <!-- 2. Agricultural Pumping Tube-well (Fresno California) -->
+                                <g id="well-fresno" style="display: none;">
+                                    <line x1="380" y1="70" x2="380" y2="260" stroke="#F59E0B" stroke-width="3" stroke-dasharray="4,2"/>
+                                    <circle cx="380" cy="70" r="5" fill="#F59E0B"/>
+                                    <circle cx="380" cy="260" r="3" fill="#F59E0B"/>
+                                    <text x="380" y="55" text-anchor="middle" fill="#F59E0B" font-size="8" font-family="Outfit" font-weight="600">Pumping Well (USA)</text>
+                                </g>
+
+                                <!-- 3. Artificial Rainwater Recharge Well -->
+                                <g id="well-recharge" class="pulse-green">
+                                    <line x1="280" y1="70" x2="280" y2="220" stroke="#10B981" stroke-width="4"/>
+                                    <circle cx="280" cy="70" r="6" fill="#10B981"/>
+                                    <circle cx="280" cy="220" r="4" fill="#10B981"/>
+                                    <text x="280" y="55" text-anchor="middle" fill="#10B981" font-size="8" font-family="Outfit" font-weight="600">Rainwater Recharge Well</text>
+                                    
+                                    <!-- Dynamic recharge water flow drops -->
+                                    <circle cx="280" cy="90" r="2.5" fill="#00BFFF" class="water-drop" id="flow-drop-1"/>
+                                    <circle cx="280" cy="140" r="2.5" fill="#00BFFF" class="water-drop" id="flow-drop-2"/>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Right: Alerts & Critical Aquifers Grid -->
+                    <div class="card alerts-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-bell"></i> Critical Aquifer Alerts</h3>
+                            <span class="active-badge" id="active-alert-count">1 Active Alert</span>
+                        </div>
+                        <div class="alerts-list" id="alerts-list">
+                            <!-- Alert 1 (Always Active initially - Karnataka Aquifer) -->
+                            <div class="alert-item warning" id="alert-kolar-item" onclick="selectAlert('kolar')">
+                                <div class="alert-icon"><i class="fa-solid fa-circle-exclamation text-orange"></i></div>
+                                <div class="alert-details">
+                                    <h4>Aquifer Depletion: Kolar Karnataka</h4>
+                                    <p>Water table fell by 4.2m. Critical dry-out warning inside crops zone.</p>
+                                    <span class="alert-meta">Source: Sat-GRACE + Well Sensors | Confidence: 91%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Selected Alert Rationale Panel -->
+                        <div class="alert-detail-panel" id="alert-detail-panel">
+                            <h3>Decision Support Panel</h3>
+                            <p class="panel-placeholder">Select an active operational alert above to inspect explainable AI reasoning and trigger closed-loop automation workflows.</p>
+                            
+                            <div class="panel-data" id="panel-data" style="display: none;">
+                                <h4 id="panel-title">Aquifer Depletion: Kolar</h4>
+                                <div class="metric-row">
+                                    <div class="sub-metric">
+                                        <span class="label">SLA Time Remaining</span>
+                                        <span class="val text-orange" id="panel-sla">48 Hours</span>
+                                    </div>
+                                    <div class="sub-metric">
+                                        <span class="label">Pumping Cost Premium</span>
+                                        <span class="val text-red" id="panel-premium">+42% Energy</span>
+                                    </div>
+                                </div>
+                                <div class="reason-block">
+                                    <h5><i class="fa-solid fa-brain"></i> GPU Spatial Interpolation & Gemini RAG Rationale</h5>
+                                    <p id="panel-rationale">Groundwater levels in Kolar have depleted below critical clay threshold (28m). Model forecasts 85% probability of permanent aquifer compaction and soil collapse unless draw-off is immediately restricted by 20%.</p>
+                                </div>
+                                <div class="action-block">
+                                    <h5>Recommended Actions</h5>
+                                    <ul id="panel-actions">
+                                        <li>Deploy rainwater harvesting recharge flows to Well R-12.</li>
+                                        <li>Initiate dynamic pumping bans during peak solar evaporation hours.</li>
+                                        <li>Alert local farmers via automated WhatsApp regional alerts.</li>
+                                    </ul>
+                                    <button class="dispatch-btn" onclick="dispatchWorkflow()"><i class="fa-solid fa-bolt"></i> Approve & Execute Actions</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: NVIDIA GPU Accelerator Benchmark -->
+            <div class="tab-content" id="accelerator">
+                <div class="simulator-header">
+                    <h2><i class="fa-solid fa-gauge-high"></i> NVIDIA GPU Accelerator Benchmark Panel</h2>
+                    <p>Compare spatial-temporal kriging calculations of 12,000 aquifer sensor wells on Google Cloud: CPU vs. GPU.</p>
+                </div>
+                
+                <div class="benchmark-container">
+                    <div class="benchmark-grid">
+                        <!-- CPU Benchmark Card -->
+                        <div class="card benchmark-card-element" id="cpu-bench-card">
+                            <h3>Traditional CPU Processing</h3>
+                            <p class="bench-sub text-muted">Standard Spark Cluster (16 vCPUs)</p>
+                            <div class="bench-speed-value" id="cpu-time-val">--</div>
+                            <div class="bench-metrics">
+                                <div class="m-row"><span>Throughput:</span><strong>930 rows/s</strong></div>
+                                <div class="m-row"><span>Hardware Limit:</span><strong>Memory Bottleneck</strong></div>
+                            </div>
+                            <button class="bench-start-btn" onclick="runBenchmark('cpu')" id="btn-run-cpu"><i class="fa-solid fa-microchip"></i> Run CPU Model (Simulated)</button>
+                        </div>
+
+                        <!-- VS Divider -->
+                        <div class="bench-vs">VS</div>
+
+                        <!-- NVIDIA GPU Benchmark Card -->
+                        <div class="card benchmark-card-element nvidia-highlight" id="gpu-bench-card">
+                            <span class="nvidia-badge"><i class="fa-solid fa-bolt"></i> ACCELERATED</span>
+                            <h3>NVIDIA GPU Spark RAPIDS</h3>
+                            <p class="bench-sub text-cyan">GCP A3 Instance (NVIDIA H100 GPU)</p>
+                            <div class="bench-speed-value text-cyan" id="gpu-time-val">--</div>
+                            <div class="bench-metrics">
+                                <div class="m-row"><span>Throughput:</span><strong>168,000 rows/s</strong></div>
+                                <div class="m-row"><span>Speedup:</span><strong class="text-green" id="gpu-speedup-multiplier">--</strong></div>
+                            </div>
+                            <button class="bench-start-btn gpu-btn" onclick="runBenchmark('gpu')" id="btn-run-gpu"><i class="fa-solid fa-bolt-lightning"></i> Run NVIDIA GPU Model</button>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar Indicator -->
+                    <div class="bench-progress-container" id="bench-progress-box" style="display: none;">
+                        <span id="bench-progress-label">Executing Spatial-Temporal Kriging Interpolation...</span>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" id="progress-bar"></div>
+                        </div>
+                    </div>
+
+                    <!-- Causal Analysis Box -->
+                    <div class="causal-engine-box" style="margin-top: 16px;">
+                        <h4><i class="fa-solid fa-circle-info"></i> Why is this acceleration crucial for real-world deployment?</h4>
+                        <p>Mapping groundwater levels requires stitching massive raster grids from satellite radar (Sentinel-1/GRACE) and multi-year telemetry from thousands of wells. CPUs take hours to complete these multi-dimensional interpolations, leading to **reactive, outdated water management**. Running cuDF and Spark RAPIDS on NVIDIA H100 GPUs reduces processing times to milliseconds, enabling **proactive, real-time closed-loop grids** that save aquifers before depletion.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: "What-If" Water Allocator -->
+            <div class="tab-content" id="simulator">
+                <div class="simulator-header">
+                    <h2><i class="fa-solid fa-sliders"></i> "What-If" Water Grid Allocator</h2>
+                    <p>Adjust aquifer extraction limits, coordinate rain recharge wells, and simulate sustainability scores.</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- Left: Control Sliders -->
+                    <div class="card sim-sliders-card">
+                        <h3>Water Allocation Adjustments</h3>
+                        <div class="slider-group">
+                            <label for="slide-pumping">
+                                <span><i class="fa-solid fa-faucet-drip"></i> Agricultural Pumping Draw limit</span>
+                                <span class="slide-val" id="val-pumping">40% Draw</span>
+                            </label>
+                            <input type="range" id="slide-pumping" min="10" max="90" value="40" oninput="runSimulation()">
+                            <span class="slide-desc">Restricts how much groundwater farmers can pump. Direct impact on aquifer levels.</span>
+                        </div>
+
+                        <div class="slider-group">
+                            <label for="slide-recharge">
+                                <span><i class="fa-solid fa-cloud-rain"></i> Artificial Rainwater Recharge Rate</span>
+                                <span class="slide-val" id="val-recharge">30L Liters/sec</span>
+                            </label>
+                            <input type="range" id="slide-recharge" min="10" max="150" step="10" value="30" oninput="runSimulation()">
+                            <span class="slide-desc">Directs local storm runoff into aquifer recharge wells to replenish groundwater.</span>
+                        </div>
+
+                        <div class="slider-group">
+                            <label for="slide-recycling">
+                                <span><i class="fa-solid fa-arrows-spin"></i> Industrial Wastewater Recycling Rate</span>
+                                <span class="slide-val" id="val-recycling">15%</span>
+                            </label>
+                            <input type="range" id="slide-recycling" min="5" max="80" step="5" value="15" oninput="runSimulation()">
+                            <span class="slide-desc">Percentage of industrial wastewater recycled to reduce aquifer reliance.</span>
+                        </div>
+                    </div>
+
+                    <!-- Right: Visual Impact Gauges -->
+                    <div class="card sim-gauges-card">
+                        <h3>Simulated Aquifer Outputs</h3>
+                        <div class="gauges-grid">
+                            <div class="gauge-card">
+                                <span class="gauge-title">Sustainability index</span>
+                                <div class="gauge-value text-orange" id="gauge-sustainability">62%</div>
+                                <div class="gauge-trend"><i class="fa-solid fa-caret-up text-orange"></i> Stable</div>
+                            </div>
+                            <div class="gauge-card">
+                                <span class="gauge-title">Water Deficit Forecast</span>
+                                <div class="gauge-value text-red" id="gauge-deficit">12%</div>
+                                <div class="gauge-trend"><i class="fa-solid fa-caret-down text-green"></i> Decreasing</div>
+                            </div>
+                            <div class="gauge-card">
+                                <span class="gauge-title">Pumping Energy cost</span>
+                                <div class="gauge-value" id="gauge-energy">₹8.4L</div>
+                                <div class="gauge-trend"><i class="fa-solid fa-caret-down text-green"></i> Low-Load</div>
+                            </div>
+                            <div class="gauge-card">
+                                <span class="gauge-title">Aquifer Compaction Risk</span>
+                                <div class="gauge-value text-orange" id="gauge-compaction">Moderate</div>
+                                <div class="gauge-trend"><i class="fa-solid fa-caret-down text-green"></i> Dropping</div>
+                            </div>
+                        </div>
+
+                        <!-- Causal Engine Box -->
+                        <div class="causal-engine-box">
+                            <h4><i class="fa-solid fa-circle-nodes"></i> Causal AI Analysis & Water Advisory</h4>
+                            <p id="sim-advisory">Current policies maintain a balanced status quo. Increasing artificial rainwater recharge to 80L Liters/sec is projected to lift aquifer sustainability to 84% and increase groundwater levels by 1.2m over the crop cycle.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: Slide Deck Browser -->
+            <div class="tab-content" id="slide-deck">
+                <div class="slide-controls">
+                    <button class="slide-nav-btn" onclick="prevSlide()"><i class="fa-solid fa-arrow-left"></i> Previous</button>
+                    <span class="slide-indicator" id="slide-number">Slide 1 of 10</span>
+                    <button class="slide-nav-btn" onclick="nextSlide()">Next <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+
+                <div class="slide-viewer">
+                    <!-- Slides Container -->
+                    <div class="slide-container" id="slide-container">
+                        <!-- Slide 1 -->
+                        <div class="slide-card active" id="slide-1">
+                            <span class="slide-tag">HACKATHON FINALE DECK</span>
+                            <h2>Sujal-Grid: Real-Time Aquifer Recharge Intelligence</h2>
+                            <h3>An Indian Solution to a Global Water Crisis using Google Cloud & NVIDIA GPU</h3>
+                            <div class="slide-bullets">
+                                <div class="bullet-item"><i class="fa-solid fa-check"></i> <strong>Core Concept:</strong> Convert static groundwater reports into real-time recharge grids.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-check"></i> <strong>NVIDIA Acceleration:</strong> Deploys cuDF & Spark RAPIDS on Google Cloud.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-check"></i> <strong>Social Impact:</strong> Secures agricultural outputs for farmers in Kolar (India) and Fresno (USA).</div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 2 -->
+                        <div class="slide-card" id="slide-2">
+                            <span class="slide-tag">THE GLOBAL WATER CRISIS</span>
+                            <h2>Groundwater Depletion: The Invisible Threat</h2>
+                            <div class="slide-bullets">
+                                <div class="bullet-item"><i class="fa-solid fa-circle-exclamation"></i> <strong>Indian Context:</strong> India consumes 25% of global groundwater. Cities like Bengaluru and Chennai face extreme shortages.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-circle-exclamation"></i> <strong>Global Context:</strong> Agricultural basins globally (US Central Valley, North China Plain) face permanent aquifer collapse.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-circle-exclamation"></i> <strong>Bottleneck:</strong> Groundwater levels are invisible; CPU-based spatial mapping takes hours to run.</div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 3 -->
+                        <div class="slide-card" id="slide-3">
+                            <span class="slide-tag">SYSTEM DESIGN</span>
+                            <h2>Accelerated Closed-Loop Groundwater Grid</h2>
+                            <div class="slide-bullets">
+                                <div class="bullet-item"><i class="fa-solid fa-database"></i> <strong>Ingest Layer:</strong> Ingests daily precipitation, well levels, and satellite rasters (GRACE/Sentinel) into BigQuery.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-bolt-lightning"></i> <strong>Processing Layer:</strong> Managed Spark on GCP accelerated by NVIDIA GPUs runs spatial-temporal interpolation.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-brain"></i> <strong>Decision Layer:</strong> Gemini Pro cross-references RAG water manuals in AlloyDB to output explainable water advisories.</div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 4 -->
+                        <div class="slide-card" id="slide-4">
+                            <span class="slide-tag">NVIDIA ACCELERATION LAYER</span>
+                            <h2>cuDF & Spark RAPIDS: The 180x Speedup</h2>
+                            <div class="slide-bullets">
+                                <div class="bullet-item"><i class="fa-solid fa-microchip"></i> <strong>The Challenge:</strong> Spatial interpolation of 12,000+ well sensors requires heavy matrix math.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-bolt"></i> <strong>The GPU Speedup:</strong> Pushing computations to NVIDIA H100 GPUs via Spark RAPIDS drops runtimes from 12.8s to 71ms.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-chart-line"></i> <strong>Real-World Value:</strong> Real-time mapping makes water grid responses proactive rather than delayed.</div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 5 -->
+                        <div class="slide-card" id="slide-5">
+                            <span class="slide-tag">FARMER INTEGRATION</span>
+                            <h2>Democratizing Hydrological Insights on WhatsApp</h2>
+                            <div class="slide-bullets">
+                                <div class="bullet-item"><i class="fa-solid fa-microphone"></i> <strong>Multi-lingual Voice Notes:</strong> Farmers record questions (e.g. Kannada, English) on WhatsApp.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-gears"></i> <strong>Grounded Advisory:</strong> Gemini extracts coords, fetches localized water table data, and provides direct pumping recommendations.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-hand-holding-droplet"></i> <strong>Empowerment:</strong> Enables smallholder farmers to avoid dry-out risks.</div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 6 -->
+                        <div class="slide-card" id="slide-6">
+                            <span class="slide-tag">WHAT-IF SIMULATION</span>
+                            <h2>Interactive Resource Allocator</h2>
+                            <div class="slide-bullets">
+                                <div class="bullet-item"><i class="fa-solid fa-sliders"></i> <strong>Resource Tuning:</strong> Allows administrators to adjust pumping limits and stormwater recharge flows.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-chart-pie"></i> <strong>Instant Feedback:</strong> Displays dynamic indicators for aquifer sustainability, pumping cost, and compaction risks.</div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 7 -->
+                        <div class="slide-card" id="slide-7">
+                            <span class="slide-tag">TECHNOLOGY STACK</span>
+                            <h2>Google Cloud & NVIDIA Hardware Core</h2>
+                            <div class="slide-bullets">
+                                <div class="bullet-item"><i class="fa-solid fa-cloud"></i> <strong>Google Cloud Layer:</strong> Managed Service for Apache Spark, BigQuery, AlloyDB pgvector, GKE.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-microchip"></i> <strong>NVIDIA Layer:</strong> GPUs on Google Cloud, RAPIDS, cuDF, Spark RAPIDS Accelerator.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-brain"></i> <strong>Cognitive Layer:</strong> Gemini Enterprise Agent Platform.</div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 8 -->
+                        <div class="slide-card" id="slide-8">
+                            <span class="slide-tag">MEASURABLE IMPACT</span>
+                            <h2>Saving Aquifers & Energy</h2>
+                            <div class="slide-bullets">
+                                <div class="bullet-item"><i class="fa-solid fa-wallet"></i> <strong>Energy Savings:</strong> Proper water table management reduces pumping energy costs by 22%.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-droplet"></i> <strong>Water Security:</strong> Replaces uncoordinated pumping with data-driven allocation.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-shield-halved"></i> <strong>Agricultural Stability:</strong> Lowers the risk of complete crop failures during monsoonal dry spells.</div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 9 -->
+                        <div class="slide-card" id="slide-9">
+                            <span class="slide-tag">THE 90-DAY MVP</span>
+                            <h2>Deployment & Pilot Scale</h2>
+                            <div class="slide-bullets">
+                                <div class="bullet-item"><i class="fa-solid fa-calendar-day"></i> <strong>Day 1-30:</strong> Connect sensor feeds and set up GPU-Spark clusters on GCP.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-calendar-day"></i> <strong>Day 31-60:</strong> Build the spatial interpolation model and test RAG advisory templates.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-calendar-day"></i> <strong>Day 61-90:</strong> Launch the pilot in Kolar (India) and Fresno (USA) for 200+ test farmers.</div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 10 -->
+                        <div class="slide-card" id="slide-10">
+                            <span class="slide-tag">CONCLUSION</span>
+                            <h2>Sujal-Grid: Securing the World's Water Future</h2>
+                            <div class="slide-bullets">
+                                <div class="bullet-item"><i class="fa-solid fa-globe"></i> <strong>Indian Solution to the World:</strong> Architecture scales from rural panchayats to global agricultural valleys.</div>
+                                <div class="bullet-item"><i class="fa-solid fa-check-double"></i> <strong>Ready for Scale:</strong> Powered by the ultimate combination of Google Cloud and NVIDIA.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- JS Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
