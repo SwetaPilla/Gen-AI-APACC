@@ -1230,53 +1230,83 @@ function startAutoDemo() {
     switchMainView('dashboard');
     setUserMode('citizen');
     
+    // 0s - Greeting Speech
+    if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+        const intro = new SpeechSynthesisUtterance("Welcome to Nirnay AI! Let us run a walkthrough of everyday decision intelligence.");
+        intro.lang = 'en-IN';
+        window.speechSynthesis.speak(intro);
+    }
+    appendChatMessage('system', "🎬 Auto-Demo active (Duration: 3 Minutes). Sit back and watch Nirnay AI solve everyday Indian use cases.");
+
+    // 15s - Agriculture Use Case
     setTimeout(() => {
-        // Step 1: Simulate water tanker inquiry
-        appendChatMessage('user', "My crops need water. Recommends borewell drill yield in Kolar?");
+        appendChatMessage('user', "Which crop should I grow in Kolar this monsoon?");
         triggerPipelineAnimation(() => {
             appendChatMessage('assistant', "💡 **Monsoon Crop Selection**: Cultivate Ragi instead of Paddy. Kolar groundwater levels indicate high compaction risks.");
-            populateDecisionScorecard('borewell');
+            populateDecisionScorecard('crop');
         });
-    }, 1000);
-    
+    }, 15000);
+
+    // 45s - Safety Route Use Case
     setTimeout(() => {
-        // Step 2: Switch to Officer Mode, demonstrate policy slide shifts
+        appendChatMessage('user', "Is walking home from Metro station safe at 10 PM?");
+        triggerPipelineAnimation(() => {
+            appendChatMessage('assistant', "💡 **Urban Transit Safety Advisor**: Use Ring Road Route B; street light intensity is high.");
+            populateDecisionScorecard('safepath');
+        });
+    }, 45000);
+
+    // 75s - Driver Transit Mode
+    setTimeout(() => {
+        setUserMode('driver');
+        appendChatMessage('user', "How to avoid road floodings in Mumbai subways?");
+        triggerPipelineAnimation(() => {
+            appendChatMessage('assistant', "💡 **Flash Flood Gati Routing**: Take Flyover route; Milan Subway is closed due to waterlogging.");
+            populateDecisionScorecard('floodroute');
+        });
+    }, 75000);
+
+    // 105s - Policy Simulator
+    setTimeout(() => {
         setUserMode('officer');
-        setWizardStep('wiz_step3');
-        document.getElementById('slide-pumping').value = 70;
+        appendChatMessage('system', "🔄 Switching to Officer Mode to simulate water compaction drawdown.");
+        document.getElementById('slide-pumping').value = 75;
         runSimulation();
-    }, 7000);
+    }, 105000);
 
+    // 130s - GPU H100 Benchmark
     setTimeout(() => {
-        // Step 3: Open GPU Benchmarks, run H100 simulation
         switchMainView('benchmark');
+        appendChatMessage('system', "⚡ Offloading spatial analytics matrices to NVIDIA H100 GPU cluster.");
         runBenchmark('gpu');
-    }, 12000);
-    
-    setTimeout(() => {
-        // Step 4: Run CPU benchmark comparison
-        runBenchmark('cpu');
-    }, 14000);
+    }, 130000);
 
+    // 145s - CPU Benchmark comparison
     setTimeout(() => {
-        // Step 5: Switch to Pitch slides
+        runBenchmark('cpu');
+    }, 145000);
+
+    // 160s - Pitch Presentation Slides
+    setTimeout(() => {
         switchMainView('slides');
         showSlide(1);
-    }, 18000);
-    
-    setTimeout(() => {
-        showSlide(2);
-    }, 21000);
+    }, 160000);
 
     setTimeout(() => {
-        showSlide(4); // Speedup slide
-    }, 24000);
+        showSlide(4); // GPU speedup slide
+    }, 168000);
 
     setTimeout(() => {
-        // Restore default
+        showSlide(10); // Conclusion
+    }, 174000);
+
+    // 180s - Restore defaults
+    setTimeout(() => {
         switchMainView('dashboard');
         setUserMode('citizen');
         demoBtn.disabled = false;
         demoBtn.innerHTML = `<i class="fa-solid fa-play"></i> Run Auto-Demo`;
-    }, 28000);
+        appendChatMessage('system', "✅ Demo completed. Feel free to ask your own queries!");
+    }, 180000);
 }
