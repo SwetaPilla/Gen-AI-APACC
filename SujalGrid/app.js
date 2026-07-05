@@ -580,6 +580,14 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Start Live Clock
     startLiveClock();
+
+    // Auto-trigger demo if query parameter contains ?demo=true
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('demo') || urlParams.has('autodemo')) {
+        setTimeout(() => {
+            startAutoDemo();
+        }, 1500);
+    }
 });
 
 function startLiveClock() {
