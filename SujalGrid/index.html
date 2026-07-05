@@ -62,8 +62,15 @@
                         <span id="lbl-hardware" data-i18n="lbl_hardware">NVIDIA H100: Active</span>
                     </div>
                 </div>
-                
                 <div class="header-actions">
+                    <!-- User Profile Badge -->
+                    <div class="user-profile-badge" id="user-profile-badge" style="display: none;" onclick="showAuthModal()" title="View Profile">
+                        <i class="fa-solid fa-circle-user text-cyan"></i>
+                        <span id="user-display-name">Guest</span>
+                        <button class="logout-btn" onclick="logoutUser(event)" title="Log Out"><i class="fa-solid fa-right-from-bracket"></i></button>
+                    </div>
+                    <div class="status-divider" id="user-divider" style="display: none;"></div>
+
                     <!-- Language Dropdown Selector -->
                     <div class="language-selector-box">
                         <i class="fa-solid fa-language text-cyan"></i>
@@ -90,12 +97,21 @@
                 </div>
             </header>
 
+            <!-- Interactive Layman Wizard Banner -->
+            <div class="wizard-banner" id="wizard-banner-box">
+                <div class="wizard-icon-animate"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                <div class="wizard-content">
+                    <span class="wizard-badge" data-i18n="wiz_badge">HELPING WIZARD (मददगार विजार्ड)</span>
+                    <p id="wizard-text" data-i18n="wiz_step1">Welcome to Pravaha! <strong>Step 1:</strong> Select a citizen profile in Column 1 (WhatsApp, Left) to simulate a voice complaint about a real crisis (Water, Traffic, or Shipping).</p>
+                </div>
+            </div>
+
             <!-- Columns Layout Grid -->
             <div class="workspace-grid">
                 <!-- Column 1: WhatsApp Ingress Chat Panel -->
                 <aside class="workspace-col chat-col">
                     <div class="col-header">
-                        <h3 data-i18n="chat_header"><i class="fa-solid fa-mobile-screen-button"></i> Ingress Chat Portal</h3>
+                        <h3 data-i18n="chat_header"><i class="fa-solid fa-mobile-screen-button"></i> Step 1: Voice Complaint (व्हाट्सएप शिकायत)</h3>
                     </div>
                     <div class="phone-screen-seamless">
                         <!-- WhatsApp Header -->
@@ -160,7 +176,7 @@
                     <div class="view-panel active" id="view-dashboard">
                         <div class="card map-card-seamless">
                             <div class="card-header-seamless">
-                                <h3 id="current-layer-title"><i class="fa-solid fa-earth-asia"></i> Hydrology (Water) Layer</h3>
+                                <h3 id="current-layer-title"><i class="fa-solid fa-earth-asia"></i> Step 2: Live Threat Map (लाइव नक्शा)</h3>
                                 <div class="map-layer-selector">
                                     <button class="layer-btn active" id="btn-layer-water" onclick="setMapLayer('water')" title="Water Layer"><i class="fa-solid fa-droplet"></i></button>
                                     <button class="layer-btn" id="btn-layer-traffic" onclick="setMapLayer('traffic')" title="Traffic Layer"><i class="fa-solid fa-traffic-light"></i></button>
@@ -244,7 +260,7 @@
                         <!-- Alerts Queue inside the same workspace panel -->
                         <div class="card alerts-card-seamless">
                             <div class="card-header-seamless">
-                                <h3><i class="fa-solid fa-bell"></i> <span data-i18n="alerts_header">Operational Alerts</span></h3>
+                                <h3><i class="fa-solid fa-bell"></i> <span data-i18n="alerts_header">Step 3: Active Alerts (सक्रिय अलर्ट)</span></h3>
                                 <span class="active-badge" id="active-alert-count">1 Active Alert</span>
                             </div>
                             <div class="alerts-list-seamless" id="alerts-list">
@@ -435,7 +451,7 @@
                     <!-- Decision Support Panel -->
                     <div class="card detail-card-seamless">
                         <div class="card-header-seamless">
-                            <h3><i class="fa-solid fa-brain"></i> <span data-i18n="detail_header">Decision Support Panel</span></h3>
+                            <h3><i class="fa-solid fa-brain"></i> <span data-i18n="detail_header">Step 4: AI Reason & Resolve (एआई समाधान)</span></h3>
                         </div>
                         <div class="alert-detail-panel-seamless" id="alert-detail-panel">
                             <p class="panel-placeholder" data-i18n="panel_placeholder">Select an active operational alert to inspect explainable AI reasoning and trigger closed-loop automation workflows.</p>
@@ -471,7 +487,7 @@
                     <!-- What-If Water & Flow Allocator -->
                     <div class="card simulator-card-seamless">
                         <div class="card-header-seamless">
-                            <h3><i class="fa-solid fa-sliders"></i> <span data-i18n="sim_header">"What-If" Flow Allocator</span></h3>
+                            <h3><i class="fa-solid fa-sliders"></i> <span data-i18n="sim_header">Step 5: Policy Simulator (पॉलिसी सिम्युलेटर)</span></h3>
                         </div>
                         
                         <div class="sim-content-seamless">
@@ -536,25 +552,75 @@
         </div>
     </div>
 
-    <!-- Onboarding Modal Overlay -->
-    <div class="modal-overlay" id="onboarding-modal">
-        <div class="modal-content">
+    <!-- Authentication & Onboarding Modal Overlay -->
+    <div class="modal-overlay" id="auth-modal" style="display: flex;">
+        <div class="modal-content auth-modal-content">
             <div class="modal-header-icon"><i class="fa-solid fa-hands-holding-child"></i></div>
             <h2>Welcome to Pravaha <span class="sanskrit-title">प्रवाह</span></h2>
-            <p>Select your operational persona to begin the interactive flow & grid intelligence simulation:</p>
-            <div class="modal-roles">
-                <button class="role-btn" onclick="selectPersona('farmer')">
-                    <div class="role-icon"><i class="fa-solid fa-seedling"></i></div>
-                    <h3>Farmer / Citizen Ingress</h3>
-                    <p>Submit voice notes to check aquifer levels, traffic blocks, or crop storage status.</p>
-                </button>
-                <button class="role-btn" onclick="selectPersona('commissioner')">
-                    <div class="role-icon"><i class="fa-solid fa-building-user"></i></div>
-                    <h3>Water & Logistics Commissioner</h3>
-                    <p>Monitor multi-layer twin maps, run GPU-Spark benchmarks, and simulate flow metrics.</p>
-                </button>
+            <p>Enter your details to track your operational preferences and configure localized grid alerts:</p>
+            
+            <!-- Auth Tab Toggles -->
+            <div class="auth-tabs">
+                <button class="auth-tab-btn active" id="tab-signup" onclick="switchAuthTab('signup')">Sign Up (नया खाता)</button>
+                <button class="auth-tab-btn" id="tab-login" onclick="switchAuthTab('login')">Log In (लॉग इन)</button>
             </div>
-            <button class="modal-skip-btn" onclick="selectPersona('none')">Skip & Explore Manually</button>
+            
+            <!-- Sign Up Form -->
+            <form id="signup-form" onsubmit="handleSignUp(event)" class="auth-form">
+                <div class="form-group">
+                    <label for="signup-name">Full Name (पूरा नाम)</label>
+                    <input type="text" id="signup-name" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-phone">Phone Number (मोबाइल नंबर)</label>
+                    <input type="tel" id="signup-phone" placeholder="Enter 10-digit phone number" pattern="[0-9]{10}" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="signup-role">Your Role (आपकी भूमिका)</label>
+                        <select id="signup-role">
+                            <option value="farmer">Farmer / Citizen (किसान / नागरिक)</option>
+                            <option value="logistics">Logistics Driver (चालक)</option>
+                            <option value="commissioner">Water/Logistics Commissioner (अधिकारी)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-state">State (राज्य)</label>
+                        <select id="signup-state">
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="Maharashtra">Maharashtra</option>
+                            <option value="Delhi">Delhi</option>
+                            <option value="Tamil Nadu">Tamil Nadu</option>
+                            <option value="Gujarat">Gujarat</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="signup-lang">Preferred Language (पसंदीदा भाषा)</label>
+                    <select id="signup-lang">
+                        <option value="en">English</option>
+                        <option value="hi">हिन्दी (Hindi)</option>
+                        <option value="kn">ಕನ್ನಡ (Kannada)</option>
+                        <option value="mr">मराठी (Marathi)</option>
+                    </select>
+                </div>
+                <button type="submit" class="auth-submit-btn">Register & Enter (रजिस्टर करें)</button>
+            </form>
+            
+            <!-- Log In Form (Hidden by default) -->
+            <form id="login-form" onsubmit="handleLogIn(event)" class="auth-form" style="display: none;">
+                <div class="form-group">
+                    <label for="login-phone">Registered Phone Number (पंजीकृत मोबाइल नंबर)</label>
+                    <input type="tel" id="login-phone" placeholder="Enter 10-digit phone number" pattern="[0-9]{10}" required>
+                </div>
+                <div class="form-error" id="login-error-msg" style="display: none; color: var(--color-danger); font-size: 11px; margin-bottom: 8px;"></div>
+                <button type="submit" class="auth-submit-btn">Log In & Load Profile (लॉग इन करें)</button>
+            </form>
+            
+            <div class="auth-footer-links">
+                <button class="modal-skip-btn" onclick="loginAsGuest()">Continue as Guest (अतिथि के रूप में आगे बढ़ें)</button>
+            </div>
         </div>
     </div>
 

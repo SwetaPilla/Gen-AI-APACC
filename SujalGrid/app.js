@@ -1,4 +1,4 @@
-// Pravaha (प्रवाह) - Core Application, Multilingual & Accessibility Logic
+// Pravaha (प्रवाह) - Core Application, Multilingual, Accessibility & Auth Session Logic
 
 // Global State
 let activeMainView = 'dashboard';
@@ -8,6 +8,11 @@ let activeAlert = 'kolar';
 let currentMapLayer = 'water';
 let simulatedWorkflows = {};
 let currentLanguage = 'en';
+let currentWizardStep = 'wiz_step1';
+
+// Global Active User Profile State
+let currentUser = null;
+let registeredUsers = JSON.parse(localStorage.getItem('pravaha_users') || '{}');
 
 // Multilingual Translation Database
 const translations = {
@@ -19,7 +24,7 @@ const translations = {
         lbl_status: "Core Status: Active",
         lbl_hardware: "NVIDIA H100: Active",
         btn_autodemo: "Run Auto-Demo",
-        chat_header: "Ingress Chat Portal",
+        chat_header: "Step 1: Voice Complaint",
         lbl_assistant: "Pravaha Assistant",
         lbl_official: "Govt of India Official",
         lbl_chat_welcome: "🙏 Welcome to Pravaha. We coordinate Water, Traffic, Grocery, Weather, and Geopolitical routes. Select a profile below to run a simulation:",
@@ -33,7 +38,7 @@ const translations = {
         pipe_cudf: "cuDF Clean",
         pipe_spark: "GPU Spark",
         pipe_gemini: "Gemini RAG",
-        alerts_header: "Operational Alerts",
+        alerts_header: "Step 3: Active Alerts",
         alert_kolar_title: "Aquifer Depletion: Kolar Karnataka",
         alert_kolar_desc: "Water table fell by 4.2m. Critical dry-out warning inside crops zone.",
         bench_header: "NVIDIA GPU Accelerator Benchmark Panel",
@@ -41,7 +46,7 @@ const translations = {
         gpu_title: "NVIDIA GPU Spark RAPIDS",
         bench_why_title: "Why is this acceleration crucial for real-world deployment?",
         bench_why_desc: "Mapping groundwater tables, traffic jams, and perishable transport logistics requires calculations on massive spatial matrices. CPUs take hours to run, leading to delayed, reactive decisions. Running cuDF and Spark RAPIDS on NVIDIA H100 GPUs reduces processing times to milliseconds, enabling proactive, automated responses.",
-        detail_header: "Decision Support Panel",
+        detail_header: "Step 4: AI Reason & Resolve",
         panel_placeholder: "Select an active operational alert to inspect explainable AI reasoning and trigger closed-loop automation workflows.",
         panel_lbl_sla: "SLA Time",
         panel_lbl_risk: "Impact Severity",
@@ -49,7 +54,7 @@ const translations = {
         panel_actions_title: "Recommended Actions",
         btn_speak: "Listen to Advisory",
         btn_dispatch: "Approve & Execute Actions",
-        sim_header: '"What-If" Flow Allocator',
+        sim_header: 'Step 5: Policy Simulator',
         slide_pumping: "🌾 Tube-well Draw limit",
         slide_traffic: "🚦 Traffic Auto-Tune",
         slide_coldchain: "🍅 Cold-Chain Subsidy",
@@ -57,7 +62,12 @@ const translations = {
         gauge_eff: "Flow Efficiency",
         gauge_risk: "Mitigated Risk",
         gauge_cost: "Transit Energy",
-        gauge_rot: "Supply Chain Rot"
+        gauge_rot: "Supply Chain Rot",
+        wiz_badge: "HELPING WIZARD",
+        wiz_step1: "Welcome to Pravaha! <strong>Step 1:</strong> Select a citizen profile in Column 1 (WhatsApp, Left) to simulate a voice complaint about a real crisis (Water, Traffic, or Shipping).",
+        wiz_step2: "<strong>Step 2:</strong> Ingestion completed! The pipeline is cleaning datasets using NVIDIA cuDF and running spatial predictions on GPU-Spark. Please wait...",
+        wiz_step3: "<strong>Step 3:</strong> Alert detected on map! Select the alert in Column 2 (Center, Bottom), then click <strong>'Approve & Execute'</strong> in Column 3 (Right, Step 4) to dispatch immediate resolution.",
+        wiz_step4: "<strong>Step 4:</strong> Crisis resolved successfully! Try adjusting the policy sliders in Column 3 (Right, Step 5) to optimize regional efficiency and watch risk values drop in real-time."
     },
     hi: {
         nav_dashboard: "नियंत्रण बोर्ड",
@@ -67,10 +77,10 @@ const translations = {
         lbl_status: "कोर स्थिति: सक्रिय",
         lbl_hardware: "NVIDIA H100: सक्रिय",
         btn_autodemo: "ऑटो-डेमो चलाएं",
-        chat_header: "चैट पोर्टल",
+        chat_header: "चरण १: व्हाट्सएप आवाज शिकायत",
         lbl_assistant: "प्रवाह सहायक",
         lbl_official: "भारत सरकार के अधिकारी",
-        lbl_chat_welcome: "🙏 प्रवाह में आपका स्वागत है। हम जल, यातायात, रसद (सब्जी), मौसम और भू-राजनीतिक मार्गों का समन्वय करते हैं। सिमुलेशन शुरू करने के लिए नीचे एक प्रोफाइल चुनें:",
+        lbl_chat_welcome: "🙏 प्रवाह में आपका स्वागत है। हम जल, यातायात, रसद, मौसम और भू-राजनीतिक मार्गों का समन्वय करते हैं। सिमुलेशन शुरू करने के लिए नीचे एक प्रोफाइल चुनें:",
         prof_harish: "हरीश (जल - नलकूप सूखा)",
         prof_deepak: "दीपक (यातायात - ओआरआर ग्रिडलॉक)",
         prof_srinivas: "श्रीनिवास (रसद - टमाटर सड़ने का जोखिम)",
@@ -81,15 +91,15 @@ const translations = {
         pipe_cudf: "cuDF सफाई",
         pipe_spark: "GPU स्पार्क",
         pipe_gemini: "जेमिनी RAG",
-        alerts_header: "परिचालन अलर्ट",
+        alerts_header: "चरण ३: सक्रिय अलर्ट",
         alert_kolar_title: "जलभृत रिक्तीकरण: कोलार कर्नाटक",
         alert_kolar_desc: "जल स्तर 4.2 मीटर नीचे गिरा। फसल क्षेत्र में गंभीर सूखे की चेतावनी।",
         bench_header: "NVIDIA GPU त्वरक बेंचमार्क पैनल",
         cpu_title: "पारंपरिक CPU प्रसंस्करण",
         gpu_title: "NVIDIA GPU स्पार्क RAPIDS",
         bench_why_title: "वास्तविक परिनियोजन के लिए यह त्वरण क्यों आवश्यक है?",
-        bench_why_desc: "भूजल स्तर, यातायात जाम और खराब होने वाली रसद मार्गों की मैपिंग के लिए बड़े स्थानिक मैट्रिक्स पर गणना की आवश्यकता होती है। सीपीयू को चलाने में घंटों लगते हैं, जिससे प्रतिक्रिया में देरी होती है। एनवीडिया एच100 पर cuDF और स्पार्क रैपिड्स चलाने से प्रसंस्करण समय मिलीसेकंड तक कम हो जाता है, जिससे सक्रिय प्रतिक्रियाएं सक्षम होती हैं।",
-        detail_header: "निर्णय समर्थन पैनल",
+        bench_why_desc: "भूजल स्तर, यातायात जाम और खराब होने वाली रसद मार्गों की मैपिंग के लिए बड़े स्थानिक मैट्रिक्स पर गणना की आवश्यकता होती है। सीपीयू को चलाने में घंटों लगते हैं, जिससे प्रतिक्रिया में देरी होती है। एनवीडिया एच१०० पर cuDF और स्पार्क रैपिड्स चलाने से प्रसंस्करण समय मिलीसेकंड तक कम हो जाता है, जिससे सक्रिय प्रतिक्रियाएं सक्षम होती हैं।",
+        detail_header: "चरण ४: एआई समाधान",
         panel_placeholder: "एआई तर्क का निरीक्षण करने और बंद-लूप स्वचालन को ट्रिगर करने के लिए एक सक्रिय अलर्ट चुनें।",
         panel_lbl_sla: "अवधि समय",
         panel_lbl_risk: "प्रभाव तीव्रता",
@@ -97,7 +107,7 @@ const translations = {
         panel_actions_title: "अनुशंसित कार्रवाइयां",
         btn_speak: "परामर्श सुनें",
         btn_dispatch: "कार्रवाई स्वीकृत और निष्पादित करें",
-        sim_header: '"व्हाट-इफ" प्रवाह नियामक',
+        sim_header: 'चरण ५: पॉलिसी सिम्युलेटर',
         slide_pumping: "🌾 नलकूप निष्कर्षण सीमा",
         slide_traffic: "🚦 ट्रैफिक ऑटो-ट्यून",
         slide_coldchain: "🍅 कोल्ड-चेन सब्सिडी",
@@ -105,7 +115,12 @@ const translations = {
         gauge_eff: "प्रवाह दक्षता",
         gauge_risk: "कम किया गया जोखिम",
         gauge_cost: "परिवहन ऊर्जा",
-        gauge_rot: "सप्लाई चेन सड़न"
+        gauge_rot: "सप्लाई चेन सड़न",
+        wiz_badge: "मददगार विजार्ड",
+        wiz_step1: "प्रवाह में आपका स्वागत है! <strong>चरण १:</strong> वास्तविक संकट (पानी, यातायात, या नौवहन) के बारे में शिकायत दर्ज करने के लिए कॉलम १ (व्हाट्सएप, बाएं) में कोई प्रोफाइल चुनें।",
+        wiz_step2: "<strong>चरण २:</strong> डेटा प्राप्त हो गया है! पाइपलाइन एनवीडिया cuDF का उपयोग करके फाइलों को साफ कर रही है और जीपीयू पर स्थानिक गणना कर रही है। कृपया प्रतीक्षा करें...",
+        wiz_step3: "<strong>चरण ३:</strong> नक्शे पर अलर्ट आ गया है! कॉलम २ (बीच, नीचे) में अलर्ट चुनें, फिर समाधान लागू करने के लिए कॉलम ३ (दाएं, चरण ४) में <strong>'Approve & Execute'</strong> पर क्लिक करें।",
+        wiz_step4: "<strong>चरण ४:</strong> संकट सफलतापूर्वक हल हो गया है! दक्षता बढ़ाने के लिए कॉलम ३ (दाएं, चरण ५) में पॉलिसी स्लाइडर्स को एडजस्ट करें और वास्तविक समय में जोखिम घटते हुए देखें।"
     },
     kn: {
         nav_dashboard: "ನಿಯಂತ್ರಣ ಫಲಕ",
@@ -115,7 +130,7 @@ const translations = {
         lbl_status: "ಸ್ಥಿತಿ: ಸಕ್ರಿಯ",
         lbl_hardware: "NVIDIA H100: ಸಕ್ರಿಯ",
         btn_autodemo: "ಸ್ವಯಂ ಪ್ರದರ್ಶನ",
-        chat_header: "ಚಾಟ್ ಪೋರ್ಟಲ್",
+        chat_header: "ಹಂತ ೧: ವಾಟ್ಸಾಪ್ ದೂರು",
         lbl_assistant: "ಪ್ರವಾಹ ಸಹಾಯಕ",
         lbl_official: "ಭಾರತ ಸರ್ಕಾರದ ಅಧಿಕಾರಿ",
         lbl_chat_welcome: "🙏 ಪ್ರವಾಹಕ್ಕೆ ಸುಸ್ವಾಗತ. ನಾವು ನೀರು, ಸಂಚಾರ, ತರಕಾರಿ ಲಾಜಿಸ್ಟಿಕ್ಸ್, ಹವಾಮಾನ ಮತ್ತು ಭೂರಾಜಕೀಯ ಮಾರ್ಗಗಳನ್ನು ಸಂಯೋಜಿಸುತ್ತೇವೆ. ಸಿಮ್ಯುಲೇಶನ್ ರನ್ ಮಾಡಲು ಕೆಳಗಿನ ಪ್ರೊಫೈಲ್ ಆಯ್ಕೆಮಾಡಿ:",
@@ -127,9 +142,9 @@ const translations = {
         pipeline_title: "NVIDIA GPU ಪ್ರೊಸೆಸಿಂಗ್ ಪೈಪ್‌ಲೈನ್",
         pipe_ingest: "ಇಂಗೆಸ್ಟ್",
         pipe_cudf: "cuDF ಕ್ಲೀನ್",
-        pipe_spark: "GPU ಸ್ಪಾರ್ಕ್",
+        pipe_spark: "GPU ಪ್ರೊಸೆಸಿಂಗ್",
         pipe_gemini: "ಜೆಮಿನಿ RAG",
-        alerts_header: "ಸಕ್ರಿಯ ಎಚ್ಚರಿಕೆಗಳು",
+        alerts_header: "ಹಂತ ೩: ಸಕ್ರಿಯ ಎಚ್ಚರಿಕೆಗಳು",
         alert_kolar_title: "ಕೊಳವೆ ಬಾವಿ ಒಣಗುವಿಕೆ: ಕೋಲಾರ ಕರ್ನಾಟಕ",
         alert_kolar_desc: "ನೀರಿನ ಮಟ್ಟ 4.2 ಮೀಟರ್ ಕುಸಿದಿದೆ. ಬೆಳೆ ವಲಯದಲ್ಲಿ ತೀವ್ರ ನೀರಿನ ಕೊರತೆ.",
         bench_header: "NVIDIA GPU ವೇಗೋತ್ಕರ್ಷದ ಮಾನದಂಡ",
@@ -137,7 +152,7 @@ const translations = {
         gpu_title: "NVIDIA GPU ಸ್ಪಾರ್ಕ್ RAPIDS",
         bench_why_title: "ವೇಗೋತ್ಕರ್ಷ ಏಕೆ ಮುಖ್ಯ?",
         bench_why_desc: "ನೀರಿನ ಮಟ್ಟಗಳು, ಸಂಚಾರ ದಟ್ಟಣೆ ಮತ್ತು ಹಾಳಾಗುವ ತರಕಾರಿ ಸರಬರಾಜು ಮಾರ್ಗಗಳನ್ನು ಮ್ಯಾಪ್ ಮಾಡಲು ಬೃಹತ್ ಡೇಟಾ ಅಗತ್ಯವಿರುತ್ತದೆ. ಸಿಪಿಯುಗಳು ಗಂಟೆಗಟ್ಟಲೆ ಸಮಯ ತೆಗೆದುಕೊಳ್ಳುತ್ತವೆ. ಎನ್ವಿಡಿಯಾ H100 ಜಿಪಿಯುನಲ್ಲಿ cuDF ಚಾಲನೆ ಮಾಡುವುದರಿಂದ ಡೇಟಾ ಲೆಕ್ಕಾಚಾರವು ಮಿಲಿಸೆಕೆಂಡ್‌ಗಳಲ್ಲಿ ಮುಕ್ತಾಯಗೊಂಡು ತ್ವರಿತ ನಿರ್ಧಾರಗಳನ್ನು ತೆಗೆದುಕೊಳ್ಳಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ.",
-        detail_header: "ನಿರ್ಧಾರ ಬೆಂಬಲ ಫಲಕ",
+        detail_header: "ಹಂತ ೪: ನಿರ್ಧಾರ ಫಲಕ",
         panel_placeholder: "ಎಚ್ಚರಿಕೆಯ ವಿವರಗಳನ್ನು ಪರಿಶೀಲಿಸಲು ಮತ್ತು ಸ್ವಯಂಚಾಲಿತ ಕ್ರಮಗಳನ್ನು ಕೈಗೊಳ್ಳಲು ಸಕ್ರಿಯ ಎಚ್ಚರಿಕೆಯನ್ನು ಆರಿಸಿ.",
         panel_lbl_sla: "ಸಮಯ ಮಿತಿ",
         panel_lbl_risk: "ಪ್ರಭಾವದ ತೀವ್ರತೆ",
@@ -145,7 +160,7 @@ const translations = {
         panel_actions_title: "ಶಿಫಾರಸು ಮಾಡಿದ ಕ್ರಮಗಳು",
         btn_speak: "ಶಿಫಾರಸನ್ನು ಆಲಿಸಿ",
         btn_dispatch: "ಕ್ರಮಗಳನ್ನು ಅನುಮೋದಿಸಿ ಮತ್ತು ಜಾರಿಗೊಳಿಸಿ",
-        sim_header: '"ವಾಟ್-ಇಫ್" ಫ್ಲೋ ನಿಯಂತ್ರಕ',
+        sim_header: 'ಹಂತ ೫: ಫ್ಲೋ ನಿಯಂತ್ರಕ',
         slide_pumping: "🌾 ಕೊಳವೆಬಾವಿ ಬಳಕೆ ಮಿತಿ",
         slide_traffic: "🚦 ಸಂಚಾರ ಸ್ವಯಂ-ಟ್ಯೂನ್",
         slide_coldchain: "🍅 ಕೋಲ್ಡ್-ಚೈನ್ ಸಬ್ಸಿಡಿ",
@@ -153,7 +168,12 @@ const translations = {
         gauge_eff: "ಹರಿವಿನ ದಕ್ಷತೆ",
         gauge_risk: "ಕಡಿಮೆಗೊಳಿಸಿದ ಅಪಾಯ",
         gauge_cost: "ಸಾರಿಗೆ ಇಂಧನ ವೆಚ್ಚ",
-        gauge_rot: "ಬೆಳೆ ಕೊಳೆಯುವಿಕೆ"
+        gauge_rot: "ಬೆಳೆ ಕೊಳೆಯುವಿಕೆ",
+        wiz_badge: "ಸಹಾಯ ವಿಝಾರ್ಡ್",
+        wiz_step1: "ಪ್ರವಾಹಕ್ಕೆ ಸುಸ್ವಾಗತ! <strong>ಹಂತ ೧:</strong> ಅಂತರ್ಜಲ, ಸಂಚಾರ ದಟ್ಟಣೆ ಅಥವಾ ಹಡಗು ಮಾರ್ಗ ತಡೆ ಬಗ್ಗೆ ದೂರು ನೀಡಲು ಎಡಭಾಗದಲ್ಲಿರುವ ವಾಟ್ಸಾಪ್ ಪ್ರೊಫೈಲ್ ಆರಿಸಿ.",
+        wiz_step2: "<strong>ಹಂತ ೨:</strong> ಡೇಟಾ ಸಂಸ್ಕರಣೆ ನಡೆಯುತ್ತಿದೆ! ಎನ್ವಿಡಿಯಾ cuDF ಕ್ಲೀನ್ ಆಗ್ತಾ ಇದೆ ಮತ್ತು ಜಿಪಿಯು-ಸ್ಪಾರ್ಕ್ ಮೂಲಕ ಅಂತರ್ಜಲ ಲೆಕ್ಕಾಚಾರ ನಡೀತಿದೆ. ದಯವಿಟ್ಟು ಕಾಯಿರಿ...",
+        wiz_step3: "<strong>ಹಂತ ೩:</strong> ಅಂತರ್ಜಲ ಅಪಾಯ ಪತ್ತೆಯಾಗಿದೆ! ನಕ್ಷೆಯ ಕೆಳಗಿರುವ ಸಕ್ರಿಯ ಎಚ್ಚರಿಕೆಯನ್ನು ಆರಿಸಿ, ನಂತರ ಬಲಭಾಗದಲ್ಲಿರುವ <strong>'Approve & Execute'</strong> ಬಟನ್ ಒತ್ತಿ.",
+        wiz_step4: "<strong>ಹಂತ ೪:</strong> ಸಮಸ್ಯೆ ಯಶಸ್ವಿಯಾಗಿ ಬಗೆಹರಿದಿದೆ! ನೀರಿನ ದಕ್ಷತೆ ಹೆಚ್ಚಿಸಲು ಬಲಗಡೆಯ ಕೆಳಗಿರುವ <strong>ಫ್ಲೋ ಸಿಮ್ಯುಲೇಟರ್</strong> ಸ್ಲೈಡರ್‌ಗಳನ್ನು ಬದಲಾಯಿಸಿ ಪ್ರಗತಿ ವೀಕ್ಷಿಸಿ."
     },
     mr: {
         nav_dashboard: "नियंत्रण बोर्ड",
@@ -162,8 +182,8 @@ const translations = {
         lbl_subbadge: "ग्लोबल ग्रिड इंटेलिजेंस कोर",
         lbl_status: "कोर स्थिती: सक्रिय",
         lbl_hardware: "NVIDIA H100: सक्रिय",
-        btn_autodemo: "ऑटो-डेमो चालवा",
-        chat_header: "चॅट पोर्टल",
+        btn_autodemo: "ऑतो-डेमो चालवा",
+        chat_header: "पायरी १: व्हॉट्सॲप तक्रार",
         lbl_assistant: "प्रवाह सहाय्यक",
         lbl_official: "भारत सरकारचे अधिकारी",
         lbl_chat_welcome: "🙏 प्रवाह मध्ये आपले स्वागत आहे. आम्ही पाणी, वाहतूक, भाजीपाला रसद, हवामान आणि भू-राजकीय मार्ग यांचे समन्वय करतो. सिमुलेशनसाठी खालील प्रोफाइल निवडा:",
@@ -177,7 +197,7 @@ const translations = {
         pipe_cudf: "cuDF स्वच्छता",
         pipe_spark: "GPU स्पार्क",
         pipe_gemini: "जेमिनी RAG",
-        alerts_header: "सक्रिय अलर्ट",
+        alerts_header: "पायरी ३: सक्रिय अलर्ट",
         alert_kolar_title: "जलभृत घट: कोलार कर्नाटक",
         alert_kolar_desc: "पाण्याची पातळी ४.२ मीटर खाली गेली. शेती क्षेत्रात पाणी टंचाईचा इशारा.",
         bench_header: "NVIDIA GPU प्रवेगक बेंचमार्क",
@@ -185,7 +205,7 @@ const translations = {
         gpu_title: "NVIDIA GPU स्पार्क RAPIDS",
         bench_why_title: "प्रवेग का महत्वाचा आहे?",
         bench_why_desc: "भूजल पातळी, वाहतूक कोंडी आणि भाजीपाला रसद मार्गांचे मॅपिंग करण्यासाठी मोठ्या स्थानिक डेटावर प्रक्रिया करावी लागते. सीपीयूला तासनतास लागतात, ज्यामुळे निर्णयात उशीर होतो. एनव्हिडिया एच१०० वर cuDF आणि स्पार्क रॅपिड्स चालवल्याने प्रक्रिया वेळ मिलिसेकंदांपर्यंत कमी होतो, ज्यामुळे जलद निर्णय शक्य होतात.",
-        detail_header: "निर्णय समर्थन पॅनेल",
+        detail_header: "पायरी ४: एआई निराकरण",
         panel_placeholder: "तपशील तपासण्यासाठी आणि स्वयंचलित क्रिया सक्रिय करण्यासाठी सक्रिय अलर्ट निवडा.",
         panel_lbl_sla: "कालावधी",
         panel_lbl_risk: "प्रभाव तीव्रता",
@@ -193,7 +213,7 @@ const translations = {
         panel_actions_title: "शिफारस केलेल्या कृती",
         btn_speak: "परामर्श ऐका",
         btn_dispatch: "कृती मंजूर आणि अंमलात आणा",
-        sim_header: '"व्हाट-इफ" प्रवाह नियामक',
+        sim_header: 'पायरी ५: पॉलिसी सिम्युलेटर',
         slide_pumping: "🌾 कूपनलिका उपसा मर्यादा",
         slide_traffic: "🚦 वाहतूक ऑटो-ट्यून",
         slide_coldchain: "🍅 कोल्ड-चेन सबसिडी",
@@ -201,7 +221,12 @@ const translations = {
         gauge_eff: "प्रवाह कार्यक्षमता",
         gauge_risk: "कमी झालेला धोका",
         gauge_cost: "वाहतूक ऊर्जा खर्च",
-        gauge_rot: "पीक सडण्याचे प्रमाण"
+        gauge_rot: "पीक सडण्याचे प्रमाण",
+        wiz_badge: "मददगार विजार्ड",
+        wiz_step1: "प्रवाह मध्ये आपले स्वागत आहे! <strong>पायरी १:</strong> संकट (पाणी, वाहतूक, किंवा जलमार्ग कोंडी) बद्दल तक्रार सिम्युलेट करण्यासाठी कॉलम १ (व्हॉट्सॲप, डावीकडे) मध्ये एक प्रोफाइल निवडा.",
+        wiz_step2: "<strong>पायरी २:</strong> डेटा प्राप्त झाला आहे! पाइपलाइन एनव्हिडिया cuDF वापरून फाइल्स साफ करत आहे आणि जीपीयू वर स्थानिक गणना करत आहे. कृपया वाट पहा...",
+        wiz_step3: "<strong>पायरी ३:</strong> नकाशावर अलर्ट आला आहे! कॉलम २ (मधे, खाली) मधील अलर्ट निवडा, नंतर निराकरण करण्यासाठी कॉलम ३ (उजवीकडे, पायरी ४) मधील <strong>'Approve & Execute'</strong> वर क्लिक करा.",
+        wiz_step4: "<strong>पायरी ४:</strong> संकट यशस्वीरित्या मिटले आहे! कार्यक्षमता वाढवण्यासाठी कॉलम ३ (उजवीकडे, पायरी ५) मधील पॉलिसी स्लाइडर्स ॲडजस्ट करा आणि जोखीम कमी होताना पहा."
     }
 };
 
@@ -277,7 +302,7 @@ const alertsDataLocalized = {
             ]
         },
         traffic: {
-            title: "यातायात जाम: बेंगलुरु आउटर रिंग रोड",
+            title: "यातायात जाम: बेंगलोर आउटर रिंग रोड",
             impact: "१८,००० यात्री",
             sla: "२ घंटे",
             rationale: "सिल्क बोर्ड जंक्शन पर जलभराव के कारण सड़क क्षमता ७०% कम हो गई है। ट्रैफिक कतार की लंबाई ४.२ किमी तक बढ़ गई है। डिलीवरी में देरी से खाद्य रसद प्रभावित हो रही है।",
@@ -324,7 +349,7 @@ const alertsDataLocalized = {
     kn: {
         kolar: {
             title: "ಕೊಳವೆ ಬಾವಿ ಒಣಗುವಿಕೆ: ಕೋಲಾರ ಕರ್ನಾಟಕ",
-            impact: "೮,೫೦೦ ರೈತರು",
+            impact: "೮, ೫೦೦ ರೈತರು",
             sla: "೪೮ ಗಂಟೆಗಳು",
             rationale: "ಕೋಲಾರದಲ್ಲಿ ಅಂತರ್ಜಲ ಮಟ್ಟವು ತೀವ್ರವಾಗಿ ಕುಸಿದಿದ್ದು (೨೮ ಮೀಟರ್), ಮಣ್ಣಿನ ಕುಸಿತದ ಅಪಾಯವು ೮೫% ಹೆಚ್ಚಾಗಿದೆ. ಪಂಪ್‌ ಮಾಡಲು ಬಳಸುವ ವಿದ್ಯುತ್ ವೆಚ್ಚ ೪೨% ಹೆಚ್ಚಾಗಿದೆ.",
             actions: [
@@ -335,7 +360,7 @@ const alertsDataLocalized = {
         },
         traffic: {
             title: "ಸಂಚಾರ ದಟ್ಟಣೆ: ಬೆಂಗಳೂರು ಹೊರವರ್ತುಲ ರಸ್ತೆ",
-            impact: "೧೮,೦೦೦ ಪ್ರಯಾಣಿಕರು",
+            impact: "೧೮, ೦೦೦ ಪ್ರಯಾಣಿಕರು",
             sla: "೨ ಗಂಟೆಗಳು",
             rationale: "ಸಿಲ್ಕ್ ಬೋರ್ಡ್ ಜಂಕ್ಷನ್‌ನಲ್ಲಿ ಮಳೆನೀರು ನಿಂತಿದ್ದರಿಂದ ರಸ್ತೆ ಸಾಮರ್ಥ್ಯ ೭೦% ನಷ್ಟು ಕಡಿಮೆಯಾಗಿದೆ. ಟ್ರಾಫಿಕ್ ಕ್ಯೂ ಉದ್ದ ೪.೨ ಕಿಲೋಮೀಟರ್ ತಲುಪಿದೆ.",
             actions: [
@@ -370,7 +395,7 @@ const alertsDataLocalized = {
             title: "ಸರಕು ಸಾಗಣೆ ಮಾರ್ಗ ತಡೆ: ಕೆಂಪು ಸಮುದ್ರ",
             impact: "೪೨ ಭಾರತೀಯ ಹಡಗುಗಳು",
             sla: "೯೬ ಗಂಟೆಗಳು",
-            rationale: "ಬಾಬ್-ಎಲ್-ಮಂಡೇಬ್ ಹಡಗು ಮಾರ್ಗ ಬಂದ್ ಆಗಿದ್ದು, ಆಫ್ರಿಕಾದ ಕೇಪ್ ಆಫ್ ಗುಡ್ ಹೋಪ್ ಮೂಲಕ ಹಡಗುಗಳನ್ನು ತಿರುಗಿಸುವುದರಿಂದ ಇಂಧನ ವೆಚ್ಚ ೨೮% ಹೆಚ್ಚಾಗಿದೆ.",
+            rationale: "ಬಾಬ್-ಎಲ್-ಮಂಡೇಬ್ ಹಡಗು ಮಾರ್ಗ ಬಂದ್ ಆಗಿದ್ದು, ಆಫ್ರಿಕಾದ ಕೇಪ್ ಆಫ್ ಗುಡ್ ಹೋಪ್ ಮೂಲಕ ಹಡಗುಗಳನ್ನು ತಿರುಗಿಸುವುದರಿಂದ ಇಂಧನ ವೆಚ್ಚ ೨৮% ಹೆಚ್ಚಾಗಿದೆ.",
             actions: [
                 "ಅನ್ನ ಧಾನ್ಯದ ಹಡಗುಗಳನ್ನು ಕೇಪ್ ಆಫ್ ಗುಡ್ ಹೋಪ್ ಬದಲಿ ಮಾರ್ಗಕ್ಕೆ ತಿರುಗಿಸಿ.",
                 "ಮಾರುಕಟ್ಟೆಯಲ್ಲಿ ಬೆಲೆ ಏರಿಕೆ ತಡೆಯಲು ಎಪಿಎಂಸಿಯಿಂದ ದಾಸ್ತಾನು ಧಾನ್ಯ ಬಿಡುಗಡೆ ಮಾಡಿ.",
@@ -381,7 +406,7 @@ const alertsDataLocalized = {
     mr: {
         kolar: {
             title: "जलभृत घट: कोलार कर्नाटक",
-            impact: "८,५०० शेतकरी",
+            impact: "८, ५०० शेतकरी",
             sla: "४८ तास",
             rationale: "कोलारमधील भूजल पातळी अत्यंत खालावली असून (२८ मीटर), जमीन खचण्याचा धोका ८५% वाढला आहे. कूपनलिकेतून पाणी उपसा करण्यासाठी विजेचा खर्च ४२% वाढला आहे.",
             actions: [
@@ -392,7 +417,7 @@ const alertsDataLocalized = {
         },
         traffic: {
             title: "वाहतूक कोंडी: बेंगळुरू आउटर रिंग रोड",
-            impact: "१८,००० प्रवासी",
+            impact: "१८, ००० प्रवासी",
             sla: "२ तास",
             rationale: "सिल्क बोर्ड जंक्शनवर पाणी साचल्यामुळे रस्ता क्षमता ७०% कमी झाली आहे. वाहतुकीची रांग ४.२ किलोमीटरवर गेली आहे. डिलिव्हरी वेळेत न झाल्याने नुकसान होत आहे.",
             actions: [
@@ -484,8 +509,6 @@ function adjustTextSize(size) {
         btn.style.backgroundColor = 'rgba(255,255,255,0.03)';
         btn.style.color = 'var(--color-text-main)';
     });
-    
-    // Standard styles will handle font scale calculations automatically!
 }
 
 // Multilingual language translation switcher
@@ -501,15 +524,18 @@ function changeLanguage() {
     elements.forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (translations[lang] && translations[lang][key]) {
-            el.textContent = translations[lang][key];
+            el.innerHTML = translations[lang][key];
         }
     });
     
     // Update Sanskrit tag text to matching language text if needed
     const sanskritTag = document.getElementById('lbl-sanskrit');
     if (sanskritTag) {
-        sanskritTag.textContent = lang === 'en' ? "प्रवाह" : translations[lang].title;
+        sanskritTag.textContent = lang === 'en' ? "प्रवाह" : "प्रवाह";
     }
+    
+    // Update wizard banner text dynamically
+    setWizardStep(currentWizardStep);
     
     // Update alert data UI if currently selected
     selectAlert(activeAlert);
@@ -529,11 +555,11 @@ function setMapLayer(layerId) {
     if (activeBtn) activeBtn.classList.add('active');
     
     const titles = {
-        water: "Hydrology (Water) Layer",
-        traffic: "Urban Traffic (Gati) Layer",
-        grocery: "APMC Perishable Food (Grocery) Layer",
-        weather: "Meteorology (Weather) Layer",
-        geopolitical: "Sovereign Logistics (Geopolitical) Layer"
+        water: "Step 2: Hydrology (Water) Layer",
+        traffic: "Step 2: Urban Traffic (Gati) Layer",
+        grocery: "Step 2: APMC Perishable Food Layer",
+        weather: "Step 2: Meteorology (Weather) Layer",
+        geopolitical: "Step 2: Sovereign Logistics Layer"
     };
     
     const currentTitle = document.getElementById('current-layer-title');
@@ -662,6 +688,9 @@ function dispatchWorkflow() {
         
         updateAlertCount();
         pushWhatsAppNotification(alertKey);
+        
+        // Advance wizard to policy simulator instructions
+        setWizardStep('wiz_step4');
     }, 1500);
 }
 
@@ -785,6 +814,9 @@ function simulateProfile(profileKey) {
     const chatBody = document.getElementById('chat-body');
     chatBody.innerHTML = '';
     
+    // Set wizard banner to processing
+    setWizardStep('wiz_step2');
+    
     // Clear pipeline states
     document.getElementById('ingest-val').textContent = 'Idle';
     document.getElementById('cudf-val').textContent = 'Idle';
@@ -826,7 +858,6 @@ function simulateProfile(profileKey) {
     // Trigger pipeline steps
     setTimeout(() => {
         const pipe = conversation.pipeline;
-        
         const ingestCard = document.getElementById('step-ingest');
         ingestCard.className = "step-card active";
         document.getElementById('ingest-val').textContent = pipe.ingest;
@@ -851,6 +882,9 @@ function simulateProfile(profileKey) {
                     
                     renderAIReplies(conversation.responses);
                     triggerPravahaAlert(profileKey);
+                    
+                    // Advance wizard to Step 3 (Alert Resolution)
+                    setWizardStep('wiz_step3');
                 }, 800);
             }, 800);
         }, 800);
@@ -1127,21 +1161,6 @@ function showSlide(index) {
 function prevSlide() { if (activeSlideIndex > 1) showSlide(activeSlideIndex - 1); }
 function nextSlide() { if (activeSlideIndex < totalSlides) showSlide(activeSlideIndex + 1); }
 
-// Onboarding selector
-function selectPersona(role) {
-    const modal = document.getElementById('onboarding-modal');
-    if (modal) {
-        modal.style.opacity = 0;
-        setTimeout(() => { modal.style.display = 'none'; }, 400);
-    }
-    if (role === 'farmer') {
-        setTimeout(() => { simulateProfile('harish'); }, 500);
-    } else if (role === 'commissioner') {
-        switchMainView('dashboard');
-        selectAlert('kolar');
-    }
-}
-
 // Automated Demo Walkthrough Script (Pravaha Multi-Flow Auto-Demo)
 function startAutoDemo() {
     const demoBtn = document.getElementById('btn-autodemo');
@@ -1197,8 +1216,200 @@ function startAutoDemo() {
     }, 26500);
     
     setTimeout(() => {
-        alert("Pravaha (प्रवाह) Walkthrough Completed!\n\nYou've witnessed the multi-layered flow optimization:\n1. Decoded Kannada farmer's well dry-out.\n2. Diverted commuter routes around Outer Ring Road in Marathi.\n3. Rerouted grain shipments around Bab-el-Mandeb Strait in English.\n4. Simulated global flow and cold-chain subsidies.\n\nExplore other layers manually!");
+        alert("Pravaha Walkthrough Completed!\n\nYou've witnessed the multi-layered flow optimization:\n1. Decoded Kannada farmer's well dry-out.\n2. Diverted commuter routes around Outer Ring Road in Marathi.\n3. Rerouted grain shipments around Bab-el-Mandeb Strait in English.\n4. Simulated global flow and cold-chain subsidies.\n\nExplore other layers manually!");
         demoBtn.disabled = false;
         demoBtn.innerHTML = `<i class="fa-solid fa-play"></i> Run Auto-Demo`;
     }, 29500);
+}
+
+// getCurrentTimeString helper
+function getCurrentTimeString() {
+    const now = new Date();
+    return now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+}
+
+// setWizardStep helper
+function setWizardStep(stepKey) {
+    currentWizardStep = stepKey;
+    const textEl = document.getElementById('wizard-text');
+    if (textEl && translations[currentLanguage] && translations[currentLanguage][stepKey]) {
+        textEl.innerHTML = translations[currentLanguage][stepKey];
+    }
+}
+
+// ==========================================
+// USER AUTHENTICATION & SESSION TRACKING
+// ==========================================
+
+// Initialize User Profile Session on Load
+document.addEventListener('DOMContentLoaded', () => {
+    checkUserSession();
+});
+
+function checkUserSession() {
+    const savedUser = localStorage.getItem('pravaha_current_user');
+    if (savedUser) {
+        currentUser = JSON.parse(savedUser);
+        loadUserProfile(currentUser);
+    } else {
+        // Show auth modal overlay
+        const authModal = document.getElementById('auth-modal');
+        if (authModal) authModal.style.display = 'flex';
+    }
+}
+
+function switchAuthTab(tab) {
+    const tabSignup = document.getElementById('tab-signup');
+    const tabLogin = document.getElementById('tab-login');
+    const signupForm = document.getElementById('signup-form');
+    const loginForm = document.getElementById('login-form');
+    
+    if (tab === 'signup') {
+        tabSignup.classList.add('active');
+        tabLogin.classList.remove('active');
+        signupForm.style.display = 'flex';
+        loginForm.style.display = 'none';
+    } else {
+        tabSignup.classList.remove('active');
+        tabLogin.classList.add('active');
+        signupForm.style.display = 'none';
+        loginForm.style.display = 'flex';
+    }
+}
+
+function handleSignUp(e) {
+    e.preventDefault();
+    const name = document.getElementById('signup-name').value.trim();
+    const phone = document.getElementById('signup-phone').value.trim();
+    const role = document.getElementById('signup-role').value;
+    const state = document.getElementById('signup-state').value;
+    const lang = document.getElementById('signup-lang').value;
+    
+    const user = { name, phone, role, state, lang };
+    
+    // Save to registered users registry (indexed by phone number)
+    registeredUsers[phone] = user;
+    localStorage.setItem('pravaha_users', JSON.stringify(registeredUsers));
+    
+    // Set as active user session
+    localStorage.setItem('pravaha_current_user', JSON.stringify(user));
+    currentUser = user;
+    
+    loadUserProfile(user);
+}
+
+function handleLogIn(e) {
+    e.preventDefault();
+    const phone = document.getElementById('login-phone').value.trim();
+    const errorMsg = document.getElementById('login-error-msg');
+    
+    if (registeredUsers[phone]) {
+        const user = registeredUsers[phone];
+        localStorage.setItem('pravaha_current_user', JSON.stringify(user));
+        currentUser = user;
+        
+        if (errorMsg) errorMsg.style.display = 'none';
+        loadUserProfile(user);
+    } else {
+        if (errorMsg) {
+            errorMsg.textContent = "Error: Phone number not registered. Please sign up first.";
+            errorMsg.style.display = 'block';
+        }
+    }
+}
+
+function loginAsGuest() {
+    const guestUser = {
+        name: "Guest User",
+        phone: "0000000000",
+        role: "commissioner",
+        state: "Karnataka",
+        lang: "en"
+    };
+    currentUser = guestUser;
+    loadUserProfile(guestUser);
+}
+
+function loadUserProfile(user) {
+    // Hide auth modal overlay
+    const authModal = document.getElementById('auth-modal');
+    if (authModal) authModal.style.display = 'none';
+    
+    // Display profile badge
+    const badge = document.getElementById('user-profile-badge');
+    const divider = document.getElementById('user-divider');
+    const nameSpan = document.getElementById('user-display-name');
+    
+    if (badge && divider && nameSpan) {
+        badge.style.display = 'flex';
+        divider.style.display = 'block';
+        
+        // Show role icon
+        let roleIcon = '👤';
+        if (user.role === 'farmer') roleIcon = '🌾';
+        else if (user.role === 'logistics') roleIcon = '🚛';
+        else if (user.role === 'commissioner') roleIcon = '🏢';
+        
+        nameSpan.textContent = `${roleIcon} ${user.name} (${user.state})`;
+    }
+    
+    // Auto-apply preferred language
+    const langSelector = document.getElementById('lang-selector');
+    if (langSelector) {
+        langSelector.value = user.lang;
+        changeLanguage();
+    }
+    
+    // Welcome notification in WhatsApp
+    pushUserWelcomeNotification(user);
+}
+
+function showAuthModal() {
+    const authModal = document.getElementById('auth-modal');
+    if (authModal) authModal.style.display = 'flex';
+}
+
+function logoutUser(e) {
+    if (e) e.stopPropagation();
+    
+    localStorage.removeItem('pravaha_current_user');
+    currentUser = null;
+    
+    // Hide profile badge
+    const badge = document.getElementById('user-profile-badge');
+    const divider = document.getElementById('user-divider');
+    if (badge) badge.style.display = 'none';
+    if (divider) divider.style.display = 'none';
+    
+    // Clear chat
+    const chatBody = document.getElementById('chat-body');
+    if (chatBody) {
+        chatBody.innerHTML = `
+            <div class="wa-message system">
+                <p id="lbl-chat-welcome" data-i18n="lbl_chat_welcome">🙏 Welcome to Pravaha. We coordinate Water, Traffic, Grocery, Weather, and Geopolitical routes. Select a profile below to run a simulation:</p>
+            </div>
+        `;
+    }
+    
+    // Show auth modal overlay
+    showAuthModal();
+}
+
+function pushUserWelcomeNotification(user) {
+    const chatBody = document.getElementById('chat-body');
+    if (!chatBody) return;
+    
+    const welcomeDiv = document.createElement('div');
+    welcomeDiv.className = "wa-message system";
+    
+    let roleText = 'Farmer';
+    if (user.role === 'logistics') roleText = 'Logistics Driver';
+    if (user.role === 'commissioner') roleText = 'Commissioner';
+    
+    welcomeDiv.innerHTML = `
+        <p>👤 <strong>Session Active:</strong> Welcome back, <strong>${user.name}</strong> (${roleText} from ${user.state}). Localized alerts configured.</p>
+    `;
+    
+    chatBody.appendChild(welcomeDiv);
+    chatBody.scrollTop = chatBody.scrollHeight;
 }
