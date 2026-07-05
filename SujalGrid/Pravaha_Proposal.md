@@ -87,3 +87,18 @@ Solving multi-layer flows requires optimizing spatial networks (Kriging interpol
     *   **cuDF**: Cleans and prepares spatial tables on GPU memory instantly.
     *   **Spark RAPIDS**: Offloads matrix covariance and shortest-path pathfinding directly to H100 GPU cores.
     *   **The Result**: Runtimes drop from **12.8 seconds** (CPU) to **71 milliseconds** (GPU) — a **180x speedup** enabling real-time, closed-loop grid responses.
+
+---
+
+## 5. Layman Wizard & Accessibility Core
+
+To ensure the sovereign platform is accessible to all demographics, including rural farmers and senior citizens:
+*   **User Session Tracking**: A dual-tabbed **Log In / Sign Up** modal caches user credentials (Name, Phone, Role, State, Language) in `localStorage`, personalizing the dashboard upon entry.
+*   **Self-Explanatory Help Wizard**: A pulsing guide banner updates dynamically at each stage of the user interaction:
+    *   *Step 1*: WhatsApp audio note submission.
+    *   *Step 2*: GPU data cleaning and model run.
+    *   *Step 3*: Alert map marker selection.
+    *   *Step 4*: AI advisory action approval.
+    *   *Step 5*: Slider-based policy simulation.
+*   **Accessibility Controls**: Inline font-scaling buttons (`A-`, `A`, `A+`) allow text scaling, and a **Text-to-Speech (TTS) synthesizer** reads explainable AI advisories aloud in Hindi, Kannada, Marathi, or English.
+
