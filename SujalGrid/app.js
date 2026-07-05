@@ -1353,6 +1353,15 @@ function loadUserProfile(user) {
         nameSpan.textContent = `${roleIcon} ${user.name} (${user.state})`;
     }
     
+    // Auto-set User Mode based on Role selection
+    if (user.role === 'farmer') {
+        setUserMode('citizen');
+    } else if (user.role === 'logistics') {
+        setUserMode('driver');
+    } else {
+        setUserMode('officer');
+    }
+    
     // Auto-apply preferred language
     const langSelector = document.getElementById('lang-selector');
     if (langSelector) {
@@ -1412,4 +1421,78 @@ function pushUserWelcomeNotification(user) {
     
     chatBody.appendChild(welcomeDiv);
     chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+// User Mode Switching Engine
+let currentUserMode = 'citizen';
+
+function setUserMode(mode) {
+    currentUserMode = mode;
+    
+    // Update active tab styles in header
+    document.querySelectorAll('.mode-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    const activeTab = document.getElementById(`mode-tab-${mode}`);
+    if (activeTab) activeTab.classList.add('active');
+    
+    const commonProblemsCard = document.getElementById('common-problems-card');
+    const routeDetourCard = document.getElementById('route-detour-card');
+    const simulatorCardBox = document.getElementById('simulator-card-box');
+    
+    // Toggle right-hand sidebar panels based on Mode
+    if (mode === 'citizen') {
+        if (commonProblemsCard) commonProblemsCard.style.display = 'flex';
+        if (routeDetourCard) routeDetourCard.style.display = 'none';
+        if (simulatorCardBox) simulatorCardBox.style.display = 'none';
+        
+        // Hide Admin menu options
+        const benchBtn = document.getElementById('btn-view-benchmark');
+        const slidesBtn = document.getElementById('btn-view-slides');
+        if (benchBtn) benchBtn.style.display = 'none';
+        if (slidesBtn) slidesBtn.style.display = 'none';
+        
+        if (activeMainView !== 'dashboard') {
+            switchMainView('dashboard');
+        }
+    } 
+    else if (mode === 'driver') {
+        if (commonProblemsCard) commonProblemsCard.style.display = 'none';
+        if (routeDetourCard) routeDetourCard.style.display = 'flex';
+        if (simulatorCardBox) simulatorCardBox.style.display = 'none';
+        
+        // Hide Admin menu options
+        const benchBtn = document.getElementById('btn-view-benchmark');
+        const slidesBtn = document.getElementById('btn-view-slides');
+        if (benchBtn) benchBtn.style.display = 'none';
+        if (slidesBtn) slidesBtn.style.display = 'none';
+        
+        if (activeMainView !== 'dashboard') {
+            switchMainView('dashboard');
+        }
+    } 
+    else if (mode === 'officer') {
+        if (commonProblemsCard) commonProblemsCard.style.display = 'none';
+        if (routeDetourCard) routeDetourCard.style.display = 'none';
+        if (simulatorCardBox) simulatorCardBox.style.display = 'flex';
+        
+        // Show Admin menu options
+        const benchBtn = document.getElementById('btn-view-benchmark');
+        const slidesBtn = document.getElementById('btn-view-slides');
+        if (benchBtn) benchBtn.style.display = 'flex';
+        if (slidesBtn) slidesBtn.style.display = 'flex';
+    }
+}
+
+// Layman Common Problems Quick Help click handler
+function solveCommonProblem(problemKey) {
+    if (problemKey === 'water') {
+        simulateProfile('harish');
+    } else if (problemKey === 'traffic') {
+        simulateProfile('deepak');
+    } else if (problemKey === 'grocery') {
+        simulateProfile('srinivas');
+    } else if (problemKey === 'weather') {
+        simulateProfile('sunita');
+    }
 }

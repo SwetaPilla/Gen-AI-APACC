@@ -69,7 +69,19 @@
                         <span id="user-display-name">Guest</span>
                         <button class="logout-btn" onclick="logoutUser(event)" title="Log Out"><i class="fa-solid fa-right-from-bracket"></i></button>
                     </div>
-                    <div class="status-divider" id="user-divider" style="display: none;"></div>
+                    <!-- Active User Mode Selector Segmented Controls -->
+                    <div class="mode-selector-box">
+                        <button class="mode-tab active" id="mode-tab-citizen" onclick="setUserMode('citizen')">
+                            <i class="fa-solid fa-users"></i> <span data-i18n="mode_citizen">Citizen Mode</span>
+                        </button>
+                        <button class="mode-tab" id="mode-tab-driver" onclick="setUserMode('driver')">
+                            <i class="fa-solid fa-truck-steering"></i> <span data-i18n="mode_driver">Driver Mode</span>
+                        </button>
+                        <button class="mode-tab" id="mode-tab-officer" onclick="setUserMode('officer')">
+                            <i class="fa-solid fa-building-user"></i> <span data-i18n="mode_officer">Officer Mode</span>
+                        </button>
+                    </div>
+                    <div class="status-divider"></div>
 
                     <!-- Language Dropdown Selector -->
                     <div class="language-selector-box">
@@ -484,8 +496,66 @@
                         </div>
                     </div>
 
+                    <!-- Step 5: Common Problems Help Desk (Citizen Mode) -->
+                    <div class="card common-problems-card" id="common-problems-card" style="display: flex;">
+                        <div class="card-header-seamless">
+                            <h3><i class="fa-solid fa-handshake-angle"></i> <span data-i18n="common_problems_header">Step 5: Common Help Desk (मददगार डेस्क)</span></h3>
+                        </div>
+                        <div class="problems-grid">
+                            <button class="prob-btn" onclick="solveCommonProblem('water')">
+                                <div class="prob-icon"><i class="fa-solid fa-droplet text-cyan"></i></div>
+                                <div class="prob-info">
+                                    <h4 data-i18n="prob_water_title">🚰 Find Subsidized Drinking Water</h4>
+                                    <p data-i18n="prob_water_desc">Request water tanker support near you.</p>
+                                </div>
+                            </button>
+                            <button class="prob-btn" onclick="solveCommonProblem('traffic')">
+                                <div class="prob-icon"><i class="fa-solid fa-road text-orange"></i></div>
+                                <div class="prob-info">
+                                    <h4 data-i18n="prob_traffic_title">🚗 Avoid Road Floodings & Jams</h4>
+                                    <p data-i18n="prob_traffic_desc">Get detour routes in Bengaluru & Mumbai.</p>
+                                </div>
+                            </button>
+                            <button class="prob-btn" onclick="solveCommonProblem('grocery')">
+                                <div class="prob-icon"><i class="fa-solid fa-basket-shopping text-green"></i></div>
+                                <div class="prob-info">
+                                    <h4 data-i18n="prob_grocery_title">🍅 Buy Subsidized Vegetables</h4>
+                                    <p data-i18n="prob_grocery_desc">Find nearby Govt-partnered stores.</p>
+                                </div>
+                            </button>
+                            <button class="prob-btn" onclick="solveCommonProblem('weather')">
+                                <div class="prob-icon"><i class="fa-solid fa-cloud-showers-heavy text-red"></i></div>
+                                <div class="prob-info">
+                                    <h4 data-i18n="prob_weather_title">⛈️ Subway Flood Level Status</h4>
+                                    <p data-i18n="prob_weather_desc">Check subway closures and warnings.</p>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Route Navigation Detours (Driver Mode) -->
+                    <div class="card route-detour-card" id="route-detour-card" style="display: none;">
+                        <div class="card-header-seamless">
+                            <h3><i class="fa-solid fa-map-location-dot"></i> <span data-i18n="route_detour_header">Step 5: Gati Route Detours (मार्ग विचलन)</span></h3>
+                        </div>
+                        <div class="detour-content">
+                            <div class="detour-step">
+                                <span class="detour-badge badge-success">NOW</span>
+                                <p><strong>Bengaluru ORR Silk Board Blocked:</strong> Detour via Bypass Corridor 2 is active. Bypassing 4.2km queue.</p>
+                            </div>
+                            <div class="detour-step">
+                                <span class="detour-badge badge-warning">TEMP</span>
+                                <p><strong>APMC Border Toll Clearance:</strong> Green pass clearance active. Bypassed 8-hour line.</p>
+                            </div>
+                            <div class="detour-step">
+                                <span class="detour-badge badge-danger">BLOCKED</span>
+                                <p><strong>Mumbai Milan Subway:</strong> CLOSED due to extreme rain waterlogging. Divert to SV Road.</p>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- What-If Water & Flow Allocator -->
-                    <div class="card simulator-card-seamless">
+                    <div class="card simulator-card-seamless" id="simulator-card-box" style="display: none;">
                         <div class="card-header-seamless">
                             <h3><i class="fa-solid fa-sliders"></i> <span data-i18n="sim_header">Step 5: Policy Simulator (पॉलिसी सिम्युलेटर)</span></h3>
                         </div>

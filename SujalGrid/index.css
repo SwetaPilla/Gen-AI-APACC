@@ -1170,3 +1170,158 @@ h1, h2, h3, h4, h5, p, span, button, input, select, textarea, label {
     font-size: 11px;
     line-height: 1.3;
 }
+
+/* User Mode Selector Segmented Controls styling */
+.mode-selector-box {
+    display: flex;
+    gap: 4px;
+    background-color: rgba(255, 255, 255, 0.02);
+    padding: 3px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.mode-tab {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    font-family: var(--font-heading);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 10px;
+    cursor: pointer;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s;
+}
+
+.mode-tab:hover {
+    color: var(--color-text-main);
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.mode-tab.active {
+    background-color: var(--color-primary);
+    color: #000;
+}
+
+/* Step 5: Common Problems & Help Finder Styles */
+.common-problems-card, .route-detour-card {
+    flex: 1.2;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.problems-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow-y: auto;
+    flex: 1;
+    padding-right: 4px;
+}
+
+.prob-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: rgba(255, 255, 255, 0.01);
+    border: 1px solid var(--border-color);
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s, transform 0.2s;
+    width: 100%;
+}
+
+.prob-btn:hover {
+    background-color: rgba(20, 184, 166, 0.06);
+    border-color: var(--color-primary);
+    transform: translateY(-0.5px);
+}
+
+.prob-icon {
+    font-size: 15px;
+    width: 26px;
+    height: 26px;
+    background-color: rgba(255, 255, 255, 0.02);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.prob-info {
+    flex: 1;
+}
+
+.prob-info h4 {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-main);
+    margin-bottom: 1px;
+}
+
+.prob-info p {
+    font-size: 9px;
+    color: var(--color-text-muted);
+    line-height: 1.2;
+}
+
+/* Driver Detours Card styling */
+.detour-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.detour-step {
+    background-color: rgba(255, 255, 255, 0.01);
+    border: 1px solid var(--border-color);
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: left;
+}
+
+.detour-badge {
+    font-size: 8px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+    width: fit-content;
+    text-transform: uppercase;
+}
+
+.badge-success {
+    background-color: rgba(16, 185, 129, 0.12);
+    color: var(--color-success);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-warning {
+    background-color: rgba(245, 158, 11, 0.12);
+    color: var(--color-warning);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.badge-danger {
+    background-color: rgba(244, 63, 94, 0.12);
+    color: var(--color-danger);
+    border: 1px solid rgba(244, 63, 94, 0.3);
+}
+
+.detour-step p {
+    font-size: 10px;
+    line-height: 1.35;
+    color: var(--color-text-main);
+}
